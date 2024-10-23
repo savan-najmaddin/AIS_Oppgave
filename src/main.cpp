@@ -23,8 +23,8 @@ int main() {
     Canvas canvas;
     GLRenderer renderer{canvas.size()};
 
-    PerspectiveCamera camera(60, canvas.aspect(), 0.1, 1000);
-    camera.position.z = 5;
+    OrthographicCamera camera(60, canvas.aspect(), 0.1, 1000);
+    //camera.position.z = 5;
 
     Scene scene;
     scene.background = Color::aliceblue;
