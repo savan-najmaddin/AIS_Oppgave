@@ -7,6 +7,8 @@ include(FetchContent)
 
 set(THREEPP_BUILD_TESTS OFF)
 set(THREEPP_BUILD_EXAMPLES OFF)
+
+
 FetchContent_Declare(
         threepp
         GIT_REPOSITORY https://github.com/markaren/threepp.git
@@ -15,6 +17,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(threepp)
 
 add_subdirectory(external)
+add_subdirectory(src)
 
-add_executable(kinematikk main.cpp)
+target_include_directories(kinematikk PUBLIC include)
+
 target_link_libraries(kinematikk PRIVATE threepp::threepp imgui::imgui)

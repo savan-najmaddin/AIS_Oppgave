@@ -1,57 +1,28 @@
 #include "threepp/threepp.hpp"
-
 #include "threepp/extras/imgui/ImguiContext.hpp"
+#include <iostream>
 
 using namespace threepp;
 
-namespace {
-
-    auto createMesh() {
-        const auto geometry = BoxGeometry::create();
-        const auto material = MeshBasicMaterial::create();
-        material->color = Color::green;
-
-        auto mesh = Mesh::create(geometry, material);
-
-        return mesh;
-    }
-
-}
 
 int main() {
 
-    Canvas canvas;
-    GLRenderer renderer{canvas.size()};
+    Canvas::Parameters parameter;
+    parameter.title("Min tittel");
+    parameter.size(monitor::monitorSize());
+    parameter.vsync(true);
+    parameter.resizable(true);
 
-    OrthographicCamera camera(60, canvas.aspect(), 0.1, 1000);
-    //camera.position.z = 5;
+    Canvas canvas(parameter);
+    canvas.animate([&]() {
 
     Scene scene;
-    scene.background = Color::aliceblue;
+        scene.background = Color::white;
 
-    auto mesh = createMesh();
-    scene.add(mesh);
 
-    bool& meshVisible = mesh->visible;
+        OrthographicCamera camera;
 
-    ImguiFunctionalContext ui(canvas.windowPtr(), [&meshVisible] {
-        ImGui::SetNextWindowPos({}, 0, {});
-               ImGui::SetNextWindowSize({230, 0}, 0);
-               ImGui::Begin("Mesh settings");
-               ImGui::Checkbox("Visible", &meshVisible);
-
-               ImGui::End();
     });
-    // ui.makeDpiAware(); // to increase imgui size on high DPI screens
 
-    Clock clock;
-    float rotationSpeed = 0.5f;
-    canvas.animate([&] {
-        const auto dt = clock.getDelta();
 
-        mesh->rotation.y += rotationSpeed * dt;
-
-        renderer.render(scene, camera);
-        ui.render();
-    });
 }
