@@ -22,3 +22,5 @@ add_subdirectory(src)
 target_include_directories(kinematikk PUBLIC include)
 
 target_link_libraries(kinematikk PRIVATE threepp::threepp imgui::imgui)
+
+add_executable(hovedprogram src/main.cpp)

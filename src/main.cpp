@@ -1,28 +1,29 @@
 #include "threepp/threepp.hpp"
-#include "threepp/extras/imgui/ImguiContext.hpp"
-#include <iostream>
+//#include "threepp/extras/imgui/ImguiContext.hpp"
+//#include "objekt.hpp"
+#include "minScene.hpp"
+
+
 
 using namespace threepp;
 
 
-int main() {
-
-    Canvas::Parameters parameter;
-    parameter.title("Min tittel");
-    parameter.size(monitor::monitorSize());
-    parameter.vsync(true);
-    parameter.resizable(true);
-
+int main()
+{
+    auto parameter = canvasParameter();
     Canvas canvas(parameter);
-    canvas.animate([&]() {
 
-    Scene scene;
-        scene.background = Color::white;
+    std::shared_ptr<Scene> scene = createScene();
 
+    std::shared_ptr<OrthographicCamera> camera = createOrthographicCamere();
 
-        OrthographicCamera camera;
+    canvas.animate([&]() { //skriv kode for vinduinnhold
+
 
     });
 
 
+    return 0;
 }
+
+

@@ -5,4 +5,6 @@
 #ifndef OBJEKT_HPP
 #define OBJEKT_HPP
 
+
+
 #endif //OBJEKT_HPP
