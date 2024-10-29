@@ -14,6 +14,8 @@ int main()
     auto parameter = canvasParameter();
     Canvas canvas(parameter);
 
+    GLRenderer renderer(canvas.size());
+
     std::shared_ptr<Scene> scene = createScene();
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamere();
 
@@ -22,7 +24,8 @@ int main()
 
 
     canvas.animate([&]() {
-      //  canvas.render(*scene, *camera);
+        renderer.clear();
+        renderer.render(*scene, *camera);
 
 
 
