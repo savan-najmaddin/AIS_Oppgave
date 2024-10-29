@@ -3,6 +3,7 @@
 //#include "objekt.hpp"
 #include "minScene.hpp"
 
+#include <objekt.hpp>
 
 
 using namespace threepp;
@@ -14,10 +15,20 @@ int main()
     Canvas canvas(parameter);
 
     std::shared_ptr<Scene> scene = createScene();
-
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamere();
 
-    canvas.animate([&]() { //skriv kode for vinduinnhold
+    armSegment arm_1(1, 1, 1);
+    scene->add(arm_1.getSegment());
+
+
+    canvas.animate([&]() {
+      //  canvas.render(*scene, *camera);
+
+
+
+        //skriv kode for vinduinnhold
+
+        //legg til kode for render
 
 
     });

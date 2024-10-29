@@ -7,7 +7,7 @@
 
 using namespace threepp;
 
-Canvas::Parameters canvasParameter(){ //vinduet til programmet
+inline Canvas::Parameters canvasParameter(){ //vinduet til programmet
     Canvas::Parameters parameter;
     parameter.title("Min tittel");
     parameter.size(1280, 720);

@@ -1,12 +1,4 @@
-/*
 #include "objekt.hpp"
-#include "threepp/math/Triangle.hpp"
 
+//til senere
 
-
-class Ball : threepp::Triangle {
-
-};
-
-
-*/
