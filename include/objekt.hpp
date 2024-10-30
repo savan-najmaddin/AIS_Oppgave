@@ -11,7 +11,7 @@ public:
   //fyi husk å differensier mellom logikk og grafikk
   armSegment(float width, float height, float depth){
 
-    auto geometry = BoxGeometry::create();
+    auto geometry = BoxGeometry::create(width, height, depth);
 
     auto material= MeshBasicMaterial::create();
 

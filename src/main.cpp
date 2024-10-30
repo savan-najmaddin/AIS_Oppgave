@@ -20,13 +20,20 @@ int main()
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamere();
 
     armSegment arm_1(1, 1, 1);
+    armSegment arm_2(1, 1, 1);
+
+
+
     scene->add(arm_1.getSegment());
+    scene->add(arm_2.getSegment());
 
 
     canvas.animate([&]() {
         renderer.clear();
         renderer.render(*scene, *camera);
+        camera -> updateProjectionMatrix();
 
+        arm_2.getSegment()->position.x += 0.005;
 
 
         //skriv kode for vinduinnhold
