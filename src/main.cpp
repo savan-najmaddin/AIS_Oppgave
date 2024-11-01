@@ -1,20 +1,20 @@
 #include "threepp/threepp.hpp"
 //#include "threepp/extras/imgui/ImguiContext.hpp"
+#include "controller.hpp"
+#include "minScene.hpp"
 #include "objekt.hpp"
 #include <iostream>
-#include "minScene.hpp"
-#include "controller.hpp"
 
 using namespace threepp;
 
-//brukes for testiing av catch2
+//brukes for testing av catch2
 int add(const int x, const int y) {
-        return x + y;
-    };
+    return x + y;
+};
 
-int main()
-{
-int add (5+4); //test funkjson
+int main() {
+
+    int add(5 + 4);//test funkjson
 
 
     auto parameter = canvasParameter();
@@ -29,7 +29,6 @@ int add (5+4); //test funkjson
     armSegment arm_2(1, 1, 1);
 
 
-
     scene->add(arm_1.getSegment());
     scene->add(arm_2.getSegment());
 
@@ -37,7 +36,7 @@ int add (5+4); //test funkjson
     canvas.animate([&]() {
         renderer.clear();
         renderer.render(*scene, *camera);
-        camera -> updateProjectionMatrix();
+        camera->updateProjectionMatrix();
 
         arm_2.getSegment()->position.x += 0.005;
 
@@ -45,8 +44,6 @@ int add (5+4); //test funkjson
         //skriv kode for vinduinnhold
 
         //legg til kode for render
-
-
     });
 
 

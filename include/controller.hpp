@@ -20,6 +20,8 @@ private:
 
   void handleAKey();
   void handleSKey();
+  void handleEnterKey();
+  void wrongKeyEnter();
   std::shared_ptr<Mesh> createMesh();
 
 };
