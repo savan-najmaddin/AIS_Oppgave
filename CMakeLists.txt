@@ -16,6 +16,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(threepp)
 
+include(FetchContent)
+FetchContent_Declare(
+        Catch2
+        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        GIT_TAG v3.3.2
+)
+FetchContent_MakeAvailable(Catch2)
+
 add_subdirectory(external)
 add_subdirectory(src)
 

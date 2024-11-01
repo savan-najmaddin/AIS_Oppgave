@@ -1,6 +1,6 @@
 #include "controller.hpp"
 #include <iostream>
-7
+
 //legg til funksjoner til kontroller
  controller::controller(Scene &scene) : scene(scene) {};
 
@@ -14,7 +14,7 @@
 
     void controller::onKeyPressed(KeyEvent evt) {
         if (evt.key == Key::D) {
-            handleAKey();
+            std::cout << "Knapp ' d ' trykkes "
         }
 
         if (evt.key == Key::A) {
