@@ -24,11 +24,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
-add_subdirectory(external)
+
 add_subdirectory(src)
 
 target_include_directories(kinematikk PUBLIC include)
 
-target_link_libraries(kinematikk PRIVATE threepp::threepp imgui::imgui)
+target_link_libraries(kinematikk PRIVATE threepp::threepp)
 
-add_executable(hovedprogram src/main.cpp)
+enable_testing()
+add_subdirectory(tests)
