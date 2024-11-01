@@ -2,7 +2,7 @@
 #include <iostream>
 
 //legg til funksjoner til kontroller
-controller::controller(Scene &scene) : scene(scene){};
+controller::controller(Scene &scene, std::vector<armSegment> &armVec) : scene(scene), armVec(armVec){};
 
 void controller::onMouseDown(int key, const Vector2 &pos) {
     if (key == 0) {
@@ -14,10 +14,10 @@ void controller::onMouseDown(int key, const Vector2 &pos) {
 
 void controller::onKeyPressed(KeyEvent evt) {
     if (evt.key == Key::D) {
-        handleAKey();
+        handleDKey();
     }
     else if (evt.key == Key::A) {
-        handleSKey();
+        handleAKey();
     }
     else if (evt.key == Key::ENTER) {
         handleEnterKey();
@@ -38,11 +38,11 @@ void controller::onKeyPressed(KeyEvent evt) {
         }
     }
 
-void controller::handleAKey() {
-        //fyll inn
+void controller::handleDKey() {
+        armVec[1].getSegment()->position.x += 0.1;
     }
-void controller::handleSKey() {
-        //
+void controller::handleAKey() {
+        armVec[1].getSegment()->position.x -= 0.1;
     }
 void controller::handleEnterKey() {
         //
