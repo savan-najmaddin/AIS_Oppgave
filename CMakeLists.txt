@@ -16,11 +16,20 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(threepp)
 
-add_subdirectory(external)
+include(FetchContent)
+FetchContent_Declare(
+        Catch2
+        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        GIT_TAG v3.3.2
+)
+FetchContent_MakeAvailable(Catch2)
+
+
 add_subdirectory(src)
 
 target_include_directories(kinematikk PUBLIC include)
 
-target_link_libraries(kinematikk PRIVATE threepp::threepp imgui::imgui)
+target_link_libraries(kinematikk PRIVATE threepp::threepp)
 
-add_executable(hovedprogram src/main.cpp)
+enable_testing()
+add_subdirectory(tests)
