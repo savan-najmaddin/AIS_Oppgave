@@ -33,6 +33,8 @@ int main() {
     armVec.emplace_back(1, 1, 1); //armVec[0]
     armVec.emplace_back(1, 1, 1); //armVec[1]
 
+    armVec[1].getSegment()->position.y=1.5;
+
     controller kontroller(*scene, armVec);
     canvas.addKeyListener(kontroller);
 
