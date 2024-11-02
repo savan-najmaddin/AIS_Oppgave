@@ -23,6 +23,9 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
+set(eigen_BUILD_EXAMPLES OFF)
+set(eigen_BUILD_Tests OFF)
+
 FetchContent_Declare(
         eigen
         GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
