@@ -16,13 +16,21 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(threepp)
 
-include(FetchContent)
 FetchContent_Declare(
         Catch2
         GIT_REPOSITORY https://github.com/catchorg/Catch2.git
         GIT_TAG v3.3.2
 )
 FetchContent_MakeAvailable(Catch2)
+
+FetchContent_Declare(
+        eigen
+        GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+        GIT_TAG 3.4.0
+)
+
+FetchContent_MakeAvailable(eigen)
+
 
 add_subdirectory(libs)
 add_subdirectory(src)
