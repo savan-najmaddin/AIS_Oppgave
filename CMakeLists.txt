@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 include(FetchContent)
 
+#threepp konfig
 set(THREEPP_BUILD_TESTS OFF)
 set(THREEPP_BUILD_EXAMPLES OFF)
 
@@ -16,6 +17,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(threepp)
 
+#catch2 konfig
 FetchContent_Declare(
         Catch2
         GIT_REPOSITORY https://github.com/catchorg/Catch2.git
@@ -23,6 +25,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
+#eigen konfig
 set(eigen_BUILD_EXAMPLES OFF)
 set(eigen_BUILD_Tests OFF)
 
@@ -32,13 +35,18 @@ FetchContent_Declare(
         GIT_TAG 3.4.0
 )
 
-FetchContent_MakeAvailable(eigen)
+FetchContent_GetProperties(eigen)
+if(NOT eigen_POPULATED)
+    FetchContent_Populate(eigen)
+endif ()
 
+#ferdig konfig
 
 add_subdirectory(libs)
 add_subdirectory(src)
 
 target_include_directories(kinematikk PUBLIC include)
+target_include_directories(kinematikk PUBLIC ${eigen_SOURCE_DIR})
 
 target_link_libraries(kinematikk PRIVATE threepp::threepp)
 

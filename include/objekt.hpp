@@ -2,7 +2,7 @@
 #define OBJEKT_HPP
 
 #include "threepp/threepp.hpp"
-
+//inkluder eigen header
 
 using namespace threepp;
 
@@ -26,6 +26,7 @@ std::shared_ptr<Mesh> getSegment() {
 private:
   std::shared_ptr<Mesh> segment;
 };
+
 
 
 
