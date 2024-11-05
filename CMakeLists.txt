@@ -17,13 +17,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(threepp)
 
-#catch2 konfig
-FetchContent_Declare(
-        Catch2
-        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-        GIT_TAG v3.3.2
-)
-FetchContent_MakeAvailable(Catch2)
+
 
 #eigen konfig
 set(eigen_BUILD_EXAMPLES OFF)
@@ -46,9 +40,11 @@ add_subdirectory(libs)
 add_subdirectory(src)
 
 target_include_directories(kinematikk PUBLIC include)
-target_include_directories(kinematikk PUBLIC ${eigen_SOURCE_DIR})
-
+#target_include_directories(kinematikk PUBLIC ${eigen_SOURCE_DIR})
+# eller link_libraries Eigen3::Eigen
 target_link_libraries(kinematikk PRIVATE threepp::threepp)
 
-enable_testing()
+
+
+
 add_subdirectory(tests)
