@@ -24,7 +24,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
-add_subdirectory(libs)
+
+
 add_subdirectory(src)
 
 target_include_directories(kinematikk PUBLIC include)
