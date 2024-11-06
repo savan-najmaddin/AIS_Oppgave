@@ -25,7 +25,8 @@ int main() {
     std::shared_ptr<Scene> scene = createScene();
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamere();
 
-
+    controller::MyMouseListener ml{clock.elapsedTime};
+    canvas.addMouseListener(ml);
 
     std::vector<armSegment> armVec;
     armVec.emplace_back(1, 5, 1); //armVec[0]
@@ -35,7 +36,8 @@ int main() {
     armVec[1].getSegment()->position.x=armVec[0].getSegment()->position.x+10;
 
     controller kontroller(*scene, armVec);
-    canvas.addKeyListener(kontroller);
+    canvas.addMouseListener( ml);
+
 
 
     for (auto& segment : armVec) { //legger til instanser av armvec o scemem
