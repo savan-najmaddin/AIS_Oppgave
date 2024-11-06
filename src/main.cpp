@@ -21,12 +21,14 @@ int main() {
     auto parameter = canvasParameter();
     Canvas canvas(parameter);
 
+    Clock clock;
+
     GLRenderer renderer(canvas.size());
 
     std::shared_ptr<Scene> scene = createScene();
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamere();
 
-    Clock clock;
+
 
     std::vector<armSegment> armVec;
     armVec.emplace_back(1, 5, 1); //armVec[0]

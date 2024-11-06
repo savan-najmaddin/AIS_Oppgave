@@ -31,7 +31,7 @@ inline std::shared_ptr<OrthographicCamera> createOrthographicCamere () {
     float far = 1000.0f;
 
     auto camera = OrthographicCamera::create(left, right, top, bottom, near, far);
-    camera ->position.set(0, 0, 10);
+    camera ->position.set(0, 0, 0);
     camera ->lookAt(0, 0, 0);
 
     return camera;

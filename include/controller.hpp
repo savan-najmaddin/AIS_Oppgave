@@ -14,7 +14,9 @@ class controller : public KeyListener, public MouseListener {
 public:
   controller(Scene& scene, std::vector<armSegment>& ) ;
 
-  void onMouseDown(int key, const Vector2 & pos) override;
+  void onMouseDown(int key, const Vector2 &pos) override;
+  Vector2 lastMousePosition(float x, float y);
+
   void onKeyPressed(KeyEvent) override;
   void onKeyReleased(KeyEvent) override;
 
@@ -24,6 +26,7 @@ private:
   Mesh* myAddedMesh = nullptr;
   bool addedMesh = false;
 
+  void handleMouseClick();
   void handleDKey();
   void handleAKey();
   void handleEnterKey();

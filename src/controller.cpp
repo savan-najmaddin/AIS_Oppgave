@@ -6,11 +6,14 @@ controller::controller(Scene &scene, std::vector<armSegment> &armVec) : scene(sc
 
 void controller::onMouseDown(int key, const Vector2 &pos) {
     if (key == 0) {
-        std::cout << "On mouse down" << std::endl;
+        Vector2 targetPosition = lastMousePosition(pos.x, pos.y);
     }
+
 }
 
 //legge til feil knapp advarsel?
+
+
 
 void controller::onKeyPressed(KeyEvent evt) {
     if (evt.key == Key::D) {
@@ -38,15 +41,7 @@ void controller::onKeyPressed(KeyEvent evt) {
         }
     }
 
-void controller::handleDKey() {
-        armVec[1].getSegment()->position.x += 0.1;
-    }
-void controller::handleAKey() {
-        armVec[1].getSegment()->position.x -= 0.1;
-    }
-void controller::handleEnterKey() {
-        //
-    }
-void controller::wrongKeyEnter() {
-        //
-    }
+
+
+
+
