@@ -18,6 +18,7 @@ public:
     explicit MyMouseListener(float& t): t(t) {}
 
     void onMouseDown(int button, const Vector2& pos) override {
+      Vector2 lastPosition = pos;
       std::cout << "onMouseDown, button= " << button << ", pos=" << pos << " at t=" << t << std::endl;
     }
   };
