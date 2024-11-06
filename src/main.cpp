@@ -23,19 +23,19 @@ int main() {
     GLRenderer renderer(canvas.size());
 
     std::shared_ptr<Scene> scene = createScene();
-    std::shared_ptr<OrthographicCamera> camera = createOrthographicCamere();
+    std::shared_ptr<OrthographicCamera> camera = createOrthographicCamera();
 
     controller::MyMouseListener ml{clock.elapsedTime};
     canvas.addMouseListener(ml);
 
     std::vector<armSegment> armVec;
-    armVec.emplace_back(1, 5, 1); //armVec[0]
-    armVec.emplace_back(1, 5, 1); //armVec[1]
+    armVec.emplace_back(1, 5, 0); //armVec[0]
+    armVec.emplace_back(1, 5, 0); //armVec[1]
 
     armVec[0].getSegment()->position.x=0;
     armVec[1].getSegment()->position.x=armVec[0].getSegment()->position.x+10;
 
-    controller kontroller(*scene, armVec);
+
     canvas.addMouseListener( ml);
 
 

@@ -15,6 +15,7 @@ public:
 
     auto material= MeshBasicMaterial::create();
 
+
     segment = Mesh::create(geometry, material);
 
     }

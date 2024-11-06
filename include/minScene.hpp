@@ -13,7 +13,7 @@ inline Canvas::Parameters canvasParameter(){ //vinduet til programmet
     parameter.title("Min tittel");
     parameter.size(1280, 720);
     parameter.vsync(true);
-    parameter.resizable(true);
+    //parameter.resizable(true);
     return parameter;
 
 };
@@ -22,7 +22,7 @@ inline auto createScene() {
     return Scene::create();
 }
 
-inline std::shared_ptr<OrthographicCamera> createOrthographicCamere () {
+inline std::shared_ptr<OrthographicCamera> createOrthographicCamera () {
     float left = -5.0f;
     float right = 5.0f;
     float top = 5.0f;
@@ -31,8 +31,8 @@ inline std::shared_ptr<OrthographicCamera> createOrthographicCamere () {
     float far = 1000.0f;
 
     auto camera = OrthographicCamera::create(left, right, top, bottom, near, far);
-    camera ->position.set(0, 0, 0);
-    camera ->lookAt(0, 0, 0);
+    camera ->position.set(0, 0, 20);
+    camera ->lookAt(0, -4, 0);
 
     return camera;
 }
