@@ -36,7 +36,7 @@ public:
     return 0; //fjern senere
   }
 
-  Eigen::Vector2f findEndEffectorPosition() {
+  [[nodiscard]] Eigen::Vector2f findEffectorPosition() const{
     Eigen::Vector2f position(0.0f, 0.0f);
     float cumulativAngle = 0.0f;
 
@@ -48,6 +48,62 @@ public:
     return position;
   }
 
+  [[nodiscard]] Eigen::MatrixXf computeJacobianTranspose() const { //returnerer transposen til matrisen
+    Eigen::MatrixXf jacobianTranspose(2, numJoints); //matrixXf er dynamisk
+    jacobianTranspose.setZero(); //setter alle elementer i matrisen til 0
+
+    float cumulativeAngle = 0.0f; //summen av vinkler
+
+    for (size_t i = 0; i < numJoints; ++i) {
+      cumulativeAngle = 0.0f;
+      // Beregn summen av vinkler fra ledd 0 til i
+      for (size_t j = 0; j <= i; ++j) {
+        cumulativeAngle += joints[j].angle;
+      }
+
+      // Beregn partiellderivertene
+      float partialX = 0.0f;
+      float partialY = 0.0f;
+
+      float angleSum = cumulativeAngle;
+      for (size_t j = i; j < numJoints; ++j) {
+        angleSum += joints[j].angle;
+        partialX -= joints[j].length * std::sin(angleSum);
+        partialY += joints[j].length * std::cos(angleSum);
+      }
+
+      jacobianTranspose(0, i) = partialX;
+      jacobianTranspose(1, i) = partialY;
+    }
+    return jacobianTranspose;
+  }
+
+  void updateJointAngles(const Eigen::VectorXf& angleAdjustments) {
+    for (size_t i = 0; i < numJoints; ++i) {
+      joints[i].angle += angleAdjustments(i);
+      joints[i].angle = clampAngle(joints[i].angle);
+    }
+  }
+
+  void inverseKinematics(const Eigen::Vector2f& targetPosition, float learningRate,
+                          float threshold = 0.001f, int maxIteration = 1000) {
+    for (int iteration = 0; iteration < maxIteration; ++iteration) {
+      Eigen::Vector2f currentPosition = findEffectorPosition();
+      Eigen::Vector2f error = targetPosition - currentPosition;
+      float errorMagnitude = error.norm(); //absolutt verdien til error mellom target  og current position
+
+      //kan skrives status til konsoll
+
+      if (errorMagnitude < threshold) {
+        break;
+      }
+
+      Eigen::MatrixXf JacobianTranspose = computeJacobianTranspose();
+
+      Eigen::VectorXf angleAdjustments = JacobianTranspose * error * learningRate; //learningrate er skalar til hvor mye vi skal justere error vinkel
+      updateJointAngles(angleAdjustments);
+    }
+  }
 
 };
 
