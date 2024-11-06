@@ -17,8 +17,7 @@ public:
   void onMouseDown(int key, const Vector2 &pos) override;
   Vector2 lastMousePosition(float x, float y);
 
-  void onKeyPressed(KeyEvent) override;
-  void onKeyReleased(KeyEvent) override;
+
 
 private:
   std::vector<armSegment>&armVec;
@@ -27,10 +26,7 @@ private:
   bool addedMesh = false;
 
   void handleMouseClick();
-  void handleDKey();
-  void handleAKey();
-  void handleEnterKey();
-  void wrongKeyEnter();
+
   std::shared_ptr<Mesh> createMesh();
 
 };

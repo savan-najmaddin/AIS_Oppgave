@@ -9,13 +9,10 @@
 using namespace threepp;
 
 //brukes for testing av catch2
-int add(const int x, const int y) {
-    return x + y;
-};
 
 int main() {
 
-    int add(5 + 4);//test funkjson
+
 
 
     auto parameter = canvasParameter();
