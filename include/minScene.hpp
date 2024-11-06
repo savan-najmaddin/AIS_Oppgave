@@ -11,9 +11,9 @@ using namespace threepp;
 inline Canvas::Parameters canvasParameter(){ //vinduet til programmet
     Canvas::Parameters parameter;
     parameter.title("Min tittel");
-    parameter.size(1280, 720);
+    parameter.size(800, 800);
     parameter.vsync(true);
-    //parameter.resizable(true);
+    parameter.resizable(false);
     return parameter;
 
 };
@@ -23,9 +23,9 @@ inline auto createScene() {
 }
 
 inline std::shared_ptr<OrthographicCamera> createOrthographicCamera () {
-    float left = -5.0f;
-    float right = 5.0f;
-    float top = 5.0f;
+    float left = -10.0f;
+    float right = 10.0f;
+    float top = 10.0f;
     float bottom = 0.1f;
     float near = 0.1f;
     float far = 1000.0f;
