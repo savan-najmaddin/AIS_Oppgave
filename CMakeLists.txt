@@ -41,7 +41,7 @@ endif ()
 add_subdirectory(src)
 
 target_include_directories(kinematikk PUBLIC include)
-#target_include_directories(kinematikk PUBLIC ${eigen_SOURCE_DIR})
+target_include_directories(kinematikk PUBLIC ${eigen_SOURCE_DIR})
 # eller link_libraries Eigen3::Eigen
 target_link_libraries(kinematikk PRIVATE threepp::threepp)
 

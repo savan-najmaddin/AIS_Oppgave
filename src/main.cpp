@@ -3,6 +3,7 @@
 #include "controller.hpp"
 #include "minScene.hpp"
 #include "objekt.hpp"
+#include <vector>
 
 
 using namespace threepp;
@@ -27,13 +28,12 @@ int main() {
 
     Clock clock;
 
-
-
     std::vector<armSegment> armVec;
-    armVec.emplace_back(1, 1, 1); //armVec[0]
-    armVec.emplace_back(1, 1, 1); //armVec[1]
+    armVec.emplace_back(1, 5, 1); //armVec[0]
+    armVec.emplace_back(1, 5, 1); //armVec[1]
 
-    armVec[1].getSegment()->position.y=1.5;
+    armVec[0].getSegment()->position.x=0;
+    armVec[1].getSegment()->position.x=armVec[0].getSegment()->position.x+10;
 
     controller kontroller(*scene, armVec);
     canvas.addKeyListener(kontroller);
