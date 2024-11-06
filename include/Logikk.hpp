@@ -8,7 +8,10 @@
 //c. Beregning av Jacobian multiplisert med Jacobian-transposen (J * J^T)
 //d. Selve løseren.
 
+//bevegelsen til IK kjeden gjort numerisk
+
 #include <cstddef> //for size_t
+#include <cmath>
 
 
 
@@ -24,7 +27,7 @@ public:
   size_t numJoints; //antall ledd i kjeden
   std::vector<Joint> joints; //array av ledd
 
-  kinematicChain(size_t n = 0) : numJoints(n), joints(n){}
+  explicit kinematicChain(size_t n = 0) : numJoints(n), joints(n){}
 
   void addJoint(const Joint& joint) {
     joints.emplace_back(joint);
@@ -32,9 +35,19 @@ public:
   }
 
   static float clampAngle (float angle) {
-    //legg til metode for å begrense vinkler på joints, [0, 2π]
-    return 0; //fjern senere
+    const float Two_PI = 2.0f * M_PI;
+
+    while (angle >= Two_PI) {
+      angle -= Two_PI;
+    }
+
+    while(angle < Two_PI) {
+      angle += Two_PI;
+    }
+
+    return angle;
   }
+
 
   [[nodiscard]] Eigen::Vector2f findEffectorPosition() const{
     Eigen::Vector2f position(0.0f, 0.0f);
@@ -47,6 +60,7 @@ public:
     }
     return position;
   }
+
 
   [[nodiscard]] Eigen::MatrixXf computeJacobianTranspose() const { //returnerer transposen til matrisen
     Eigen::MatrixXf jacobianTranspose(2, numJoints); //matrixXf er dynamisk
@@ -78,6 +92,7 @@ public:
     return jacobianTranspose;
   }
 
+
   void updateJointAngles(const Eigen::VectorXf& angleAdjustments) {
     for (size_t i = 0; i < numJoints; ++i) {
       joints[i].angle += angleAdjustments(i);
@@ -85,7 +100,7 @@ public:
     }
   }
 
-  void inverseKinematics(const Eigen::Vector2f& targetPosition, float learningRate,
+  void inverseKinematics(const Eigen::Vector2f& targetPosition, float learningRate, //targetPosition skal hentes fra mouselistner
                           float threshold = 0.001f, int maxIteration = 1000) {
     for (int iteration = 0; iteration < maxIteration; ++iteration) {
       Eigen::Vector2f currentPosition = findEffectorPosition();
