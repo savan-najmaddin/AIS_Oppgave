@@ -26,7 +26,7 @@ inline std::shared_ptr<OrthographicCamera> createOrthographicCamera () {
     float left = -15.0f;
     float right = 15.0f;
     float top = 15.0f;
-    float bottom = 0.05f;
+    float bottom =-15.0f;
     float near = 0.1f;
     float far = 1000.0f;
 

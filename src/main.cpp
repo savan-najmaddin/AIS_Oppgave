@@ -26,11 +26,6 @@ int main() {
     std::shared_ptr<Scene> scene = createScene();
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamera();
 
-    interactivPlane plane(10, 3);
-    scene->add(plane.getPlane());
-    plane.getPlane()->position.x = 0;
-    plane.getPlane()->position.y = 0;
-
     controller::MyMouseListener ml{clock.elapsedTime};
     canvas.addMouseListener(ml);
 

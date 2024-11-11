@@ -2,7 +2,7 @@
 #define CONTROLLER_HPP
 
 
-#include "objekt.hpp"
+
 #include "threepp/threepp.hpp"
 #include "Eigen/Core"
 #include "Logikk.hpp" //må denne være her?
@@ -20,14 +20,13 @@ public:
     explicit MyMouseListener(float& t): t(t) {}
 
     void onMouseDown(int button, const Vector2& pos) override {
-      Eigen::Vector2f target(pos.x, pos.y);
+      Eigen::Vector2f const target(pos.x, pos.y);
       chain.insideCircle(target);
 
     }
   };
 
 
-  controller(Scene& scene, std::vector<armSegment>& ) ;
 
   void onMouseDown(int key, const Vector2 &pos) ;
   Vector2 lastMousePosition(float x, float y);
@@ -35,7 +34,6 @@ public:
 
 
 private:
-  std::vector<armSegment>&armVec;
   Scene& scene;
   Mesh* myAddedMesh = nullptr;
   bool addedMesh = false;

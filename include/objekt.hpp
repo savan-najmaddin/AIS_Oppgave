@@ -2,59 +2,34 @@
 #define OBJEKT_HPP
 
 #include "threepp/threepp.hpp"
-
+#include "Eigen/Core"
 
 using namespace threepp;
 
-
-class interactivPlane {
+class circleObject {
 public:
+  circleObject() {
 
-  interactivPlane(float width, float height) {
-    auto geometry = PlaneGeometry::create(width, height);
+    auto circleGeometry = CircleGeometry::create(0.5f, 32);
+    auto circleMaterial = MeshBasicMaterial::create();
+    circleMaterial->color = Color::red;
 
-    auto material = MeshBasicMaterial::create();
-    material->color = Color::yellow;
-
-    plane = Mesh::create(geometry, material);
+    circleMesh = Mesh::create(circleGeometry, circleMaterial);
   }
 
-  std::shared_ptr<Mesh> getPlane() {
-    return plane;
-
+  void setPosition(const Eigen::Vector2f& position) {
+    circleMesh->position.set(position.x(), position.y(), 0);
   }
+
+  std::shared_ptr<Mesh> getMesh() const {
+    return circleMesh;
+  }
+
 
 private:
-  std::shared_ptr<Mesh> plane;
+  std::shared_ptr<Mesh> circleMesh;
+
 };
-
-
-class armSegment { //kanskje slette denne?
-public:
-  //fyi husk å differensier mellom logikk og grafikk
-  armSegment(float width, float height, float depth){
-
-    auto geometry = BoxGeometry::create(width, height, depth);
-
-    auto material= MeshBasicMaterial::create();
-
-
-    segment = Mesh::create(geometry, material);
-
-  }
-  //skriv en funksjon som returnerer segment
-  std::shared_ptr<Mesh> getSegment() {
-    return segment;
-  }
-
-private:
-  std::shared_ptr<Mesh> segment;
-};
-
-
-
-
-
 
 
 

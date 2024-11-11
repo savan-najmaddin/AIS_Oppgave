@@ -43,13 +43,12 @@ public:
     numJoints = joints.size();
   }
 
-  float insideCircle(Eigen::Vector2f target) {
+  void insideCircle(const Eigen::Vector2f& target) {
     if (target.norm() > maxReach) {
       updateInverseKinematics(target, 0.1f);
+      //legg til initialisering av en sirkel
     }
-    else {
-      std::cout<<"Target is out of reach"<<std::endl;
-    }
+
   }
 
   static float clampAngle (float angle) {
@@ -119,7 +118,7 @@ public:
 
 
   void updateInverseKinematics(const Eigen::Vector2f& targetPosition, float learningRate,
-                            float threshold = 0.001f, int maxIteration = 1000) {
+                            float const threshold = 0.001f, int maxIteration = 1000) {
 
     Eigen::Vector2f currentPosition = findEffectorPosition();
     Eigen::Vector2f error = targetPosition - currentPosition;
