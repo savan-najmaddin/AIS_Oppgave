@@ -4,8 +4,8 @@
 
 #include "objekt.hpp"
 #include "threepp/threepp.hpp"
-#include <iostream>
-
+#include "Eigen/Core"
+#include "Logikk.hpp" //må denne være her?
 
 
 using namespace threepp;
@@ -15,14 +15,18 @@ class controller  {
 public:
   struct MyMouseListener: MouseListener {
     float& t;
+    kinematicChain chain;
 
     explicit MyMouseListener(float& t): t(t) {}
 
     void onMouseDown(int button, const Vector2& pos) override {
-      Vector2 lastPosition = pos;
-      std::cout << "onMouseDown, button= " << button << ", pos=" << pos << " at t=" << t << std::endl;
+      Eigen::Vector2f target(pos.x, pos.y);
+      chain.insideCircle(target);
+
     }
   };
+
+
   controller(Scene& scene, std::vector<armSegment>& ) ;
 
   void onMouseDown(int key, const Vector2 &pos) ;

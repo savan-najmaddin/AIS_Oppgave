@@ -3,7 +3,8 @@
 #include "controller.hpp"
 #include "minScene.hpp"
 #include "objekt.hpp"
-#include <vector>
+#include "Logikk.hpp"
+#include "Eigen/Core"
 
 
 using namespace threepp;
@@ -33,19 +34,20 @@ int main() {
     controller::MyMouseListener ml{clock.elapsedTime};
     canvas.addMouseListener(ml);
 
-    std::vector<armSegment> armVec;
-    armVec.emplace_back(1, 5, 0); //armVec[0]
-    armVec.emplace_back(1, 5, 0); //armVec[1]
+  /* kinematicChain armVec(3);
 
-    armVec[0].getSegment()->position.x=0;
-    armVec[0].getSegment()->position.y=0;
-
-    armVec[1].getSegment()->position.x=5;
-    armVec[1].getSegment()->position.y=5;
+    armVec.joints[0] = Joint(0.0f);
+    armVec.joints[1] = Joint(0.0f);
+    armVec.joints[2] = Joint(0.0f);
+    trenger settet først
+    */
 
 
 
-    canvas.addMouseListener( ml);
+
+
+
+
 
 
 

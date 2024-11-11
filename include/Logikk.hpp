@@ -10,9 +10,10 @@
 
 //bevegelsen til IK kjeden gjort numerisk
 
-#include <cstddef> //for size_t
+#include <Eigen/Core>
 #include <cmath>
-
+#include <iostream>
+#include <vector>
 
 
 struct Joint {
@@ -26,22 +27,37 @@ class kinematicChain {
 public:
   size_t numJoints; //antall ledd i kjeden
   std::vector<Joint> joints; //array av ledd
+  float maxReach;
 
-  explicit kinematicChain(size_t n = 0) : numJoints(n), joints(n){}
+  explicit kinematicChain(size_t n = 0) : numJoints(n), joints(n) {
+    float totalLength = 0.0f;
+    for (const auto &joint : joints) {
+      totalLength += joint.length;
+    }
+
+    maxReach = totalLength;
+  }
 
   void addJoint(const Joint& joint) {
     joints.emplace_back(joint);
     numJoints = joints.size();
   }
 
-  static float clampAngle (float angle) {
-    const float Two_PI = 2.0f * M_PI;
-
-    while (angle >= Two_PI) {
-      angle -= Two_PI;
+  float insideCircle(Eigen::Vector2f target) {
+    if (target.norm() > maxReach) {
+      updateInverseKinematics(target, 0.1f);
     }
+    else {
+      std::cout<<"Target is out of reach"<<std::endl;
+    }
+  }
 
-    while(angle < Two_PI) {
+  static float clampAngle (float angle) {
+    constexpr float Two_PI = 2.0f * M_PI;
+
+    angle = std::fmod(angle, Two_PI); //mod av 2π
+
+    if (angle < 0.0f) {
       angle += Two_PI;
     }
 
@@ -49,6 +65,7 @@ public:
   }
 
 
+  // Google når nodiscard skal brukes
   [[nodiscard]] Eigen::Vector2f findEffectorPosition() const{
     Eigen::Vector2f position(0.0f, 0.0f);
     float cumulativAngle = 0.0f;
@@ -63,7 +80,7 @@ public:
 
 
   [[nodiscard]] Eigen::MatrixXf computeJacobianTranspose() const { //returnerer transposen til matrisen
-    Eigen::MatrixXf jacobianTranspose(2, numJoints); //matrixXf er dynamisk
+    Eigen::MatrixXf jacobianTranspose(numJoints, 2); //matrixXf er dynamisk
     jacobianTranspose.setZero(); //setter alle elementer i matrisen til 0
 
     float cumulativeAngle = 0.0f; //summen av vinkler
@@ -86,8 +103,8 @@ public:
         partialY += joints[j].length * std::cos(angleSum);
       }
 
-      jacobianTranspose(0, i) = partialX;
-      jacobianTranspose(1, i) = partialY;
+      jacobianTranspose( i, 0) = partialX;
+      jacobianTranspose( i, 1) = partialY;
     }
     return jacobianTranspose;
   }
@@ -100,25 +117,27 @@ public:
     }
   }
 
-  void inverseKinematics(const Eigen::Vector2f& targetPosition, float learningRate, //targetPosition skal hentes fra mouselistner
-                          float threshold = 0.001f, int maxIteration = 1000) {
-    for (int iteration = 0; iteration < maxIteration; ++iteration) {
-      Eigen::Vector2f currentPosition = findEffectorPosition();
-      Eigen::Vector2f error = targetPosition - currentPosition;
-      float errorMagnitude = error.norm(); //absolutt verdien til error mellom target  og current position
 
-      //kan skrives status til konsoll
+  void updateInverseKinematics(const Eigen::Vector2f& targetPosition, float learningRate,
+                            float threshold = 0.001f, int maxIteration = 1000) {
 
-      if (errorMagnitude < threshold) {
-        break;
-      }
+    Eigen::Vector2f currentPosition = findEffectorPosition();
+    Eigen::Vector2f error = targetPosition - currentPosition;
+    float errorMagnitude = error.norm(); //absolutt verdien til error mellom target  og current position
 
-      Eigen::MatrixXf JacobianTranspose = computeJacobianTranspose();
+    //kan skrives status til konsoll
 
-      Eigen::VectorXf angleAdjustments = JacobianTranspose * error * learningRate; //learningrate er skalar til hvor mye vi skal justere error vinkel
-      updateJointAngles(angleAdjustments);
+    if (errorMagnitude < threshold) {
+      return ;
     }
+
+    Eigen::MatrixXf JacobianTranspose = computeJacobianTranspose();
+
+    Eigen::VectorXf angleAdjustments = learningRate * JacobianTranspose * error ; //learningrate er skalar til hvor mye vi skal justere error vinkel
+    updateJointAngles(angleAdjustments);
   }
+
+
 
 };
 

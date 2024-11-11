@@ -29,7 +29,7 @@ private:
 };
 
 
-class armSegment {
+class armSegment { //kanskje slette denne?
 public:
   //fyi husk å differensier mellom logikk og grafikk
   armSegment(float width, float height, float depth){
