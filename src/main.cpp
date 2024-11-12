@@ -9,12 +9,14 @@
 
 using namespace threepp;
 
-//brukes for testing av catch2
+int add(int x, int y) {
+    return x+y;
+}
 
 int main() {
 
-
-
+    add(5,4);
+    std::cout<<add;
 
     auto parameter = canvasParameter();
     Canvas canvas(parameter);
@@ -26,9 +28,17 @@ int main() {
     std::shared_ptr<Scene> scene = createScene();
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamera();
 
+
+
     controller::MyMouseListener ml{clock.elapsedTime};
     canvas.addMouseListener(ml);
 
+    myBox box;
+    box.boxSegment(6, 5, 0.001f );
+    scene->add(box.getMesh());
+
+    circleObject circle;
+    scene->add(circle.getMesh());
   /* kinematicChain armVec(3);
 
     armVec.joints[0] = Joint(0.0f);
@@ -38,17 +48,6 @@ int main() {
     */
 
 
-
-
-
-
-
-
-
-
-    for (auto& segment : armVec) { //legger til instanser av armvec o scemem
-        scene->add(segment.getSegment());
-    }
 
 
 

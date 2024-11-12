@@ -34,7 +34,6 @@ public:
 
 
 private:
-  Scene& scene;
   Mesh* myAddedMesh = nullptr;
   bool addedMesh = false;
   void handleMouseClick();
