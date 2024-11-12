@@ -63,12 +63,15 @@ int main() {
     Eigen::Vector2f lastPosition = chain.findEffectorPosition();
     std::cout<< "Last position: " << lastPosition.x() << ", " << lastPosition.y() << std::endl;
 
+    Visualizer visualizer(scene);
+
     canvas.animate([&]() {
 
         chain.updateInverseKinematics(targetPosition, learningRate);
-       // drawKinematicChain(chain, scene);
-        camera->updateProjectionMatrix();
+        visualizer.drawKinematicChain(chain);
         renderer.render(*scene, *camera);
+        Eigen::Vector2f lastPosition = chain.findEffectorPosition();
+        std::cout<< "Last position: " << lastPosition.x() << ", " << lastPosition.y() << std::endl;
 
 
 
