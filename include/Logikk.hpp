@@ -82,7 +82,7 @@ public:
 
 
   [[nodiscard]] Eigen::MatrixXf computeJacobianTranspose() const { //returnerer transposen til matrisen
-    Eigen::MatrixXf jacobianTranspose(numJoints, 2); //matrixXf er dynamisk
+    Eigen::MatrixXf jacobianTranspose(  numJoints, 2); //matrixXf er dynamisk
     jacobianTranspose.setZero(); //setter alle elementer i matrisen til 0
 
     float cumulativeAngle = 0.0f; //summen av vinkler
@@ -105,8 +105,8 @@ public:
         partialY += joints[j].length * std::cos(angleSum);
       }
 
-      jacobianTranspose( 0, i) = partialX;
-      jacobianTranspose( 0, i) = partialY;
+      jacobianTranspose( i, 0) = partialX;
+      jacobianTranspose( i, 1) = partialY;
     }
     return jacobianTranspose;
   }

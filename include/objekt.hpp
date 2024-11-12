@@ -33,6 +33,7 @@ public:
     auto circleMaterial = MeshBasicMaterial::create();
     circleMaterial->color = Color::red;
 
+
     circleMesh = Mesh::create(circleGeometry, circleMaterial);
 
   }

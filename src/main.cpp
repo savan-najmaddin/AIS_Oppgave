@@ -3,10 +3,10 @@
 #include "Eigen/Core"
 #include "Logikk.hpp"
 #include "controller.hpp"
-#include "jointMesh.hpp"
 #include "minScene.hpp"
 #include "objekt.hpp"
 
+#include <Visual.hpp>
 
 
 using namespace threepp;
@@ -46,18 +46,18 @@ int main() {
     kinematicChain chain(3);
 
     Eigen::Vector2f targetPosition = {2.0f, 3.0f};
+    float learningRate = 0.1f;
     //if (mouselistner) { ny targetPosition}
 
-    Joint joint1(M_PI/2, 2.0f);
-    Joint joint2(0.0, 2.0f);
-    Joint joint3(0.0f, 2.0f);
+    Joint joint1(M_PI/2, 5.0f);
+    Joint joint2(0.0, 5.0f);
 
 
 
     canvas.animate([&]() {
 
-        //chain.updateInverseKinematics(targetPosition, 0.1f);
-        scene->clear();
+        chain.updateInverseKinematics(targetPosition, learningRate);
+        drawKinematicChain(chain, scene);
         camera->updateProjectionMatrix();
         renderer.render(*scene, *camera);
 
