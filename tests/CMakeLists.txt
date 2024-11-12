@@ -1,6 +1,7 @@
-add_executable(tests tests.cpp test_main.cpp)
+add_executable(test_main test_main.cpp)
 add_test(NAME test_main COMMAND test_main)
-target_link_libraries(tests PRIVATE Catch2::Catch2 threepp)
+
+
 
 
 

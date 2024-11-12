@@ -43,13 +43,16 @@ public:
     numJoints = joints.size();
   }
 
-  void insideCircle(const Eigen::Vector2f& target) {
-    if (target.norm() > maxReach) {
-      updateInverseKinematics(target, 0.1f);
+  auto insideCircle(const Eigen::Vector2f& target) {
+    if (target.norm() <= maxReach) {
+      return target;
       //legg til initialisering av en sirkel
     }
+  };
 
-  }
+
+
+
 
   static float clampAngle (float angle) {
     constexpr float Two_PI = 2.0f * M_PI;
@@ -102,8 +105,8 @@ public:
         partialY += joints[j].length * std::cos(angleSum);
       }
 
-      jacobianTranspose( i, 0) = partialX;
-      jacobianTranspose( i, 1) = partialY;
+      jacobianTranspose( 0, i) = partialX;
+      jacobianTranspose( 0, i) = partialY;
     }
     return jacobianTranspose;
   }

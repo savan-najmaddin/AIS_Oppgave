@@ -1,22 +1,24 @@
 #include "threepp/threepp.hpp"
 //#include "threepp/extras/imgui/ImguiContext.hpp"
+#include "Eigen/Core"
+#include "Logikk.hpp"
 #include "controller.hpp"
+#include "jointMesh.hpp"
 #include "minScene.hpp"
 #include "objekt.hpp"
-#include "Logikk.hpp"
-#include "Eigen/Core"
+
 
 
 using namespace threepp;
 
-int add(int x, int y) {
-    return x+y;
-}
+//int add(int x, int y) {
+//    return x+y;
+//}
 
 int main() {
 
-    add(5,4);
-    std::cout<<add;
+   //#add(5,4);
+   ///std::cout<<add;
 
     auto parameter = canvasParameter();
     Canvas canvas(parameter);
@@ -38,23 +40,27 @@ int main() {
     scene->add(box.getMesh());
 
     circleObject circle;
+    circle.getMesh()->position.z = 3.0f;
     scene->add(circle.getMesh());
-  /* kinematicChain armVec(3);
 
-    armVec.joints[0] = Joint(0.0f);
-    armVec.joints[1] = Joint(0.0f);
-    armVec.joints[2] = Joint(0.0f);
-    trenger settet først
-    */
+    kinematicChain chain(3);
 
+    Eigen::Vector2f targetPosition = {2.0f, 3.0f};
+    //if (mouselistner) { ny targetPosition}
 
+    Joint joint1(M_PI/2, 2.0f);
+    Joint joint2(0.0, 2.0f);
+    Joint joint3(0.0f, 2.0f);
 
 
 
     canvas.animate([&]() {
-        renderer.clear();
-        renderer.render(*scene, *camera);
+
+        //chain.updateInverseKinematics(targetPosition, 0.1f);
+        scene->clear();
         camera->updateProjectionMatrix();
+        renderer.render(*scene, *camera);
+
 
 
     });
