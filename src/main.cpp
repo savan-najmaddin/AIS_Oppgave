@@ -43,21 +43,30 @@ int main() {
     circle.getMesh()->position.z = 3.0f;
     scene->add(circle.getMesh());
 
-    kinematicChain chain(3);
+    kinematicChain chain;
+
+    chain.addJoint(Joint(M_PI , 5.0f));
+    chain.addJoint(Joint(M_PI , 5.0f));
+    chain.addJoint(Joint(M_PI , 5.0f));
 
     Eigen::Vector2f targetPosition = {2.0f, 3.0f};
     float learningRate = 0.1f;
     //if (mouselistner) { ny targetPosition}
 
-    Joint joint1(M_PI/2, 5.0f);
-    Joint joint2(0.0, 5.0f);
 
 
+    std::cout << "Joint Positions:\n";
+    for (const auto& joint : chain.joints) {
+        std::cout << "Angle: " << joint.angle << ", Length: " << joint.length << std::endl;
+    }
+
+    Eigen::Vector2f lastPosition = chain.findEffectorPosition();
+    std::cout<< "Last position: " << lastPosition.x() << ", " << lastPosition.y() << std::endl;
 
     canvas.animate([&]() {
 
         chain.updateInverseKinematics(targetPosition, learningRate);
-        drawKinematicChain(chain, scene);
+       // drawKinematicChain(chain, scene);
         camera->updateProjectionMatrix();
         renderer.render(*scene, *camera);
 
