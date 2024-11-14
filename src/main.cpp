@@ -74,7 +74,7 @@ int main() {
 
         float dt = clock.getDelta();
 
-        chain.updateInverseKinematics(targetPosition, 0.01f);
+        chain.updateInverseKinematics(targetPosition, 0.001f);
 
         float cumulativeAngle = 0.0f;
         Eigen::Vector2f position(0.0f, 0.0f);
@@ -89,6 +89,9 @@ int main() {
             position.y() += chain.joints[i].length * std::sin(cumulativeAngle);
 
         }
+
+        Eigen::Vector2f posisjon = chain.findEffectorPosition();
+        std::cout << "Effector position: " << posisjon.x() << ", " << posisjon.y() << std::endl;
 
         renderer.render(*scene, *camera);
 

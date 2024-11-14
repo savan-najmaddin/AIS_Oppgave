@@ -42,16 +42,11 @@ public:
     joints.emplace_back(joint);
     numJoints = joints.size();
   }
-/*
-  auto insideCircle(const Eigen::Vector2f& target) {
-    if (target.norm() <= maxReach) {
-      return target;
-      //legg til initialisering av en sirkel
-    }
-    */
 
 
+  auto targetPosition(threepp::Vector2 pos = {2, 3}) {
 
+  }
 
 
 
@@ -122,7 +117,7 @@ public:
 
 
   void updateInverseKinematics(const Eigen::Vector2f& targetPosition, float learningRate,
-                            float const threshold = 0.001f, int maxIteration = 1000) {
+                            float const threshold = 0.1f, int maxIteration = 10000) {
 
     Eigen::Vector2f currentPosition = findEffectorPosition();
     Eigen::Vector2f error = targetPosition - currentPosition;

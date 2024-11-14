@@ -25,34 +25,6 @@ std::shared_ptr<Mesh> inline createBox() {
 
 
 
-class circleObject {
-public:
-  circleObject() {
-
-    auto circleGeometry = CircleGeometry::create(2.0f, 32);
-    auto circleMaterial = MeshBasicMaterial::create();
-    circleMaterial->color = Color::red;
-
-
-    circleMesh = Mesh::create(circleGeometry, circleMaterial);
-
-  }
-/*
-  void setPosition(const Eigen::Vector2f& position) {
-    circleMesh->position.set(position.x(), position.y(), 0);
-    }
-    */
-
-
-  std::shared_ptr<Mesh> getMesh() const {
-    return circleMesh;
-  }
-
-private:
-  std::shared_ptr<Mesh> circleMesh;
-
-};
-
 
 
 #endif //OBJEKT_HPP
