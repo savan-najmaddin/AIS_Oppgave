@@ -44,9 +44,12 @@ public:
   }
 
 
-  Eigen::Vector2f targetPosition(Eigen::Vector2f position = {2, 3}) {
-    std::cout << "pos x: " << position.x() << "pos y: " << position.y() << std::endl;
-    return position;
+  void targetPosition(Eigen::Vector2f& position) {
+    newVectorPosition = position;
+
+  }
+  const Eigen::Vector2f& getTargetPosition() const {
+    return newVectorPosition;
   }
 
 
@@ -136,6 +139,8 @@ public:
     updateJointAngles(angleAdjustments);
   }
 
+private:
+    Eigen::Vector2f newVectorPosition{1.0f, 8.0f};
 
 };
 

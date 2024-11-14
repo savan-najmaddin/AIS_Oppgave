@@ -10,14 +10,9 @@
 
 using namespace threepp;
 
-//int add(int x, int y) {
-//    return x+y;
-//}
-
 int main() {
 
-   //#add(5,4);
-   ///std::cout<<add;
+    kinematicChain chain;
 
     auto parameter = canvasParameter();
     Canvas canvas(parameter);
@@ -32,10 +27,10 @@ int main() {
 
 
 
-    controller::MyMouseListener ml{clock.elapsedTime};
+    controller::MyMouseListener ml{clock.elapsedTime, chain};
     canvas.addMouseListener(ml);
 
-    kinematicChain chain;
+
     chain.addJoint(Joint(M_PI , 5.0f));
     chain.addJoint(Joint(M_PI , 5.0f));
     chain.addJoint(Joint(M_PI , 5.0f));
@@ -52,7 +47,7 @@ int main() {
         scene->add(jointVisual);
     }
 
-    Eigen::Vector2f targetPosition = {2.0f, 3.0f};
+    auto targetPosition = chain.getTargetPosition();
 
     auto targetGeometry = SphereGeometry::create(0.5f, 16, 16);
     auto targetMaterial = MeshBasicMaterial::create({{"color", Color::green}});
@@ -69,17 +64,15 @@ int main() {
     Eigen::Vector2f lastPosition = chain.findEffectorPosition();
     std::cout<< "Last position: " << lastPosition.x() << ", " << lastPosition.y() << std::endl;
 
-    chain.targetPosition();
-    auto n = chain.targetPosition();
 
 
     canvas.animate([&]() {
 
-        clock.start();
-        float dt = clock.getDelta();
+        Eigen::Vector2f targetPosition = chain.getTargetPosition();
+
         frameCount += 1;
 
-        chain.updateInverseKinematics(n, 0.001f);
+        chain.updateInverseKinematics(targetPosition, 0.001f);
 
         float cumulativeAngle = 0.0f;
         Eigen::Vector2f position(0.0f, 0.0f);

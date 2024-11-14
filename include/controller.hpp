@@ -10,20 +10,21 @@
 
 using namespace threepp;
 
-inline kinematicChain chain;
-
 class controller  {
 
 public:
   struct MyMouseListener: MouseListener {
+
+    kinematicChain& chain;
+
     float& t;
 
-
-    explicit MyMouseListener(float& t): t(t) {}
+    explicit MyMouseListener(float& t, kinematicChain& chain): t(t) , chain(chain) {}
 
     void onMouseDown(int button, const Vector2& pos) override {
       Eigen::Vector2f target(pos.x, pos.y);
-      chain.targetPosition(target); //oversetter fra threepp til eigen og sender til logikk.hpp
+      chain.targetPosition(target);
+      //oversetter fra threepp til eigen og sender til logikk.hpp
 
 
     }
