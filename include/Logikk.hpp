@@ -42,13 +42,14 @@ public:
     joints.emplace_back(joint);
     numJoints = joints.size();
   }
-
+/*
   auto insideCircle(const Eigen::Vector2f& target) {
     if (target.norm() <= maxReach) {
       return target;
       //legg til initialisering av en sirkel
     }
-  };
+    */
+
 
 
 

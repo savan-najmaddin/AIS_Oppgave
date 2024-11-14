@@ -23,19 +23,38 @@ inline auto createScene() {
 }
 
 inline std::shared_ptr<OrthographicCamera> createOrthographicCamera () {
-    float left = -15.0f;
-    float right = 15.0f;
-    float top = 15.0f;
-    float bottom =-15.5f;
+    float left = -5.0f;
+    float right = 5.0f;
+    float top = 5.0f;
+    float bottom =-5.0f;
     float near = 0.1f;
     float far = 100.0f;
 
     auto camera = OrthographicCamera::create(left, right, top, bottom, near, far);
     camera ->position.set(0, 0, 10);
-    camera ->lookAt(0, 0, 0);
+    camera ->lookAt(-3, 0, 0);
 
     return camera;
 }
+
+class JointVisual {
+public:
+    JointVisual(float length, float width = 0.2f) {
+        // Create geometry for the joint (a thin box)
+        auto geometry = BoxGeometry::create(length, width, width);
+        auto material = MeshBasicMaterial::create({{"color", Color::red}});
+
+        mesh = Mesh::create(geometry, material);
+        mesh->position.set(length / 2.0f, 0, 0); // Center the mesh
+    }
+
+    std::shared_ptr<Mesh> getMesh() {
+        return mesh;
+    }
+
+private:
+    std::shared_ptr<Mesh> mesh;
+};
 
 
 class myBox {

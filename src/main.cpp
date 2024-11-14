@@ -35,24 +35,29 @@ int main() {
     controller::MyMouseListener ml{clock.elapsedTime};
     canvas.addMouseListener(ml);
 
-    myBox box;
-    box.boxSegment(6, 5, 0.001f );
-    scene->add(box.getMesh());
-
-    circleObject circle;
-    circle.getMesh()->position.z = 3.0f;
-    scene->add(circle.getMesh());
-
     kinematicChain chain;
+    chain.addJoint(Joint(M_PI , 5.0f));
+    chain.addJoint(Joint(M_PI , 5.0f));
+    chain.addJoint(Joint(M_PI , 5.0f));
 
-    chain.addJoint(Joint(M_PI , 5.0f));
-    chain.addJoint(Joint(M_PI , 5.0f));
-    chain.addJoint(Joint(M_PI , 5.0f));
+    std::vector<std::shared_ptr<Object3D>> jointVisuals;
+    for(size_t i = 0; i < chain.numJoints; ++i) {
+        auto jointVisual = std::make_shared<Object3D>();
+        auto link = std::make_shared<JointVisual>(chain.joints[i].length)->getMesh();
+        jointVisual->add(link);
+        jointVisuals.push_back(jointVisual);
+    }
+
+    for (auto& jointVisual : jointVisuals) {
+        scene->add(jointVisual);
+    }
 
     Eigen::Vector2f targetPosition = {2.0f, 3.0f};
-    float learningRate = 0.1f;
-    //if (mouselistner) { ny targetPosition}
-
+    auto targetGeometry = SphereGeometry::create(0.5f, 16, 16);
+    auto targetMaterial = MeshBasicMaterial::create({{"color", Color::green}});
+    auto targetMesh = Mesh::create(targetGeometry, targetMaterial);
+    targetMesh->position.set(targetPosition.x(), targetPosition.y(), 0);
+    scene->add(targetMesh);
 
 
     std::cout << "Joint Positions:\n";
@@ -63,15 +68,29 @@ int main() {
     Eigen::Vector2f lastPosition = chain.findEffectorPosition();
     std::cout<< "Last position: " << lastPosition.x() << ", " << lastPosition.y() << std::endl;
 
-    Visualizer visualizer(scene);
+
 
     canvas.animate([&]() {
 
-        chain.updateInverseKinematics(targetPosition, learningRate);
-        visualizer.drawKinematicChain(chain);
+        float dt = clock.getDelta();
+
+        chain.updateInverseKinematics(targetPosition, 0.01f);
+
+        float cumulativeAngle = 0.0f;
+        Eigen::Vector2f position(0.0f, 0.0f);
+
+        for(size_t i = 0; i < chain.numJoints; ++i) {
+            cumulativeAngle += chain.joints[i].angle;
+
+            jointVisuals[i]->position.set(position.x(), position.y(), 0);
+            jointVisuals[i]->rotation.set(0, 0, cumulativeAngle);
+
+            position.x() += chain.joints[i].length * std::cos(cumulativeAngle);
+            position.y() += chain.joints[i].length * std::sin(cumulativeAngle);
+
+        }
+
         renderer.render(*scene, *camera);
-        Eigen::Vector2f lastPosition = chain.findEffectorPosition();
-        std::cout<< "Last position: " << lastPosition.x() << ", " << lastPosition.y() << std::endl;
 
 
 

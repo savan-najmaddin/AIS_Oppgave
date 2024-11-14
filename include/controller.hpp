@@ -21,7 +21,8 @@ public:
 
     void onMouseDown(int button, const Vector2& pos) override {
       Eigen::Vector2f const target(pos.x, pos.y);
-      chain.insideCircle(target);
+      //chain.insideCircle(target);
+      std::cout << "position.x()" << target.x() << "position.y()" << target.y() << std::endl;
 
     }
   };
