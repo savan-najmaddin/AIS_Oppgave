@@ -1,14 +1,15 @@
-#ifndef LOGIKK_HPP
-#define LOGIKK_HPP
-
-
-
 //a. Beregning av Jacobian-transposematrisen
 //b. Multiplikasjon av en vektor med Jacobian-transposen
 //c. Beregning av Jacobian multiplisert med Jacobian-transposen (J * J^T)
 //d. Selve løseren.
 
 //bevegelsen til IK kjeden gjort numerisk
+
+
+#ifndef LOGIKK_HPP
+#define LOGIKK_HPP
+
+
 
 #include "Eigen/Core"
 #include <cmath>

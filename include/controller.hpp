@@ -7,28 +7,40 @@
 #include "Eigen/Core"
 #include "Logikk.hpp" //må denne være her?
 
-
 using namespace threepp;
 
 class controller  {
 
-public:
+  public:
   struct MyMouseListener: MouseListener {
 
     kinematicChain& chain;
-
     float& t;
+    Canvas& canvas;
+    OrthographicCamera& camera;
 
-    explicit MyMouseListener(float& t, kinematicChain& chain): t(t) , chain(chain) {}
+    float windowWidth = 800.0f;
+    float windowHeight = 800.0f;
+
+    MyMouseListener(float& t, kinematicChain& chain, Canvas& canvas, OrthographicCamera& camera)
+        : t(t), chain(chain), canvas(canvas), camera(camera) {}
 
     void onMouseDown(int button, const Vector2& pos) override {
-      Eigen::Vector2f target(pos.x, pos.y);
+      // Convert screen coordinates to NDC
+      float ndcX = (2.0f * pos.x) / 800.0f - 1.0f;
+      float ndcY = 1.0f - (2.0f * pos.y) / 800.0f;
+
+      // Unproject to world coordinates
+      Vector3 ndcCoords(ndcX, ndcY, 0.0f); // Z = 0 for the XY-plane
+      Vector3 worldCoords = ndcCoords.unproject(camera);
+
+      // Update the target position in the kinematic chain
+      Eigen::Vector2f target(worldCoords.x, worldCoords.y);
       chain.targetPosition(target);
-      //oversetter fra threepp til eigen og sender til logikk.hpp
-
-
     }
   };
+  // ...
+
 
 
 private:

@@ -27,7 +27,7 @@ int main() {
 
 
 
-    controller::MyMouseListener ml{clock.elapsedTime, chain};
+    controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
     canvas.addMouseListener(ml);
 
 
@@ -93,7 +93,7 @@ int main() {
 
         Eigen::Vector2f effectorPosition = chain.findEffectorPosition();
         if(frameCount % 150 == 0){
-            //std::cout << "Effector position: " << effectorPosition.x() << ", " << effectorPosition.y() << std::endl;
+            std::cout << "Effector position: " << effectorPosition.x() << ", " << effectorPosition.y() << std::endl;
             std::cout << "Effector actual position: " << effectorPosition.norm() << std::endl;
             std::cout << "Target postion: " << targetPosition.x() << ", " << targetPosition.y() << std::endl;
             std::cout << "Visual target position" << targetMesh->position.x << ", " << targetMesh->position.y << std::endl;
