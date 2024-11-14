@@ -23,16 +23,16 @@ inline auto createScene() {
 }
 
 inline std::shared_ptr<OrthographicCamera> createOrthographicCamera () {
-    float left = -5.0f;
-    float right = 5.0f;
-    float top = 5.0f;
-    float bottom =-5.0f;
+    float left = -10.0f;
+    float right = 10.0f;
+    float top = 10.0f;
+    float bottom =-10.0f;
     float near = 0.1f;
-    float far = 10.0f;
+    float far = 100.0f;
 
     auto camera = OrthographicCamera::create(left, right, top, bottom, near, far);
     camera ->position.set(0, 0, 10);
-    camera ->lookAt(-3, 0, 0);
+    camera ->lookAt(-5, 0, 0);
 
     return camera;
 }
