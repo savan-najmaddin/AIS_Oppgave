@@ -2,30 +2,27 @@
 #define OBJEKT_HPP
 
 #include "threepp/threepp.hpp"
-//inkluder eigen header
+#include "Eigen/Core"
 
 using namespace threepp;
 
-class armSegment {
-public:
-  //fyi husk å differensier mellom logikk og grafikk
-  armSegment(float width, float height, float depth){
+std::shared_ptr<Mesh> inline createBox() {
+  const auto boxGeometry = BoxGeometry::create();
+  const auto boxMaterial = MeshBasicMaterial::create();
+  boxMaterial->color.setRGB(1, 0, 0);
+  boxMaterial->transparent = true;
+  boxMaterial->opacity = 0.1f;
+  auto box = Mesh::create(boxGeometry, boxMaterial);
 
-    auto geometry = BoxGeometry::create(width, height, depth);
+  auto wiredBox = LineSegments::create(WireframeGeometry::create(*boxGeometry));
+  wiredBox->material()->as<LineBasicMaterial>()->depthTest = false;
+  wiredBox->material()->as<LineBasicMaterial>()->color = Color::gray;
+  box->add(wiredBox);
 
-    auto material= MeshBasicMaterial::create();
-
-    segment = Mesh::create(geometry, material);
-
-    }
-//skriv en funksjon som returnerer segment
-std::shared_ptr<Mesh> getSegment() {
-    return segment;
-  }
-
-private:
-  std::shared_ptr<Mesh> segment;
+  return box;
 };
+
+
 
 
 

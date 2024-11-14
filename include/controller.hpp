@@ -2,31 +2,43 @@
 #define CONTROLLER_HPP
 
 
+
 #include "threepp/threepp.hpp"
-#include "objekt.hpp"
+#include "Eigen/Core"
+#include "Logikk.hpp" //må denne være her?
+
 
 using namespace threepp;
 
-class controller : public KeyListener, public MouseListener {
+inline kinematicChain chain;
+
+class controller  {
 
 public:
-  controller(Scene& scene, std::vector<armSegment>& ) ;
+  struct MyMouseListener: MouseListener {
+    float& t;
 
-  void onMouseDown(int key, const Vector2 & pos) override;
-  void onKeyPressed(KeyEvent) override;
-  void onKeyReleased(KeyEvent) override;
+
+    explicit MyMouseListener(float& t): t(t) {}
+
+    void onMouseDown(int button, const Vector2& pos) override {
+      Eigen::Vector2f target(pos.x, pos.y);
+      chain.targetPosition(target); //oversetter fra threepp til eigen og sender til logikk.hpp
+
+
+    }
+  };
+
 
 private:
-  std::vector<armSegment>&armVec;
-  Scene& scene;
   Mesh* myAddedMesh = nullptr;
   bool addedMesh = false;
+  void handleMouseClick();
 
-  void handleDKey();
-  void handleAKey();
-  void handleEnterKey();
-  void wrongKeyEnter();
   std::shared_ptr<Mesh> createMesh();
 
 };
+
+
+
 #endif //CONTROLLER_HPP

@@ -5,14 +5,15 @@
 #include "threepp/threepp.hpp"
 
 
+
 using namespace threepp;
 
 inline Canvas::Parameters canvasParameter(){ //vinduet til programmet
     Canvas::Parameters parameter;
     parameter.title("Min tittel");
-    parameter.size(1280, 720);
+    parameter.size(800, 800);
     parameter.vsync(true);
-    parameter.resizable(true);
+    parameter.resizable(false);
     return parameter;
 
 };
@@ -21,20 +22,58 @@ inline auto createScene() {
     return Scene::create();
 }
 
-inline std::shared_ptr<OrthographicCamera> createOrthographicCamere () {
+inline std::shared_ptr<OrthographicCamera> createOrthographicCamera () {
     float left = -5.0f;
     float right = 5.0f;
     float top = 5.0f;
-    float bottom = 0.1f;
+    float bottom =-5.0f;
     float near = 0.1f;
-    float far = 1000.0f;
+    float far = 100.0f;
 
     auto camera = OrthographicCamera::create(left, right, top, bottom, near, far);
-    camera ->position.set(0, 0, 5);
-    camera ->lookAt(0, 0, 0);
+    camera ->position.set(0, 0, 10);
+    camera ->lookAt(-3, 0, 0);
 
     return camera;
 }
 
+class JointVisual {
+public:
+    JointVisual(float length, float width = 0.2f) {
+        // Create geometry for the joint (a thin box)
+        auto geometry = BoxGeometry::create(length, width, width);
+        auto material = MeshBasicMaterial::create({{"color", Color::red}});
+
+        mesh = Mesh::create(geometry, material);
+        mesh->position.set(length / 2.0f, 0, 0); // Center the mesh
+    }
+
+    std::shared_ptr<Mesh> getMesh() {
+        return mesh;
+    }
+
+private:
+    std::shared_ptr<Mesh> mesh;
+};
+
+
+class myBox {
+public:
+    void boxSegment (float width, float height, float depth) {
+        auto geometry = BoxGeometry::create(width, height, depth);
+        auto material = MeshBasicMaterial::create();
+
+        segment = Mesh::create(geometry, material);
+    }
+    std::shared_ptr<Mesh> getMesh () {
+        return segment;
+    }
+
+private:
+    std::shared_ptr<Mesh> segment;
+
+};
+
+//
 
 #endif //MINSCENE_HPP
