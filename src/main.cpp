@@ -53,6 +53,7 @@ int main() {
     }
 
     Eigen::Vector2f targetPosition = {2.0f, 3.0f};
+
     auto targetGeometry = SphereGeometry::create(0.5f, 16, 16);
     auto targetMaterial = MeshBasicMaterial::create({{"color", Color::green}});
     auto targetMesh = Mesh::create(targetGeometry, targetMaterial);
@@ -68,13 +69,14 @@ int main() {
     Eigen::Vector2f lastPosition = chain.findEffectorPosition();
     std::cout<< "Last position: " << lastPosition.x() << ", " << lastPosition.y() << std::endl;
 
-
+    chain.targetPosition();
+    auto nig = chain.targetPosition();
 
     canvas.animate([&]() {
 
         float dt = clock.getDelta();
 
-        chain.updateInverseKinematics(targetPosition, 0.001f);
+        chain.updateInverseKinematics(nig, 0.001f);
 
         float cumulativeAngle = 0.0f;
         Eigen::Vector2f position(0.0f, 0.0f);
@@ -91,7 +93,7 @@ int main() {
         }
 
         Eigen::Vector2f posisjon = chain.findEffectorPosition();
-        std::cout << "Effector position: " << posisjon.x() << ", " << posisjon.y() << std::endl;
+        //std::cout << "Effector position: " << posisjon.x() << ", " << posisjon.y() << std::endl;
 
         renderer.render(*scene, *camera);
 

@@ -44,8 +44,9 @@ public:
   }
 
 
-  auto targetPosition(threepp::Vector2 pos = {2, 3}) {
-
+  Eigen::Vector2f targetPosition(Eigen::Vector2f position = {2, 3}) {
+    std::cout << "pos x: " << position.x() << "pos y: " << position.y() << std::endl;
+    return position;
   }
 
 
@@ -64,7 +65,7 @@ public:
 
 
   // Google når nodiscard skal brukes
-  [[nodiscard]] Eigen::Vector2f findEffectorPosition() const{
+  [[nodiscard]] Eigen::Vector2f findEffectorPosition() {
     Eigen::Vector2f position(0.0f, 0.0f);
     float cumulativAngle = 0.0f;
 
@@ -116,8 +117,8 @@ public:
   }
 
 
-  void updateInverseKinematics(const Eigen::Vector2f& targetPosition, float learningRate,
-                            float const threshold = 0.1f, int maxIteration = 10000) {
+  void updateInverseKinematics(Eigen::Vector2f& targetPosition, float learningRate,
+                            float const threshold = 0.01f, int maxIteration = 10000000) {
 
     Eigen::Vector2f currentPosition = findEffectorPosition();
     Eigen::Vector2f error = targetPosition - currentPosition;
