@@ -121,7 +121,7 @@ public:
 
 
   void updateInverseKinematics(Eigen::Vector2f& targetPosition, float learningRate,
-                            float const threshold = 0.01f, int maxIteration = 10000000) {
+                            float const threshold = 0.1f, int maxIteration = 10000000) {
 
     Eigen::Vector2f currentPosition = findEffectorPosition();
     Eigen::Vector2f error = targetPosition - currentPosition;
@@ -140,7 +140,7 @@ public:
   }
 
 private:
-    Eigen::Vector2f newVectorPosition{1.0f, 8.0f};
+    Eigen::Vector2f newVectorPosition{6.0f, 3.0f};
 
 };
 

@@ -52,7 +52,7 @@ int main() {
     auto targetGeometry = SphereGeometry::create(0.5f, 16, 16);
     auto targetMaterial = MeshBasicMaterial::create({{"color", Color::green}});
     auto targetMesh = Mesh::create(targetGeometry, targetMaterial);
-    targetMesh->position.set(targetPosition.x(), targetPosition.y(), 0);
+
     scene->add(targetMesh);
 
 
@@ -70,9 +70,11 @@ int main() {
 
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
+        targetMesh->position.set(targetPosition.x(), targetPosition.y(), 0);
+
         frameCount += 1;
 
-        chain.updateInverseKinematics(targetPosition, 0.001f);
+        chain.updateInverseKinematics(targetPosition, 0.0001f);
 
         float cumulativeAngle = 0.0f;
         Eigen::Vector2f position(0.0f, 0.0f);
@@ -89,9 +91,12 @@ int main() {
         }
 
 
-        Eigen::Vector2f posisjon = chain.findEffectorPosition();
-        if(frameCount % 60 == 0){
-            std::cout << "Effector position: " << posisjon.x() << ", " << posisjon.y() << std::endl;
+        Eigen::Vector2f effectorPosition = chain.findEffectorPosition();
+        if(frameCount % 150 == 0){
+            //std::cout << "Effector position: " << effectorPosition.x() << ", " << effectorPosition.y() << std::endl;
+            std::cout << "Effector actual position: " << effectorPosition.norm() << std::endl;
+            std::cout << "Target postion: " << targetPosition.x() << ", " << targetPosition.y() << std::endl;
+            std::cout << "Visual target position" << targetMesh->position.x << ", " << targetMesh->position.y << std::endl;
 
         }
         renderer.render(*scene, *camera);
