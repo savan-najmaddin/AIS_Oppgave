@@ -5,7 +5,6 @@
 #include "controller.hpp"
 #include "minScene.hpp"
 #include "objekt.hpp"
-
 #include <Visual.hpp>
 
 
@@ -24,6 +23,7 @@ int main() {
     Canvas canvas(parameter);
 
     Clock clock;
+    int frameCount{0}; //Potential overflow after x hours.
 
     GLRenderer renderer(canvas.size());
 
@@ -70,13 +70,16 @@ int main() {
     std::cout<< "Last position: " << lastPosition.x() << ", " << lastPosition.y() << std::endl;
 
     chain.targetPosition();
-    auto nig = chain.targetPosition();
+    auto n = chain.targetPosition();
+
 
     canvas.animate([&]() {
 
+        clock.start();
         float dt = clock.getDelta();
+        frameCount += 1;
 
-        chain.updateInverseKinematics(nig, 0.001f);
+        chain.updateInverseKinematics(n, 0.001f);
 
         float cumulativeAngle = 0.0f;
         Eigen::Vector2f position(0.0f, 0.0f);
@@ -92,10 +95,14 @@ int main() {
 
         }
 
-        Eigen::Vector2f posisjon = chain.findEffectorPosition();
-        //std::cout << "Effector position: " << posisjon.x() << ", " << posisjon.y() << std::endl;
 
+        Eigen::Vector2f posisjon = chain.findEffectorPosition();
+        if(frameCount % 60 == 0){
+            std::cout << "Effector position: " << posisjon.x() << ", " << posisjon.y() << std::endl;
+
+        }
         renderer.render(*scene, *camera);
+
 
 
 
