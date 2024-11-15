@@ -4,7 +4,6 @@
 #include "Logikk.hpp"
 #include "controller.hpp"
 #include "minScene.hpp"
-#include "objekt.hpp"
 #include <Visual.hpp>
 
 
@@ -47,7 +46,6 @@ int main() {
         scene->add(jointVisual);
     }
 
-    auto targetPosition = chain.getTargetPosition();
 
     auto targetGeometry = SphereGeometry::create(0.5f, 16, 16);
     auto targetMaterial = MeshBasicMaterial::create({{"color", Color::green}});
@@ -74,7 +72,7 @@ int main() {
 
         frameCount += 1;
 
-        chain.updateInverseKinematics(targetPosition, 0.0001f);
+        chain.updateInverseKinematics(targetPosition, 0.001f);
 
         float cumulativeAngle = 0.0f;
         Eigen::Vector2f position(0.0f, 0.0f);

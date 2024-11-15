@@ -82,32 +82,36 @@ public:
   }
 
 
-  [[nodiscard]] Eigen::MatrixXf computeJacobianTranspose() const { //returnerer transposen til matrisen
-    Eigen::MatrixXf jacobianTranspose(  numJoints, 2); //matrixXf er dynamisk
-    jacobianTranspose.setZero(); //setter alle elementer i matrisen til 0
+  [[nodiscard]] Eigen::MatrixXf computeJacobianTranspose() const {
+    Eigen::MatrixXf jacobianTranspose(numJoints, 2);
+    jacobianTranspose.setZero();
 
-    float cumulativeAngle = 0.0f; //summen av vinkler
+    // Precompute cumulative angles up to each joint
+    std::vector<float> cumulativeAngles(numJoints);
+    float cumulativeAngle = 0.0f;
 
     for (size_t i = 0; i < numJoints; ++i) {
-      cumulativeAngle = 0.0f;
-      // Beregn summen av vinkler fra ledd 0 til i
-      for (size_t j = 0; j <= i; ++j) {
-        cumulativeAngle += joints[j].angle;
-      }
+      cumulativeAngle += joints[i].angle;
+      cumulativeAngles[i] = cumulativeAngle;
+    }
 
-      // Beregn partiellderivertene
+    // For each joint i
+    for (size_t i = 0; i < numJoints; ++i) {
       float partialX = 0.0f;
       float partialY = 0.0f;
 
-      float angleSum = cumulativeAngle;
-      for (size_t j = i; j < numJoints; ++j) {
-        angleSum += joints[j].angle;
-        partialX -= joints[j].length * std::sin(angleSum);
-        partialY += joints[j].length * std::cos(angleSum);
+      // For k from i to numJoints - 1
+      for (size_t k = i; k < numJoints; ++k) {
+        float angleSum = cumulativeAngles[k];
+        float dx_dtheta = -joints[k].length * std::sin(angleSum);
+        float dy_dtheta =  joints[k].length * std::cos(angleSum);
+
+        partialX += dx_dtheta;
+        partialY += dy_dtheta;
       }
 
-      jacobianTranspose( i, 0) = partialX;
-      jacobianTranspose( i, 1) = partialY;
+      jacobianTranspose(i, 0) = partialX;
+      jacobianTranspose(i, 1) = partialY;
     }
     return jacobianTranspose;
   }
@@ -124,21 +128,23 @@ public:
   void updateInverseKinematics(Eigen::Vector2f& targetPosition, float learningRate,
                             float const threshold = 0.1f, int maxIteration = 10000000) {
 
-    Eigen::Vector2f currentPosition = findEffectorPosition();
-    Eigen::Vector2f error = targetPosition - currentPosition;
-    float errorMagnitude = error.norm(); //absolutt verdien til error mellom target  og current position
+      Eigen::Vector2f currentPosition = findEffectorPosition();
+      Eigen::Vector2f error = targetPosition - currentPosition;
+      float errorMagnitude = error.norm(); //absolutt verdien til error mellom target  og current position
 
-    //kan skrives status til konsoll
+      //kan skrives status til konsoll
 
-    if (errorMagnitude < threshold) {
-      return ;
+      if (errorMagnitude < threshold) {
+        return ;
+      }
+
+
+      Eigen::MatrixXf JacobianTranspose = computeJacobianTranspose();
+
+      Eigen::VectorXf angleAdjustments = learningRate * JacobianTranspose * error ; //learningrate er skalar til hvor mye vi skal justere error vinkel
+      updateJointAngles(angleAdjustments);
     }
 
-    Eigen::MatrixXf JacobianTranspose = computeJacobianTranspose();
-
-    Eigen::VectorXf angleAdjustments = learningRate * JacobianTranspose * error ; //learningrate er skalar til hvor mye vi skal justere error vinkel
-    updateJointAngles(angleAdjustments);
-  }
 
 private:
     Eigen::Vector2f newVectorPosition{6.0f, 3.0f};
