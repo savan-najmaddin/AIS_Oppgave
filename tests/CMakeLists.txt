@@ -1,17 +1,10 @@
-add_executable(test_main test_main.cpp)
-add_test(NAME test_main COMMAND test_main)
-
+add_executable(test_main testLogic.cpp)
 target_link_libraries(
         test_main
         PRIVATE
-        Catch2::Catch2
+        Catch2::Catch2WithMain
         threepp::threepp
-
+        kinematikkLib
+        Eigen3::Eigen
 )
-
-target_link_directories(test_main PRIVATE ${eigen_SOURCE_DIR})
-
-
-
-
-#trenger å linke til main.cpp
+add_test(NAME test_main COMMAND test_main)

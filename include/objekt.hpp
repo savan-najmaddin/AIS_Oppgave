@@ -23,7 +23,9 @@ std::shared_ptr<Mesh> inline createBox() {
 };
 
 
-
+int add(int x, int y) {
+  return x+y;
+}
 
 
 
