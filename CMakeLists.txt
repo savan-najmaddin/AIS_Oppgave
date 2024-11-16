@@ -7,6 +7,7 @@ option(KINEMATIKK_TEST "Build tests" ON)
 
 include(FetchContent)
 
+add_subdirectory(src)
 
 set(THREEPP_BUILD_TESTS OFF)
 set(THREEPP_BUILD_EXAMPLES OFF)
@@ -17,8 +18,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(threepp)
 
-
-
+add_executable(kinematikk src/main.cpp)
 
 if(KINEMATIKK_TEST)
     FetchContent_Declare(
@@ -29,6 +29,7 @@ if(KINEMATIKK_TEST)
     FetchContent_MakeAvailable(Catch2)
 
     enable_testing()
+
     add_subdirectory(tests)
 endif()
 
@@ -45,9 +46,7 @@ if(NOT eigen_POPULATED)
 endif ()
 
 
-add_subdirectory(src)
-target_include_directories(kinematikk PUBLIC include)
-target_link_libraries(kinematikk PRIVATE threepp::threepp)
-target_include_directories(kinematikk PRIVATE ${eigen_SOURCE_DIR})
+target_include_directories(kinematikk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+find_package(Eigen3 REQUIRED)
 
-
+target_link_libraries(kinematikk PRIVATE kinematikkLib threepp::threepp Eigen3::Eigen)

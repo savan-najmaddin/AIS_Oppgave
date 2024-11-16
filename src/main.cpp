@@ -17,7 +17,7 @@ int main() {
     Canvas canvas(parameter);
 
     Clock clock;
-    int frameCount{0}; //Potential overflow after x hours.
+    int frameCount{0};//Potential overflow after x hours.
 
     GLRenderer renderer(canvas.size());
 
@@ -25,24 +25,25 @@ int main() {
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamera();
 
 
-
     controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
     canvas.addMouseListener(ml);
 
 
-    chain.addJoint(Joint(M_PI , 5.0f));
-    chain.addJoint(Joint(M_PI , 5.0f));
-    chain.addJoint(Joint(M_PI , 5.0f));
+    chain.addJoint(Joint(M_PI, 5.0f));
+    chain.addJoint(Joint(M_PI, 5.0f));
+    chain.addJoint(Joint(M_PI, 5.0f));
+
+    float radius = 15.0f;// må bytte dette til maxReach
 
     std::vector<std::shared_ptr<Object3D>> jointVisuals;
-    for(size_t i = 0; i < chain.numJoints; ++i) {
+    for (size_t i = 0; i < chain.numJoints; ++i) {
         auto jointVisual = std::make_shared<Object3D>();
         auto link = std::make_shared<JointVisual>(chain.joints[i].length)->getMesh();
         jointVisual->add(link);
         jointVisuals.push_back(jointVisual);
     }
 
-    for (auto& jointVisual : jointVisuals) {
+    for (auto &jointVisual: jointVisuals) {
         scene->add(jointVisual);
     }
 
@@ -51,33 +52,41 @@ int main() {
     auto targetMaterial = MeshBasicMaterial::create({{"color", Color::green}});
     auto targetMesh = Mesh::create(targetGeometry, targetMaterial);
 
-    scene->add(targetMesh);
+    auto circleGeometry = SphereGeometry::create(radius, 64);
+    auto circleMaterial = MeshBasicMaterial::create();
+    circleMaterial->color = Color(0xffffff);
+    circleMaterial->transparent = true;
+    circleMaterial->opacity = 0.2f;
 
+    auto circleMesh = Mesh::create(circleGeometry, circleMaterial);
+    circleMesh->rotation.x = math::degToRad(-90);
+
+    circleMesh->position.set(0, 0, -0.1);
+
+    scene->add(targetMesh);
+    scene->add(circleMesh);
 
     std::cout << "Joint Positions:\n";
-    for (const auto& joint : chain.joints) {
+    for (const auto &joint: chain.joints) {
         std::cout << "Angle: " << joint.angle << ", Length: " << joint.length << std::endl;
     }
 
     Eigen::Vector2f lastPosition = chain.findEffectorPosition();
-    std::cout<< "Last position: " << lastPosition.x() << ", " << lastPosition.y() << std::endl;
-
-
+    std::cout << "Last position: " << lastPosition.x() << ", " << lastPosition.y() << std::endl;
 
     canvas.animate([&]() {
-
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
         targetMesh->position.set(targetPosition.x(), targetPosition.y(), 0);
 
         frameCount += 1;
 
-        chain.updateInverseKinematics(targetPosition, 0.001f);
+        chain.updateInverseKinematics(targetPosition, 0.002f);
 
         float cumulativeAngle = 0.0f;
         Eigen::Vector2f position(0.0f, 0.0f);
 
-        for(size_t i = 0; i < chain.numJoints; ++i) {
+        for (size_t i = 0; i < chain.numJoints; ++i) {
             cumulativeAngle += chain.joints[i].angle;
 
             jointVisuals[i]->position.set(position.x(), position.y(), 0);
@@ -85,27 +94,17 @@ int main() {
 
             position.x() += chain.joints[i].length * std::cos(cumulativeAngle);
             position.y() += chain.joints[i].length * std::sin(cumulativeAngle);
-
         }
 
-
         Eigen::Vector2f effectorPosition = chain.findEffectorPosition();
-        if(frameCount % 150 == 0){
+        if (frameCount % 150 == 0) {
             std::cout << "Effector position: " << effectorPosition.x() << ", " << effectorPosition.y() << std::endl;
             std::cout << "Effector actual position: " << effectorPosition.norm() << std::endl;
             std::cout << "Target postion: " << targetPosition.x() << ", " << targetPosition.y() << std::endl;
             std::cout << "Visual target position" << targetMesh->position.x << ", " << targetMesh->position.y << std::endl;
-
         }
         renderer.render(*scene, *camera);
-
-
-
-
     });
-
 
     return 0;
 }
-
-

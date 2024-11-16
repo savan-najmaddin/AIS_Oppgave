@@ -1,8 +1,5 @@
 #define CATCH_CONFIG_MAIN
-#include "catch2/catch_test_macros.hpp"
-
-
-/*
+#include
 #include "Eigen/Core"
 
 TEST_CASE("kinematicChain inverse kinematics moves end effector towards target", "[kinematicChain]") {
@@ -19,4 +16,3 @@ TEST_CASE("kinematicChain inverse kinematics moves end effector towards target",
 
     REQUIRE(distance < 0.01f); // Expect the end effector to be within 0.01 units of the target
 }
-*/

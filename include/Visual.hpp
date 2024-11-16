@@ -46,6 +46,7 @@ public:
     // Optional: Update the line's material or other properties if needed
   }
 
+
 private:
   std::shared_ptr<threepp::Scene> scene_;
   std::shared_ptr<threepp::BufferGeometry> geometry_;
