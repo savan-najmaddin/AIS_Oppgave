@@ -7,8 +7,8 @@ option(KINEMATIKK_TEST "Build tests" ON)
 
 include(FetchContent)
 
-set(THREEPP_BUILD_TESTS)
-set(THREEPP_BUILD_EXAMPLES)
+set(THREEPP_BUILD_TESTS OFF)
+set(THREEPP_BUILD_EXAMPLES OFF)
 
 FetchContent_Declare(
         threepp
