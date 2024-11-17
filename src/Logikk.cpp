@@ -16,13 +16,15 @@ void KinematicChain::addJoint(const Joint &joint) {
     joints.emplace_back(joint);
     numJoints = joints.size();
 }
-float getMaxReach(KinematicChain& chain) { //dette burde kunne skrives bedre
-    float maxReach{0};
-    for (size_t i = 0; i < chain.numJoints; ++i) {
-        maxReach += chain.joints[i].length;
+float KinematicChain::getMaxReach(KinematicChain &chain) const {
+    float totalLength{0};
+    for (const auto& joint : chain.joints) {
+        totalLength += joint.length;
     }
-    return maxReach;
+    return totalLength;
 }
+
+
 void KinematicChain::targetPosition(Eigen::Vector2f &position) {
     newVectorPosition = position;
 }

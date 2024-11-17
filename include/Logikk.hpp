@@ -33,7 +33,7 @@ public:
 
     void addJoint(const Joint &joint);
 
-    float getMaxReach(const KinematicChain &chain);
+    float getMaxReach(KinematicChain &chain) const;
 
     void targetPosition(Eigen::Vector2f &position);
     const Eigen::Vector2f &getTargetPosition() const;

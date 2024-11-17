@@ -29,7 +29,7 @@ int main() {
     for (size_t i = 0; i < numJoints; i++) {
         chain.addJoint(Joint(M_PI, jointLength));
     }
-    float maxReach = 15;
+    float maxReach = chain.getMaxReach(chain);
 
     Clock clock;
     controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
@@ -82,7 +82,7 @@ int main() {
 
         targetMesh->position.set(targetPosition.x(), targetPosition.y(), 0);
 
-        chain.updateInverseKinematics(targetPosition, 0.008f);
+        chain.updateInverseKinematics(targetPosition, 0.015f);
 
         float cumulativeAngle = 0.0f;
         Eigen::Vector2f position(0.0f, 0.0f);
