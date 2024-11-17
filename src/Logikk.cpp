@@ -1,4 +1,5 @@
 #include "Logikk.hpp"
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -104,7 +105,6 @@ void KinematicChain::updateInverseKinematics(const Eigen::Vector2f &targetPositi
             break;
         }
 
-        // dette gjør sånn at armen ikke beveger seg raskt
         float maxErrorMagnitude = 0.01f;
         if (errorMagnitude > maxErrorMagnitude) {
             error = error.normalized() * maxErrorMagnitude;
@@ -126,3 +126,4 @@ void KinematicChain::updateInverseKinematics(const Eigen::Vector2f &targetPositi
         updateJointAngles(angleAdjustments);
     }
 }
+

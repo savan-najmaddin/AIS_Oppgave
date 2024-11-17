@@ -20,14 +20,14 @@ struct Joint {
     float angle;
     float length;
 
-    Joint(float ang = 0.0f, float len = 1.0f);
+    explicit Joint(float ang = 0.0f, float len = 1.0f); //explicit for å forhindre feil konvertering
 };
 
 class KinematicChain {
 public:
-    size_t numJoints;         //antall ledd i kjeden
-    std::vector<Joint> joints;//array av ledd
+    size_t numJoints;
 
+    std::vector<Joint> joints;
 
     explicit KinematicChain(size_t n = 0);
 
