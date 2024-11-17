@@ -16,3 +16,5 @@ TEST_CASE("Testing the initial condition of the endeffector", "[effector test]")
     REQUIRE(endEffectorPosition.isApprox(expectedPosition, 0.01f));
 }
 
+//lag test for maks antall joint og lengde
+
