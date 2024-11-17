@@ -21,12 +21,10 @@ const Eigen::Vector2f &kinematicChain::getTargetPosition() const {
     return newVectorPosition;
 }
 float kinematicChain::clampAngle(float angle) {
-    constexpr float Two_PI = 2.0f * M_PI;
-
-    angle = std::fmod(angle, Two_PI);//mod av 2π
+    angle = std::fmod(angle, 2* M_PI);//mod av 2π
 
     if (angle < 0.0f) {
-        angle += Two_PI;
+        angle += 2 * M_PI;
     }
 
     return angle;
