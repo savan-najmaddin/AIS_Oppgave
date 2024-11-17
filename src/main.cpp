@@ -15,33 +15,33 @@ using namespace threepp;
 
 int main() {
 
-
-    kinematicChain chain;
+    int numJoints{};
+    float jointLength{};
+    std::cout << "Hvor mange ledd, anbefalt 3: " << std::endl;
+    std::cin >> numJoints;
+    std::cout << "Hvor lang skal leddene være, anbefalt 5: " << std::endl;
+    std::cin >> jointLength;
 
     auto parameter = canvasParameter();
     Canvas canvas(parameter);
-
-    Clock clock;
-    int frameCount{0};//Potential overflow after x hours.
-
     GLRenderer renderer(canvas.size());
 
     std::shared_ptr<Scene> scene = createScene();
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamera();
 
+    kinematicChain chain;
+    for (size_t i = 0; i < numJoints; i++) {
+        chain.addJoint(Joint(M_PI, jointLength));
+    }
 
+    Clock clock;
     controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
     canvas.addMouseListener(ml);
-
-    for (size_t i = 0; i < 3; i++) {
-        chain.addJoint(Joint(M_PI, 5.0f));
-    }
 
     float maxReach{};
     for (size_t i = 0; i < chain.numJoints; i++) {
         maxReach += chain.joints[i].length;
     }
-
 
     std::vector<std::shared_ptr<Object3D>> jointVisuals;
     for (size_t i = 0; i < chain.numJoints; ++i) {
@@ -82,8 +82,10 @@ int main() {
     Eigen::Vector2f lastPosition = chain.findEffectorPosition();
     std::cout << "Last position: " << lastPosition.x() << ", " << lastPosition.y() << std::endl;
 
+    int frameCount{0};//Potential overflow after x hours.
+
     canvas.animate([&]() {
-        frameCount += 1; //for å holde tid
+        frameCount += 1;//for å holde tid
 
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
