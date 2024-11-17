@@ -1,2 +1,4 @@
-add_executable(kinematikk main.cpp objekt.cpp controller.cpp)
-
+add_library(kinematikkLib)
+target_sources(kinematikkLib PRIVATE controller.cpp objekt.cpp Logikk.cpp)
+target_include_directories(kinematikkLib PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(kinematikkLib PUBLIC threepp::threepp Eigen3::Eigen)
