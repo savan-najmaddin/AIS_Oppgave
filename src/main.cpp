@@ -15,12 +15,8 @@ using namespace threepp;
 
 int main() {
 
-    int numJoints{};
-    float jointLength{};
-    std::cout << "Hvor mange ledd, anbefalt 3: " << std::endl;
-    std::cin >> numJoints;
-    std::cout << "Hvor lang skal leddene være, anbefalt 5: " << std::endl;
-    std::cin >> jointLength;
+    int numJoints{3};
+    float jointLength{5};
 
     auto parameter = canvasParameter();
     Canvas canvas(parameter);
@@ -29,19 +25,15 @@ int main() {
     std::shared_ptr<Scene> scene = createScene();
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamera();
 
-    kinematicChain chain;
+    KinematicChain chain;
     for (size_t i = 0; i < numJoints; i++) {
         chain.addJoint(Joint(M_PI, jointLength));
     }
+    float maxReach = 15;
 
     Clock clock;
     controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
     canvas.addMouseListener(ml);
-
-    float maxReach{};
-    for (size_t i = 0; i < chain.numJoints; i++) {
-        maxReach += chain.joints[i].length;
-    }
 
     std::vector<std::shared_ptr<Object3D>> jointVisuals;
     for (size_t i = 0; i < chain.numJoints; ++i) {
@@ -54,7 +46,6 @@ int main() {
     for (auto &jointVisual: jointVisuals) {
         scene->add(jointVisual);
     }
-
 
     auto targetGeometry = SphereGeometry::create(0.5f, 16, 16);
     auto targetMaterial = MeshBasicMaterial::create({{"color", Color::green}});
@@ -91,7 +82,7 @@ int main() {
 
         targetMesh->position.set(targetPosition.x(), targetPosition.y(), 0);
 
-        chain.updateInverseKinematics(targetPosition, 0.002f);
+        chain.updateInverseKinematics(targetPosition, 0.008f);
 
         float cumulativeAngle = 0.0f;
         Eigen::Vector2f position(0.0f, 0.0f);

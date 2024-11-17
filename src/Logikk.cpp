@@ -4,7 +4,7 @@
 #endif
 
 Joint::Joint(float ang, float len) : angle(ang), length(len) {}
-kinematicChain::kinematicChain(size_t n) : numJoints(n), joints(n) { //beholde size_t ?
+KinematicChain::KinematicChain(size_t n) : numJoints(n), joints(n) {//beholde size_t ?
     float totalLength = 0.0f;
     for (const auto &joint: joints) {
         totalLength += joint.length;
@@ -12,18 +12,25 @@ kinematicChain::kinematicChain(size_t n) : numJoints(n), joints(n) { //beholde s
 
     maxReach = totalLength;
 }
-void kinematicChain::addJoint(const Joint &joint) {
+void KinematicChain::addJoint(const Joint &joint) {
     joints.emplace_back(joint);
     numJoints = joints.size();
 }
-void kinematicChain::targetPosition(Eigen::Vector2f &position) {
+float getMaxReach(KinematicChain& chain) { //dette burde kunne skrives bedre
+    float maxReach{0};
+    for (size_t i = 0; i < chain.numJoints; ++i) {
+        maxReach += chain.joints[i].length;
+    }
+    return maxReach;
+}
+void KinematicChain::targetPosition(Eigen::Vector2f &position) {
     newVectorPosition = position;
 }
-const Eigen::Vector2f &kinematicChain::getTargetPosition() const {
+const Eigen::Vector2f &KinematicChain::getTargetPosition() const {
     return newVectorPosition;
 }
-float kinematicChain::clampAngle(float angle) {
-    angle = std::fmod(angle, 2* M_PI);//mod av 2π
+float KinematicChain::clampAngle(float angle) {
+    angle = std::fmod(angle, 2 * M_PI);//mod av 2π
 
     if (angle < 0.0f) {
         angle += 2 * M_PI;
@@ -31,7 +38,7 @@ float kinematicChain::clampAngle(float angle) {
 
     return angle;
 }
-Eigen::Vector2f kinematicChain::findEffectorPosition() {
+Eigen::Vector2f KinematicChain::findEffectorPosition() {
     Eigen::Vector2f position(0.0f, 0.0f);
     float cumulativAngle = 0.0f;
 
@@ -42,7 +49,7 @@ Eigen::Vector2f kinematicChain::findEffectorPosition() {
     }
     return position;
 }
-Eigen::MatrixXf kinematicChain::computeJacobianTranspose() const {
+Eigen::MatrixXf KinematicChain::computeJacobianTranspose() const {
     Eigen::MatrixXf jacobianTranspose(numJoints, 2);
     jacobianTranspose.setZero();
 
@@ -76,7 +83,8 @@ Eigen::MatrixXf kinematicChain::computeJacobianTranspose() const {
     }
     return jacobianTranspose;
 }
-void kinematicChain::updateJointAngles(const Eigen::VectorXf &angleAdjustments) {
+
+void KinematicChain::updateJointAngles(const Eigen::VectorXf &angleAdjustments) {
     for (size_t i = 0; i < numJoints; ++i) {
         joints[i].angle += angleAdjustments(i);
         joints[i].angle = clampAngle(joints[i].angle);
@@ -84,7 +92,7 @@ void kinematicChain::updateJointAngles(const Eigen::VectorXf &angleAdjustments) 
 }
 
 //funksjonen burde være mindre
-void kinematicChain::updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate, float threshold, int maxIteration) {
+void KinematicChain::updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate, float threshold, int maxIteration) {
     for (int iter = 0; iter < maxIteration; ++iter) {
         Eigen::Vector2f currentPosition = findEffectorPosition();
         Eigen::Vector2f error = targetPosition - currentPosition;
@@ -95,7 +103,7 @@ void kinematicChain::updateInverseKinematics(const Eigen::Vector2f &targetPositi
         }
 
         // dette gjør sånn at armen ikke beveger seg raskt
-        float maxErrorMagnitude = 0.1f;
+        float maxErrorMagnitude = 0.01f;
         if (errorMagnitude > maxErrorMagnitude) {
             error = error.normalized() * maxErrorMagnitude;
         }

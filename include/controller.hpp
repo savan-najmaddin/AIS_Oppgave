@@ -14,7 +14,7 @@ class controller  {
   public:
   struct MyMouseListener: MouseListener {
 
-    kinematicChain& chain;
+    KinematicChain& chain;
     float& t;
     Canvas& canvas;
     OrthographicCamera& camera;
@@ -22,7 +22,7 @@ class controller  {
     float windowWidth = 800.0f;
     float windowHeight = 800.0f;
 
-    MyMouseListener(float& t, kinematicChain& chain, Canvas& canvas, OrthographicCamera& camera)
+    MyMouseListener(float& t, KinematicChain& chain, Canvas& canvas, OrthographicCamera& camera)
         : t(t), chain(chain), canvas(canvas), camera(camera) {}
 
     void onMouseDown(int button, const Vector2& pos) override {

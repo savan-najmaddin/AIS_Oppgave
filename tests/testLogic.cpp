@@ -4,7 +4,7 @@
 
 TEST_CASE("Testing the initial condition of the endeffector", "[effector test]") {
 
-    kinematicChain chain(2);
+    KinematicChain chain(2);
     chain.addJoint(Joint(0.0f, 0.0f));
     chain.addJoint(Joint(0.0f, 0.0f));
 

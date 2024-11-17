@@ -23,23 +23,23 @@ struct Joint {
     Joint(float ang = 0.0f, float len = 1.0f);
 };
 
-class kinematicChain {
+class KinematicChain {
 public:
     size_t numJoints;         //antall ledd i kjeden
     std::vector<Joint> joints;//array av ledd
 
 
-    explicit kinematicChain(size_t n = 0);
+    explicit KinematicChain(size_t n = 0);
 
     void addJoint(const Joint &joint);
 
+    float getMaxReach(const KinematicChain &chain);
 
     void targetPosition(Eigen::Vector2f &position);
     const Eigen::Vector2f &getTargetPosition() const;
 
 
     static float clampAngle(float angle);
-
 
 
     // Google når nodiscard skal brukes
