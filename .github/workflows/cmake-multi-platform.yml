@@ -14,20 +14,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest]
-        build_type: [Release, Debug]
         include:
+          # macOS Builds
           - os: macos-latest
+            build_type: Release
             c_compiler: clang
             cpp_compiler: clang++
+          - os: macos-latest
+            build_type: Debug
+            c_compiler: clang
+            cpp_compiler: clang++
+          # Windows Builds
           - os: windows-latest
+            build_type: Release
             c_compiler: cl
             cpp_compiler: cl
-      exclude:
-        - os: macos-latest
-          c_compiler: cl
-        - os: windows-latest
-          c_compiler: clang
+          - os: windows-latest
+            build_type: Debug
+            c_compiler: cl
+            cpp_compiler: cl
 
     steps:
       - name: Checkout code
