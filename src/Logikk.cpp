@@ -61,6 +61,7 @@ Eigen::MatrixXf kinematicChain::computeJacobianTranspose() const {
         float partialY = 0.0f;
 
         // For k from i to numJoints - 1
+        //funksjonen burde være mindre
         for (size_t k = i; k < numJoints; ++k) {
             float angleSum = cumulativeAngles[k];
             float dx_dtheta = -joints[k].length * std::sin(angleSum);
@@ -81,6 +82,8 @@ void kinematicChain::updateJointAngles(const Eigen::VectorXf &angleAdjustments) 
         joints[i].angle = clampAngle(joints[i].angle);
     }
 }
+
+//funksjonen burde være mindre
 void kinematicChain::updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate, float threshold, int maxIteration) {
     for (int iter = 0; iter < maxIteration; ++iter) {
         Eigen::Vector2f currentPosition = findEffectorPosition();

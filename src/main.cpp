@@ -22,7 +22,7 @@ int main() {
     Canvas canvas(parameter);
 
     Clock clock;
-    int frameCount{0}; //Potential overflow after x hours.
+    int frameCount{0};//Potential overflow after x hours.
 
     GLRenderer renderer(canvas.size());
 
@@ -33,12 +33,11 @@ int main() {
     controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
     canvas.addMouseListener(ml);
 
+    for (int i = 0; i < 3; i++) {
+        chain.addJoint(Joint(M_PI, 5.0f));
+    }
 
-    chain.addJoint(Joint(M_PI, 5.0f));
-    chain.addJoint(Joint(M_PI, 5.0f));
-    chain.addJoint(Joint(M_PI, 5.0f));
-
-    float radius = 15.0f; // må bytte dette til maxReach
+    float radius = 15.0f;// må bytte dette til maxReach
 
     std::vector<std::shared_ptr<Object3D>> jointVisuals;
     for (size_t i = 0; i < chain.numJoints; ++i) {
