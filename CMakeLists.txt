@@ -10,14 +10,14 @@ include(FetchContent)
 set(THREEPP_BUILD_TESTS OFF)
 set(THREEPP_BUILD_EXAMPLES OFF)
 
+find_package(Eigen3 REQUIRED)
+
 FetchContent_Declare(
         threepp
         GIT_REPOSITORY https://github.com/markaren/threepp.git
         GIT_TAG 2e2397e0b7f0e639f254ea3046b70e53a71f0387
 )
 FetchContent_MakeAvailable(threepp)
-
-find_package(Eigen3 REQUIRED)
 
 if (KINEMATIKK_TEST)
     FetchContent_Declare(
@@ -26,6 +26,7 @@ if (KINEMATIKK_TEST)
             GIT_TAG v3.7.1
     )
     FetchContent_MakeAvailable(Catch2)
+    include(CTest)
     enable_testing()
 endif ()
 

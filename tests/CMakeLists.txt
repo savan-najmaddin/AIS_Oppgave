@@ -7,4 +7,7 @@ target_link_libraries(
         kinematikkLib
         Eigen3::Eigen
 )
-add_test(NAME test_main COMMAND test_main)
+
+include(CTest)
+include(Catch)
+catch_discover_tests(test_main)
