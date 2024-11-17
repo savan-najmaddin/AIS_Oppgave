@@ -82,7 +82,7 @@ int main() {
 
         targetMesh->position.set(targetPosition.x(), targetPosition.y(), 0);
 
-        chain.updateInverseKinematics(targetPosition, 0.015f);
+        chain.updateInverseKinematics(targetPosition, 0.1f);
 
         float cumulativeAngle = 0.0f;
         Eigen::Vector2f position(0.0f, 0.0f);

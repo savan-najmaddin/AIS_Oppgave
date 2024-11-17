@@ -41,7 +41,7 @@ float KinematicChain::clampAngle(float angle) {
 
     return angle;
 }
-Eigen::Vector2f KinematicChain::findEffectorPosition() {
+Eigen::Vector2f KinematicChain::findEffectorPosition() const{
     Eigen::Vector2f position(0.0f, 0.0f);
     float cumulativAngle = 0.0f;
 
@@ -94,36 +94,40 @@ void KinematicChain::updateJointAngles(const Eigen::VectorXf &angleAdjustments) 
     }
 }
 
-//funksjonen burde være mindre
-void KinematicChain::updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate, float threshold, int maxIteration) {
-    for (int iter = 0; iter < maxIteration; ++iter) {
-        Eigen::Vector2f currentPosition = findEffectorPosition();
-        Eigen::Vector2f error = targetPosition - currentPosition;
+void KinematicChain::updateInverseKinematics(const Eigen::Vector2f& targetPosition, float learningRate, float threshold, int maxIteration) {
+    for (size_t i = 0; i < maxIteration; ++i) {
+        Eigen::Vector2f error = computeError(targetPosition);
         float errorMagnitude = error.norm();
 
-        if (errorMagnitude < threshold) {
+        if (error.norm() < threshold) {
             break;
         }
 
-        float maxErrorMagnitude = 0.01f;
-        if (errorMagnitude > maxErrorMagnitude) {
-            error = error.normalized() * maxErrorMagnitude;
+        float maxErrorMagnitutde = 0.001f; //define how precise the end effector should be
+        if (errorMagnitude > maxErrorMagnitutde) {
+            error *= maxErrorMagnitutde / errorMagnitude;
         }
 
-        Eigen::MatrixXf JacobianTranspose = computeJacobianTranspose();
-        Eigen::VectorXf angleAdjustments = learningRate * JacobianTranspose * error;
-
-        // Limit the angle adjustments
-        float maxAngleChange = 0.05f;
-        for (int i = 0; i < angleAdjustments.size(); ++i) {
-            if (angleAdjustments(i) > maxAngleChange) {
-                angleAdjustments(i) = maxAngleChange;
-            } else if (angleAdjustments(i) < -maxAngleChange) {
-                angleAdjustments(i) = -maxAngleChange;
-            }
-        }
-
+        Eigen::VectorXf angleAdjustments = computeAngleAdjustments(error, learningRate);
         updateJointAngles(angleAdjustments);
     }
 }
 
+Eigen::Vector2f KinematicChain::computeError(const Eigen::Vector2f& targetPosition) const {
+    Eigen::Vector2f currentPosition = findEffectorPosition();
+    Eigen::Vector2f error = targetPosition - currentPosition;
+
+    return error;
+}
+
+Eigen::VectorXf KinematicChain::computeAngleAdjustments(const Eigen::Vector2f& error, float learningRate) const {
+    Eigen::MatrixXf jacobianTranspose = computeJacobianTranspose();
+    Eigen::VectorXf angleAdjustments = learningRate * jacobianTranspose * error;
+
+
+    float maxAngleChange = 0.05f; //limit angle change, this is to slow it down once it´s close to the target
+    for (int i = 0; i < angleAdjustments.size(); ++i) {
+        angleAdjustments(i) = std::clamp(angleAdjustments(i), -maxAngleChange, maxAngleChange);
+    }
+    return angleAdjustments;
+}

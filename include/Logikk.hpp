@@ -36,14 +36,14 @@ public:
     float getMaxReach(KinematicChain &chain) const;
 
     void targetPosition(Eigen::Vector2f &position);
-    const Eigen::Vector2f &getTargetPosition() const;
+    const Eigen::Vector2f& getTargetPosition() const;
 
 
     static float clampAngle(float angle);
 
 
     // Google når nodiscard skal brukes
-    [[nodiscard]] Eigen::Vector2f findEffectorPosition();
+    [[nodiscard]] Eigen::Vector2f findEffectorPosition() const;
 
 
     [[nodiscard]] Eigen::MatrixXf computeJacobianTranspose() const;
@@ -54,6 +54,10 @@ public:
 
     void updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate,
                                  float threshold = 0.1f, int maxIteration = 10);
+
+    Eigen::Vector2f computeError(const Eigen::Vector2f& targetPosition) const;
+
+    Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f& error, float learningRate) const;
 
 
 private:
