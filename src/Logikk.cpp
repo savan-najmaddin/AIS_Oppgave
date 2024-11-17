@@ -1,5 +1,7 @@
 #include "Logikk.hpp"
-
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 Joint::Joint(float ang, float len) : angle(ang), length(len) {}
 kinematicChain::kinematicChain(size_t n) : numJoints(n), joints(n) {
