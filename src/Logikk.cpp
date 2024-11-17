@@ -4,7 +4,7 @@
 #endif
 
 Joint::Joint(float ang, float len) : angle(ang), length(len) {}
-kinematicChain::kinematicChain(size_t n) : numJoints(n), joints(n) {
+kinematicChain::kinematicChain(size_t n) : numJoints(n), joints(n) { //beholde size_t ?
     float totalLength = 0.0f;
     for (const auto &joint: joints) {
         totalLength += joint.length;

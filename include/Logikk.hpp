@@ -10,7 +10,6 @@
 #define LOGIKK_HPP
 
 
-
 #include "Eigen/Core"
 #include <cmath>
 #include <iostream>
@@ -18,48 +17,48 @@
 
 
 struct Joint {
-  float angle;
-  float length;
+    float angle;
+    float length;
 
-  Joint(float ang = 0.0f, float len = 1.0f);
+    Joint(float ang = 0.0f, float len = 1.0f);
 };
 
 class kinematicChain {
 public:
-  size_t numJoints; //antall ledd i kjeden
-  std::vector<Joint> joints; //array av ledd
+    size_t numJoints;         //antall ledd i kjeden
+    std::vector<Joint> joints;//array av ledd
 
 
-  explicit kinematicChain(size_t n = 0);
+    explicit kinematicChain(size_t n = 0);
 
-  void addJoint(const Joint &joint);
-
-
-  void targetPosition(Eigen::Vector2f &position);
-  const Eigen::Vector2f &getTargetPosition() const;
+    void addJoint(const Joint &joint);
 
 
-  static float clampAngle(float angle);
+    void targetPosition(Eigen::Vector2f &position);
+    const Eigen::Vector2f &getTargetPosition() const;
 
 
-  // Google når nodiscard skal brukes
-  [[nodiscard]] Eigen::Vector2f findEffectorPosition();
+    static float clampAngle(float angle);
 
 
-  [[nodiscard]] Eigen::MatrixXf computeJacobianTranspose() const;
+
+    // Google når nodiscard skal brukes
+    [[nodiscard]] Eigen::Vector2f findEffectorPosition();
 
 
-  void updateJointAngles(const Eigen::VectorXf &angleAdjustments);
+    [[nodiscard]] Eigen::MatrixXf computeJacobianTranspose() const;
 
 
-  void updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate,
-                               float threshold = 0.1f, int maxIteration = 10);
+    void updateJointAngles(const Eigen::VectorXf &angleAdjustments);
 
 
-  private:
-  Eigen::Vector2f newVectorPosition{6.0f, 3.0f};
-  float maxReach;
+    void updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate,
+                                 float threshold = 0.1f, int maxIteration = 10);
 
+
+private:
+    Eigen::Vector2f newVectorPosition{6.0f, 3.0f};
+    float maxReach;
 };
 
 #endif

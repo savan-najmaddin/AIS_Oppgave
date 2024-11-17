@@ -33,11 +33,15 @@ int main() {
     controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
     canvas.addMouseListener(ml);
 
-    for (int i = 0; i < 3; i++) {
+    for (size_t i = 0; i < 3; i++) {
         chain.addJoint(Joint(M_PI, 5.0f));
     }
 
-    float radius = 15.0f;// må bytte dette til maxReach
+    float maxReach{};
+    for (size_t i = 0; i < chain.numJoints; i++) {
+        maxReach += chain.joints[i].length;
+    }
+
 
     std::vector<std::shared_ptr<Object3D>> jointVisuals;
     for (size_t i = 0; i < chain.numJoints; ++i) {
@@ -56,7 +60,7 @@ int main() {
     auto targetMaterial = MeshBasicMaterial::create({{"color", Color::green}});
     auto targetMesh = Mesh::create(targetGeometry, targetMaterial);
 
-    auto circleGeometry = SphereGeometry::create(radius, 64);
+    auto circleGeometry = SphereGeometry::create(maxReach, 64);
     auto circleMaterial = MeshBasicMaterial::create();
     circleMaterial->color = Color(0xffffff);
     circleMaterial->transparent = true;
@@ -79,11 +83,11 @@ int main() {
     std::cout << "Last position: " << lastPosition.x() << ", " << lastPosition.y() << std::endl;
 
     canvas.animate([&]() {
+        frameCount += 1; //for å holde tid
+
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
         targetMesh->position.set(targetPosition.x(), targetPosition.y(), 0);
-
-        frameCount += 1;
 
         chain.updateInverseKinematics(targetPosition, 0.002f);
 
