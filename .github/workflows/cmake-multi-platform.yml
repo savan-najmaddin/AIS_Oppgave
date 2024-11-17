@@ -1,59 +1,38 @@
-name: CMake Multi-Platform Build and Test
+name: Build
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: [push, workflow_dispatch]
 
 jobs:
-  build:
+  linux:
 
     runs-on: ${{ matrix.os }}
-
+    env:
+      CC: gcc-${{ matrix.compiler_version }}
+      CXX: g++-${{ matrix.compiler_version }}
     strategy:
       fail-fast: false
       matrix:
-        include:
-          # macOS Builds
-          - os: macos-latest
-            build_type: Release
-            c_compiler: clang
-            cpp_compiler: clang++
-          - os: macos-latest
-            build_type: Debug
-            c_compiler: clang
-            cpp_compiler: clang++
-          # Windows Builds
-          - os: windows-latest
-            build_type: Release
-            c_compiler: cl
-            cpp_compiler: cl
-          - os: windows-latest
-            build_type: Debug
-            c_compiler: cl
-            cpp_compiler: cl
+        os: [ ubuntu-22.04 ]
+        compiler_version: [ 11 ]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      - name: Configure CMake
-        shell: bash
+      - name: Install prerequisites
         run: |
-          mkdir -p build
-          cmake -S . -B build \
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} \
-            -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+          sudo apt-get update && sudo apt-get install -y \
+          libxinerama-dev \
+          libxcursor-dev \
+          xorg-dev \
+          libglu1-mesa-dev \
+          pkg-config
 
-      - name: Build
-        shell: bash
+      - name: Configure and build
         run: |
-          cmake --build build --config ${{ matrix.build_type }}
+          cmake . -B build -DCMAKE_BUILD_TYPE="Release"
+          cmake --build build
 
       - name: Test
-        shell: bash
         run: |
-          cd build
-          ctest --output-on-failure --build-config ${{ matrix.build_type }}
+          cd build/tests
+          ctest --output-on-failure }}

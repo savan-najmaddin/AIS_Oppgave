@@ -4,7 +4,8 @@ target_link_libraries(
         PRIVATE
         Catch2::Catch2WithMain
         threepp::threepp
+        eigen::eigen
         kinematikkLib
-        Eigen3::Eigen
+
 )
 add_test(NAME test_main COMMAND test_main)
