@@ -10,13 +10,14 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+//sette exceptions
 
 using namespace threepp;
 
 int main() {
 
-    int numJoints{3};
-    float jointLength{5};
+    const int numJoints{3};
+    const float jointLength{5};
 
     auto parameter = canvasParameter();
     Canvas canvas(parameter);
@@ -26,7 +27,7 @@ int main() {
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamera();
 
     KinematicChain chain;
-    for (size_t i = 0; i < numJoints; i++) {
+    for (size_t i = 0; i < numJoints; ++i) {
         chain.addJoint(Joint(M_PI, jointLength));
     }
     float maxReach = chain.getMaxReach(chain);
@@ -76,7 +77,7 @@ int main() {
     int frameCount{0};//Potential overflow after x hours.
 
     canvas.animate([&]() {
-        frameCount += 1;//for å holde tid
+        frameCount += 1; //for å holde tid
 
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 

@@ -23,13 +23,13 @@ inline auto createScene() {
 }
 
 std::shared_ptr<OrthographicCamera> createOrthographicCamera() {
-    float viewSize = 20.0f; // Adjust based on your scene's scale
-    float aspectRatio = 1.0f; // Since the window is 800x800, the aspect ratio is 1
+    float viewSize = 20.0f;
+    float aspectRatio = 1.0f;
 
     auto camera = OrthographicCamera::create(
-        -viewSize * aspectRatio, viewSize * aspectRatio, // left, right
-        viewSize, -viewSize,                             // top, bottom
-        -100.0f, 100.0f                                  // near, far
+        -20, 20,
+        20, -20, //aspectrartio er 1
+        -100.0f, 100.0f
     );
 
     return camera;

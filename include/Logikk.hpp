@@ -4,7 +4,7 @@
 //d. Selve løseren.
 
 //bevegelsen til IK kjeden gjort numerisk
-
+//imgiu
 
 #ifndef LOGIKK_HPP
 #define LOGIKK_HPP
@@ -45,6 +45,7 @@ public:
     // Google når nodiscard skal brukes
     [[nodiscard]] Eigen::Vector2f findEffectorPosition() const;
 
+    [[nodiscard]] std::vector<float> computeCumulativeAngels() const;
 
     [[nodiscard]] Eigen::MatrixXf computeJacobianTranspose() const;
 
