@@ -11,7 +11,6 @@
 
 
 #include "Eigen/Core"
-#include <cmath>
 #include <iostream>
 #include <vector>
 
