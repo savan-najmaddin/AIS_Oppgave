@@ -39,43 +39,6 @@ inline std::shared_ptr<OrthographicCamera> createOrthographicCamera() {
     return camera;
 }
 
-class JointVisual {
-public:
-    JointVisual(float length, float width = 0.2f) {
-        // Create geometry for the joint (a thin box)
-        auto geometry = BoxGeometry::create(length, width, width);
-        auto material = MeshBasicMaterial::create({{"color", Color::red}});
-
-        mesh = Mesh::create(geometry, material);
-        mesh->position.set(length / 2.0f , 0, 0); // Center the mesh
-    }
-
-    std::shared_ptr<Mesh> getMesh() {
-        return mesh;
-    }
-
-private:
-    std::shared_ptr<Mesh> mesh;
-};
-
-
-class myBox {
-public:
-    void boxSegment (float width, float height, float depth) {
-        auto geometry = BoxGeometry::create(width, height, depth);
-        auto material = MeshBasicMaterial::create();
-
-        segment = Mesh::create(geometry, material);
-    }
-    std::shared_ptr<Mesh> getMesh () {
-        return segment;
-    }
-
-private:
-    std::shared_ptr<Mesh> segment;
-
-};
-
 //
 
 #endif //MINSCENE_HPP

@@ -6,14 +6,6 @@
 
 Joint::Joint(float ang, float len) : angle(ang), length(len) {}
 
-float Joint::getMaxReach(KinematicChain &chain) const {//burde dette gjøres static
-    float totalLength{0};
-    for (const auto &joint: chain.joints) {
-        totalLength += joint.length;
-    }
-    return totalLength;
-}
-
 //vet at det burde være 2 klasser, men jeg har dårlig tid
 KinematicChain::KinematicChain(size_t n) : joints(n) {
     float totalLength = 0.0f;
@@ -26,6 +18,9 @@ KinematicChain::KinematicChain(size_t n) : joints(n) {
 
 void KinematicChain::addJoint(const Joint &joint) {
     joints.emplace_back(joint);
+}
+void KinematicChain::removeJoint() {
+    joints.pop_back();
 }
 
 void KinematicChain::targetPosition(Eigen::Vector2f &position) {
@@ -44,6 +39,16 @@ float KinematicChain::clampAngle(float angle) {
     }
 
     return angle;
+}
+float KinematicChain::getMaxReach() const {
+    return maxReach;
+}
+void KinematicChain::updateMaxReach() {
+    float totalLength{0};
+    for (const auto &joint: joints) {
+        totalLength += joint.length;
+    }
+    maxReach = totalLength;
 }
 
 Eigen::Vector2f KinematicChain::findEffectorPosition() const {

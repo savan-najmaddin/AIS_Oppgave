@@ -20,7 +20,6 @@ struct Joint {
     float length;
 
     explicit Joint(float ang = 0.0f, float len = 1.0f); //explicit for å forhindre feil konvertering
-    float getMaxReach(KinematicChain &chain) const;
 };
 
 class KinematicChain {
@@ -30,12 +29,16 @@ public:
     explicit KinematicChain(size_t n = 0);
 
     void addJoint(const Joint &joint);
+    void removeJoint();
 
     void targetPosition(Eigen::Vector2f &position);
     const Eigen::Vector2f& getTargetPosition() const;
 
 
     static float clampAngle(float angle);
+
+    float getMaxReach() const;
+    void updateMaxReach();
 
 
     // Google når nodiscard skal brukes

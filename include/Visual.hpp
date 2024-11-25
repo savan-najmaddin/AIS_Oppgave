@@ -9,11 +9,12 @@ class VisualJoints {
 public:
   void setChain(threepp::Scene &scene, const KinematicChain &chain);
 
-  void update(const KinematicChain &chain);
+  // Kan være const fordi pekeren ikke blir endret på direkte
+  void update(const KinematicChain &chain) const;
 
 private:
     static constexpr float WIDTH = 0.2f;
 
-    std::vector<std::shared_ptr<threepp::Mesh>> joints;
+    std::vector<std::unique_ptr<threepp::Mesh>> joints;
 };
 #endif

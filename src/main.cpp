@@ -78,26 +78,11 @@ int main() {
 
     float &learningRate = ui.learningRate;
 
-    float maxReach = joint.getMaxReach(chain);
-
     Clock clock;
     controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
     canvas.addMouseListener(ml);
 
-
-    /*std::vector<std::shared_ptr<Object3D>> jointVisuals;
-    for (size_t i = 0; i < chain.joints.size(); ++i) {
-        auto jointVisual = std::make_shared<Object3D>();
-        auto link = std::make_shared<JointVisual>(chain.joints[i].length)->getMesh();
-        jointVisual->add(link);
-        jointVisuals.push_back(jointVisual);
-    }*/
-
     VisualJoints visualJoints;
-
-    /*for (auto &jointVisual: jointVisuals) {
-        scene->add(jointVisual);
-    }*/
 
     auto targetGeometry = SphereGeometry::create(0.5f, 16, 16);
     auto targetMaterial = MeshBasicMaterial::create({{"color", Color::green}});
@@ -109,6 +94,14 @@ int main() {
     circleMaterial->transparent = false;
     circleMaterial->opacity = 0.2f;
 
+    auto reachGeometry = SphereGeometry::create(1, 64);
+    auto reachMaterial = MeshBasicMaterial::create();
+    reachMaterial->color = Color(0xffffff);
+    reachMaterial->transparent = true;
+    reachMaterial->opacity = 0.2f;
+    auto reachCircleMesh = Mesh::create(reachGeometry, reachMaterial);
+    reachCircleMesh->position.z = -0.1;
+
     auto circleMesh = Mesh::create(circleGeometry, circleMaterial);
     circleMesh->rotation.x = math::degToRad(-90);
 
@@ -116,6 +109,9 @@ int main() {
 
     scene->add(targetMesh);
     scene->add(circleMesh);
+    scene->add(reachCircleMesh);
+
+    std::size_t prevNumJoints = 0;
 
 
     canvas.animate([&]() {
@@ -127,15 +123,22 @@ int main() {
         if(ui.initializeChain)
         {
             while (chain.joints.size() > ui.numJoints) {
-                chain.joints.pop_back();
+                chain.removeJoint();
             }
             while (chain.joints.size() < ui.numJoints) {
                 chain.addJoint(Joint(M_PI, ui.jointLength));
             }
 
-            chain.updateInverseKinematics(targetPosition, learningRate);
+            if (chain.joints.size() != prevNumJoints) {
 
-            visualJoints.setChain(*scene, chain);
+                chain.updateMaxReach();
+                visualJoints.setChain(*scene, chain);
+                auto geometry = threepp::SphereGeometry::create(chain.getMaxReach(), 64);
+                reachCircleMesh->setGeometry(geometry);
+                prevNumJoints = chain.joints.size();
+            }
+
+            chain.updateInverseKinematics(targetPosition, learningRate);
             visualJoints.update(chain);
 
             renderer.render(*scene, *camera);
