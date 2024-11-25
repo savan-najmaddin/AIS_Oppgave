@@ -38,8 +38,8 @@ struct MyUI : public ImguiContext {//gjør om til klasse
 
         ImGui::Text("Input field: ");
 
+        ImGui::InputInt("Number of joints: (1-10)", &numJoints, 1, 10);
         if (!initializeChain) {
-            ImGui::InputInt("Number of joints: (1-10)", &numJoints, 1, 10);
             ImGui::InputFloat("Joint Length (0.1 - 10.0): ", &jointLength, 0.1f, 10.0f);
 
             if (ImGui::Button("Initialize Chain: ")) {
@@ -117,11 +117,8 @@ int main() {
     scene->add(targetMesh);
     scene->add(circleMesh);
 
-    int frameCount{0};//Potential overflow after x hours.
-
 
     canvas.animate([&]() {
-        frameCount += 1;//for å holde tid
 
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 

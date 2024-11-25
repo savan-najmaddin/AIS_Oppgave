@@ -12,7 +12,6 @@ void VisualJoints::setChain(threepp::Scene &scene, const KinematicChain &chain) 
             auto geometry = threepp::BoxGeometry::create(chain.joints[i].length, WIDTH, WIDTH);
             auto material = threepp::MeshBasicMaterial::create({{"color", threepp::Color::red}});
             auto mesh = threepp::Mesh::create(geometry, material);
-            mesh->position.set(chain.joints[i].length / 2.0f, 0, 0);
             joints.push_back(std::move(std::make_unique<threepp::Mesh>()));
             joints.back()->copy(*mesh);
             scene.add(*joints.back());
@@ -25,7 +24,9 @@ void VisualJoints::update(const KinematicChain &chain) {
     for (size_t i = 0; i < chain.joints.size(); ++i) {
         cumulativeAngle += chain.joints[i].angle;
 
-        joints[i]->position.set(position.x(), position.y(), 0);
+        const auto &length = chain.joints[i].length;
+        joints[i]->position.set(position.x() + length * std::cos(cumulativeAngle) / 2,
+            position.y() + length * std::sin(cumulativeAngle) / 2, 0);
         joints[i]->rotation.set(0, 0, cumulativeAngle);
 
         position.x() += chain.joints[i].length * std::cos(cumulativeAngle);

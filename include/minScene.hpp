@@ -47,7 +47,7 @@ public:
         auto material = MeshBasicMaterial::create({{"color", Color::red}});
 
         mesh = Mesh::create(geometry, material);
-        mesh->position.set(length / 2.0f, 0, 0); // Center the mesh
+        mesh->position.set(length / 2.0f , 0, 0); // Center the mesh
     }
 
     std::shared_ptr<Mesh> getMesh() {
