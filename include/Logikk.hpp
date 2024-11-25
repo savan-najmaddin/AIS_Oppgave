@@ -14,24 +14,22 @@
 #include <vector>
 
 
+class KinematicChain;
 struct Joint {
     float angle;
     float length;
 
     explicit Joint(float ang = 0.0f, float len = 1.0f); //explicit for å forhindre feil konvertering
+    float getMaxReach(KinematicChain &chain) const;
 };
 
 class KinematicChain {
 public:
-    size_t numJoints;
-
     std::vector<Joint> joints;
 
     explicit KinematicChain(size_t n = 0);
 
     void addJoint(const Joint &joint);
-
-    float getMaxReach(KinematicChain &chain) const;
 
     void targetPosition(Eigen::Vector2f &position);
     const Eigen::Vector2f& getTargetPosition() const;

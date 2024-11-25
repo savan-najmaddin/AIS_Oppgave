@@ -5,13 +5,15 @@
 #include "Logikk.hpp"
 #include "iostream"
 
-KinematicChain chain;
+class VisualJoints {
+public:
+  void setChain(threepp::Scene &scene, const KinematicChain &chain);
 
+  void update(const KinematicChain &chain);
 
-class Circle {
+private:
+    static constexpr float WIDTH = 0.2f;
 
-  //auto circleGeometry = threepp::SphereGeometry::create( chain.getMaxReach(), 64);
-
-
+    std::vector<std::shared_ptr<threepp::Mesh>> joints;
 };
 #endif

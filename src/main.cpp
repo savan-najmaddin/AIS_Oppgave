@@ -5,6 +5,8 @@
 #include "threepp/extras/imgui/ImguiContext.hpp"
 #include "threepp/threepp.hpp"
 
+#include <Visual.hpp>
+
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -45,6 +47,7 @@ struct MyUI : public ImguiContext {//gjør om til klasse
             }
         } else {
             ImGui::SliderFloat("Learning Rate: ", &learningRate, 0.03f, 0.5f);
+
         }
         ImGui::End();
     }
@@ -70,48 +73,46 @@ int main() {
     canvas.setIOCapture(&capture);
 
     KinematicChain chain;
+    Joint joint;
     MyUI ui(canvas);
 
-    int numJoints = ui.numJoints;
-    float jointLength = ui.jointLength;
     float &learningRate = ui.learningRate;
 
-    for (size_t i = 0; i < numJoints; ++i) {
-        chain.addJoint(Joint(M_PI, jointLength));
-    }
-    float maxReach = chain.getMaxReach(chain);
+    float maxReach = joint.getMaxReach(chain);
 
     Clock clock;
     controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
     canvas.addMouseListener(ml);
 
 
-    std::vector<std::shared_ptr<Object3D>> jointVisuals;
-    for (size_t i = 0; i < chain.numJoints; ++i) {
+    /*std::vector<std::shared_ptr<Object3D>> jointVisuals;
+    for (size_t i = 0; i < chain.joints.size(); ++i) {
         auto jointVisual = std::make_shared<Object3D>();
         auto link = std::make_shared<JointVisual>(chain.joints[i].length)->getMesh();
         jointVisual->add(link);
         jointVisuals.push_back(jointVisual);
-    }
+    }*/
 
-    for (auto &jointVisual: jointVisuals) {
+    VisualJoints visualJoints;
+
+    /*for (auto &jointVisual: jointVisuals) {
         scene->add(jointVisual);
-    }
+    }*/
 
     auto targetGeometry = SphereGeometry::create(0.5f, 16, 16);
     auto targetMaterial = MeshBasicMaterial::create({{"color", Color::green}});
     auto targetMesh = Mesh::create(targetGeometry, targetMaterial);
 
-    auto circleGeometry = SphereGeometry::create(maxReach, 64);
+    auto circleGeometry = SphereGeometry::create(1, 64);
     auto circleMaterial = MeshBasicMaterial::create();
     circleMaterial->color = Color(0xffffff);
-    circleMaterial->transparent = true;
+    circleMaterial->transparent = false;
     circleMaterial->opacity = 0.2f;
 
     auto circleMesh = Mesh::create(circleGeometry, circleMaterial);
     circleMesh->rotation.x = math::degToRad(-90);
 
-    circleMesh->position.set(0, 0, -0.1);
+    circleMesh->position.set(0, 0, 0.1);
 
     scene->add(targetMesh);
     scene->add(circleMesh);
@@ -126,28 +127,22 @@ int main() {
 
         targetMesh->position.set(targetPosition.x(), targetPosition.y(), 0);
 
-        float cumulativeAngle = 0.0f;
-        Eigen::Vector2f position(0.0f, 0.0f);
-
         if(ui.initializeChain)
         {
-        chain.updateInverseKinematics(targetPosition, learningRate);
-        chain.numJoints = numJoints;
+            while (chain.joints.size() > ui.numJoints) {
+                chain.joints.pop_back();
+            }
+            while (chain.joints.size() < ui.numJoints) {
+                chain.addJoint(Joint(M_PI, ui.jointLength));
+            }
 
-        for (size_t i = 0; i < chain.numJoints; ++i) {
-            cumulativeAngle += chain.joints[i].angle;
+            chain.updateInverseKinematics(targetPosition, learningRate);
 
-            jointVisuals[i]->position.set(position.x(), position.y(), 0);
-            jointVisuals[i]->rotation.set(0, 0, cumulativeAngle);
+            visualJoints.setChain(*scene, chain);
+            visualJoints.update(chain);
 
-            position.x() += chain.joints[i].length * std::cos(cumulativeAngle);
-            position.y() += chain.joints[i].length * std::sin(cumulativeAngle);
+            renderer.render(*scene, *camera);
         }
-
-
-        renderer.render(*scene, *camera);
-
-    }
         ui.render();
     });
 

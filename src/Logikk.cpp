@@ -6,8 +6,16 @@
 
 Joint::Joint(float ang, float len) : angle(ang), length(len) {}
 
+float Joint::getMaxReach(KinematicChain &chain) const {//burde dette gjøres static
+    float totalLength{0};
+    for (const auto &joint: chain.joints) {
+        totalLength += joint.length;
+    }
+    return totalLength;
+}
+
 //vet at det burde være 2 klasser, men jeg har dårlig tid
-KinematicChain::KinematicChain(size_t n) : numJoints(n), joints(n) {
+KinematicChain::KinematicChain(size_t n) : joints(n) {
     float totalLength = 0.0f;
     for (const auto &joint: joints) {
         totalLength += joint.length;
@@ -18,15 +26,6 @@ KinematicChain::KinematicChain(size_t n) : numJoints(n), joints(n) {
 
 void KinematicChain::addJoint(const Joint &joint) {
     joints.emplace_back(joint);
-    numJoints = joints.size();
-}
-
-float KinematicChain::getMaxReach(KinematicChain &chain) const {//burde dette gjøres static
-    float totalLength{0};
-    for (const auto &joint: chain.joints) {
-        totalLength += joint.length;
-    }
-    return totalLength;
 }
 
 void KinematicChain::targetPosition(Eigen::Vector2f &position) {
@@ -61,10 +60,10 @@ Eigen::Vector2f KinematicChain::findEffectorPosition() const {
 
 std::vector<float> KinematicChain::computeCumulativeAngels() const {
 
-    std::vector<float> cumulativeAngles(numJoints);
+    std::vector<float> cumulativeAngles(joints.size());
     float cumulativeAngle = 0.0f;
 
-    for (size_t i = 0; i < numJoints; ++i) {
+    for (size_t i = 0; i < joints.size(); ++i) {
         cumulativeAngle += joints[i].angle;
         cumulativeAngles[i] = cumulativeAngle;
     }
@@ -72,17 +71,17 @@ std::vector<float> KinematicChain::computeCumulativeAngels() const {
 }
 
 Eigen::MatrixXf KinematicChain::computeJacobianTranspose() const {
-    Eigen::MatrixXf jacobianTranspose(numJoints, 2);
+    Eigen::MatrixXf jacobianTranspose(joints.size(), 2);
     jacobianTranspose.setZero();
 
     std::vector<float> cumulativeAngles = computeCumulativeAngels();
 
-    for (size_t i = 0; i < numJoints; ++i) {
+    for (size_t i = 0; i < joints.size(); ++i) {
         float partialX = 0.0f;
         float partialY = 0.0f;
 
 
-        for (size_t j = i; j < numJoints; ++j) {
+        for (size_t j = i; j < joints.size(); ++j) {
             float angleSum = cumulativeAngles[j];
             float dx_dtheta = -joints[j].length * std::sin(angleSum);
             float dy_dtheta = joints[j].length * std::cos(angleSum);
@@ -98,7 +97,7 @@ Eigen::MatrixXf KinematicChain::computeJacobianTranspose() const {
 }
 
 void KinematicChain::updateJointAngles(const Eigen::VectorXf &angleAdjustments) {
-    for (size_t i = 0; i < numJoints; ++i) {
+    for (size_t i = 0; i < joints.size(); ++i) {
         joints[i].angle += angleAdjustments(i);
         joints[i].angle = clampAngle(joints[i].angle);
     }
