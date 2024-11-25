@@ -133,7 +133,7 @@ int main() {
         {
         chain.updateInverseKinematics(targetPosition, learningRate);
         chain.numJoints = numJoints;
-        std::cout << (chain.numJoints) << std::endl;
+
         for (size_t i = 0; i < chain.numJoints; ++i) {
             cumulativeAngle += chain.joints[i].angle;
 
