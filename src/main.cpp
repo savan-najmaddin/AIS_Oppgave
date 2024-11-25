@@ -1,9 +1,7 @@
 #include "threepp/threepp.hpp"
-//#include "threepp/extras/imgui/ImguiContext.hpp"
 #include "Eigen/Core"
 #include "Logikk.hpp"
 #include "controller.hpp"
-
 #include "minScene.hpp"
 #include "threepp/extras/imgui/ImguiContext.hpp"
 
@@ -17,7 +15,7 @@
 
 using namespace threepp;
 
-// Define the MyUI structure with the required variables
+
 struct MyUI : public ImguiContext {
     int numJoints;
     float jointLength;
@@ -33,13 +31,13 @@ struct MyUI : public ImguiContext {
     void onRender() override {
         ImGui::Begin("title");
 
+        ImGui::Text("Adjust the simulation parameters:");
+
         ImGui::SliderFloat("Learning Rate: ", &learningRate, 0.01f, 0.1f);
 
         ImGui::End();
     }
 };
-
-
 
 using namespace threepp;
 
@@ -100,15 +98,9 @@ int main() {
     scene->add(targetMesh);
     scene->add(circleMesh);
 
-    std::cout << "Joint Positions:\n";
-    for (const auto &joint: chain.joints) {
-        std::cout << "Angle: " << joint.angle << ", Length: " << joint.length << std::endl;
-    }
-
-    Eigen::Vector2f lastPosition = chain.findEffectorPosition();
-    std::cout << "Last position: " << lastPosition.x() << ", " << lastPosition.y() << std::endl;
-
     int frameCount{0};//Potential overflow after x hours.
+
+
 
     canvas.animate([&]() {
         frameCount += 1;//for å holde tid
@@ -134,13 +126,6 @@ int main() {
             position.y() += chain.joints[i].length * std::sin(cumulativeAngle);
         }
 
-        Eigen::Vector2f effectorPosition = chain.findEffectorPosition();
-        if (frameCount % 150 == 0) {
-            std::cout << "Effector position: " << effectorPosition.x() << ", " << effectorPosition.y() << std::endl;
-            std::cout << "Effector actual position: " << effectorPosition.norm() << std::endl;
-            std::cout << "Target postion: " << targetPosition.x() << ", " << targetPosition.y() << std::endl;
-            std::cout << "Visual target position" << targetMesh->position.x << ", " << targetMesh->position.y << std::endl;
-        }
         renderer.render(*scene, *camera);
     });
 
