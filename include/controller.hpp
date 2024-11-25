@@ -2,56 +2,46 @@
 #define CONTROLLER_HPP
 
 
-
-#include "threepp/threepp.hpp"
 #include "Eigen/Core"
-#include "Logikk.hpp" //må denne være her?
-
-using namespace threepp;
-
-class controller  {
-
-  public:
-  struct MyMouseListener: MouseListener {
-
-    kinematicChain& chain;
-    float& t;
-    Canvas& canvas;
-    OrthographicCamera& camera;
-
-    float windowWidth = 800.0f;
-    float windowHeight = 800.0f;
-
-    MyMouseListener(float& t, kinematicChain& chain, Canvas& canvas, OrthographicCamera& camera)
-        : t(t), chain(chain), canvas(canvas), camera(camera) {}
-
-    void onMouseDown(int button, const Vector2& pos) override {
-      // Convert screen coordinates to NDC
-      float ndcX = (2.0f * pos.x) / 800.0f - 1.0f;
-      float ndcY = 1.0f - (2.0f * pos.y) / 800.0f;
-
-      // Unproject to world coordinates
-      Vector3 ndcCoords(ndcX, ndcY, 0.0f); // Z = 0 for the XY-plane
-      Vector3 worldCoords = ndcCoords.unproject(camera);
-
-      // Update the target position in the kinematic chain
-      Eigen::Vector2f target(worldCoords.x, worldCoords.y);
-      chain.targetPosition(target);
-    }
-  };
-  // ...
+#include "Logikk.hpp"
+#include "threepp/threepp.hpp"
 
 
 
-private:
-  Mesh* myAddedMesh = nullptr;
-  bool addedMesh = false;
-  void handleMouseClick();
+class controller {
 
-  std::shared_ptr<Mesh> createMesh();
+public:
+    struct MyMouseListener : threepp::MouseListener {
+
+        KinematicChain &chain;
+        float &t;
+        threepp::Canvas &canvas;
+        threepp::OrthographicCamera &camera;
+
+
+        MyMouseListener(float &t, KinematicChain &chain, threepp::Canvas &canvas, threepp::OrthographicCamera &camera)
+            : t(t), chain(chain), canvas(canvas), camera(camera) {}
+
+        void onMouseDown(int button, const threepp::Vector2 &pos) override {
+            // adjusting the mouse position relative to the canvas size, PS adjusted for square canvas
+            threepp::WindowSize const windowSize = canvas.size();
+
+
+            float ndcX = (2.0f * pos.x) / windowSize.height() - 1.0f;
+            float ndcY = 1.0f - (2.0f * pos.y) / windowSize.height();
+
+            // for targetposition
+            threepp::Vector3 ndcCoords(ndcX, ndcY, 0.0f);// Z = 0 for the XY-plane
+            threepp::Vector3 worldCoords = ndcCoords.unproject(camera);
+
+
+            Eigen::Vector2f target(worldCoords.x, worldCoords.y);
+            chain.targetPosition(target);
+
+        }
+    };
 
 };
 
 
-
-#endif //CONTROLLER_HPP
+#endif//CONTROLLER_HPP

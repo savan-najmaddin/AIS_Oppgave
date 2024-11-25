@@ -21,6 +21,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(threepp)
 
+
+
 FetchContent_Declare(
         eigen
         GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
@@ -41,6 +43,8 @@ if (KINEMATIKK_TEST)
     enable_testing()
 endif ()
 
+
+add_subdirectory(external)
 add_subdirectory(src)
 
 add_executable(kinematikk src/main.cpp)
