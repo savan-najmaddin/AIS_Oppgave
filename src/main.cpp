@@ -1,9 +1,9 @@
-#include "threepp/threepp.hpp"
 #include "Eigen/Core"
 #include "Logikk.hpp"
 #include "controller.hpp"
 #include "minScene.hpp"
 #include "threepp/extras/imgui/ImguiContext.hpp"
+#include "threepp/threepp.hpp"
 
 
 #ifndef M_PI
@@ -16,27 +16,36 @@
 using namespace threepp;
 
 
-struct MyUI : public ImguiContext { //gjør om til klasse
+struct MyUI : public ImguiContext {//gjør om til klasse
     int numJoints;
     float jointLength;
     float learningRate;
+    bool initializeChain;
 
     explicit MyUI(const Canvas &canvas)
         : ImguiContext(canvas.windowPtr()),
           numJoints(3),
           jointLength(5.0f),
-          learningRate(0.08f) {}
-
+          learningRate(0.08f),
+          initializeChain(false) {}
 
     void onRender() override {
         ImGui::SetNextWindowPos({}, 0, {});
         ImGui::SetNextWindowSize({}, 0);
-        ImGui::Begin("Crane3R");
+        ImGui::Begin("Bendern");
 
-        ImGui::Text("ka dette:");
+        ImGui::Text("Input field: ");
 
-        ImGui::SliderFloat("Learning Rate: ", &learningRate, 0.03f, 0.3f);
+        if (!initializeChain) {
+            ImGui::InputInt("Number of joints: (1-10)", &numJoints, 1, 10);
+            ImGui::InputFloat("Joint Length (0.1 - 10.0): ", &jointLength, 0.1f, 10.0f);
 
+            if (ImGui::Button("Initialize Chain: ")) {
+                initializeChain = true;
+            }
+        } else {
+            ImGui::SliderFloat("Learning Rate: ", &learningRate, 0.03f, 0.5f);
+        }
         ImGui::End();
     }
 };
@@ -44,8 +53,6 @@ struct MyUI : public ImguiContext { //gjør om til klasse
 using namespace threepp;
 
 int main() {
-
-
     auto parameter = canvasParameter();
     Canvas canvas(parameter);
     GLRenderer renderer(canvas.size());
@@ -112,7 +119,6 @@ int main() {
     int frameCount{0};//Potential overflow after x hours.
 
 
-
     canvas.animate([&]() {
         frameCount += 1;//for å holde tid
 
@@ -120,11 +126,14 @@ int main() {
 
         targetMesh->position.set(targetPosition.x(), targetPosition.y(), 0);
 
-        chain.updateInverseKinematics(targetPosition, learningRate);
-
         float cumulativeAngle = 0.0f;
         Eigen::Vector2f position(0.0f, 0.0f);
 
+        if(ui.initializeChain)
+        {
+        chain.updateInverseKinematics(targetPosition, learningRate);
+        chain.numJoints = numJoints;
+        std::cout << (chain.numJoints) << std::endl;
         for (size_t i = 0; i < chain.numJoints; ++i) {
             cumulativeAngle += chain.joints[i].angle;
 
@@ -135,8 +144,10 @@ int main() {
             position.y() += chain.joints[i].length * std::sin(cumulativeAngle);
         }
 
+
         renderer.render(*scene, *camera);
 
+    }
         ui.render();
     });
 
