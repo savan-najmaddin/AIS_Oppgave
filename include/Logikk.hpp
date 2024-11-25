@@ -4,7 +4,6 @@
 //d. Selve løseren.
 
 //bevegelsen til IK kjeden gjort numerisk
-//imgiu
 
 #ifndef LOGIKK_HPP
 #define LOGIKK_HPP

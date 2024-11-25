@@ -3,8 +3,10 @@
 #include "Eigen/Core"
 #include "Logikk.hpp"
 #include "controller.hpp"
+
 #include "minScene.hpp"
-#include <Visual.hpp>
+#include "threepp/extras/imgui/ImguiContext.hpp"
+
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -12,12 +14,37 @@
 
 //sette exceptions
 
+
+using namespace threepp;
+
+// Define the MyUI structure with the required variables
+struct MyUI : public ImguiContext {
+    int numJoints;
+    float jointLength;
+    float learningRate;
+
+    explicit MyUI(const Canvas &canvas)
+        : ImguiContext(canvas.windowPtr()),
+          numJoints(3),
+          jointLength(5.0f),
+          learningRate(0.08f) {}
+
+
+    void onRender() override {
+        ImGui::Begin("title");
+
+        ImGui::SliderFloat("Learning Rate: ", &learningRate, 0.01f, 0.1f);
+
+        ImGui::End();
+    }
+};
+
+
+
 using namespace threepp;
 
 int main() {
 
-    const int numJoints{3};
-    const float jointLength{5};
 
     auto parameter = canvasParameter();
     Canvas canvas(parameter);
@@ -27,6 +54,12 @@ int main() {
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamera();
 
     KinematicChain chain;
+    MyUI ui(canvas);
+
+    int numJoints = ui.numJoints;
+    float jointLength = ui.jointLength;
+    float &learningRate = ui.learningRate;
+
     for (size_t i = 0; i < numJoints; ++i) {
         chain.addJoint(Joint(M_PI, jointLength));
     }
@@ -35,6 +68,7 @@ int main() {
     Clock clock;
     controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
     canvas.addMouseListener(ml);
+
 
     std::vector<std::shared_ptr<Object3D>> jointVisuals;
     for (size_t i = 0; i < chain.numJoints; ++i) {
@@ -77,13 +111,15 @@ int main() {
     int frameCount{0};//Potential overflow after x hours.
 
     canvas.animate([&]() {
-        frameCount += 1; //for å holde tid
+        frameCount += 1;//for å holde tid
+
+        ui.render();
 
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
         targetMesh->position.set(targetPosition.x(), targetPosition.y(), 0);
 
-        chain.updateInverseKinematics(targetPosition, 0.5f);
+        chain.updateInverseKinematics(targetPosition, learningRate);
 
         float cumulativeAngle = 0.0f;
         Eigen::Vector2f position(0.0f, 0.0f);

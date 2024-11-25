@@ -44,7 +44,7 @@ if (KINEMATIKK_TEST)
 endif ()
 
 
-
+add_subdirectory(external)
 add_subdirectory(src)
 
 add_executable(kinematikk src/main.cpp)
