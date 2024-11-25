@@ -16,7 +16,7 @@
 using namespace threepp;
 
 
-struct MyUI : public ImguiContext {
+struct MyUI : public ImguiContext { //gjør om til klasse
     int numJoints;
     float jointLength;
     float learningRate;
@@ -29,11 +29,13 @@ struct MyUI : public ImguiContext {
 
 
     void onRender() override {
-        ImGui::Begin("title");
+        ImGui::SetNextWindowPos({}, 0, {});
+        ImGui::SetNextWindowSize({}, 0);
+        ImGui::Begin("Crane3R");
 
-        ImGui::Text("Adjust the simulation parameters:");
+        ImGui::Text("ka dette:");
 
-        ImGui::SliderFloat("Learning Rate: ", &learningRate, 0.01f, 0.1f);
+        ImGui::SliderFloat("Learning Rate: ", &learningRate, 0.03f, 0.3f);
 
         ImGui::End();
     }
@@ -50,6 +52,15 @@ int main() {
 
     std::shared_ptr<Scene> scene = createScene();
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamera();
+
+    IOCapture capture{};
+    capture.preventMouseEvent = [] {
+        return ImGui::GetIO().WantCaptureMouse;
+    };
+    capture.preventKeyboardEvent = [] {
+        return ImGui::GetIO().WantCaptureKeyboard;
+    };
+    canvas.setIOCapture(&capture);
 
     KinematicChain chain;
     MyUI ui(canvas);
@@ -105,8 +116,6 @@ int main() {
     canvas.animate([&]() {
         frameCount += 1;//for å holde tid
 
-        ui.render();
-
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
         targetMesh->position.set(targetPosition.x(), targetPosition.y(), 0);
@@ -127,6 +136,8 @@ int main() {
         }
 
         renderer.render(*scene, *camera);
+
+        ui.render();
     });
 
     return 0;
