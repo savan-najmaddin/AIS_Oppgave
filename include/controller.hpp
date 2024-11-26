@@ -3,7 +3,7 @@
 
 
 #include "Eigen/Core"
-#include "Logikk.hpp"
+#include "Logic.hpp"
 #include "threepp/threepp.hpp"
 
 

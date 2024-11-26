@@ -17,6 +17,7 @@ inline Canvas::Parameters canvasParameter(){ //vinduet til programmet
     parameter.title("Min tittel");
     parameter.size(800.0f, 800.0f);
     parameter.vsync(true);
+    parameter.antialiasing(4);
     parameter.resizable(false);
     return parameter;
 
@@ -27,7 +28,7 @@ inline auto createScene() {
 }
 
 inline std::shared_ptr<OrthographicCamera> createOrthographicCamera() {
-    float viewSize = 20.0f;
+    float viewSize = 20.0f; //vurderer resizeable kamera, la stå for nå
     float aspectRatio = 1.0f;
 
     auto camera = OrthographicCamera::create(
