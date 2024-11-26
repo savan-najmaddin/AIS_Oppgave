@@ -28,7 +28,7 @@ inline auto createScene() {
 }
 
 inline std::shared_ptr<OrthographicCamera> createOrthographicCamera() {
-    float viewSize = 20.0f;
+    float viewSize = 20.0f; //vurderer resizeable kamera, la stå for nå
     float aspectRatio = 1.0f;
 
     auto camera = OrthographicCamera::create(

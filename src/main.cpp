@@ -46,16 +46,14 @@ int main() {
     canvas.addMouseListener(ml);
 
     VisualJoints visualJoints;
-    MySpheres sphere;
 
-    auto targetCircle = sphere.createSphere(0.5f, 32, 32, Color(0x800080)); //lilla
+    auto targetCircle = MySpheres::createSphere(0.5f, 32, 32, Color(0x800080)); //lilla
 
-    auto centerCircle = sphere.createSphere(0.5f, 32, 32, Color(0xffffff)); //blå
+    auto centerCircle = MySpheres::createSphere(0.5f, 32, 32, Color(0xffffff)); //blå
 
-    auto reachCircle = sphere.createSphere(1.0f, 300, 300, Color(0x00AAAD)); //turkis
+    auto reachCircle = MySpheres::createSphere(1.0f, 300, 300, Color(0x00AAAD)); //turkis
     reachCircle->material()->transparent = true;
     reachCircle->material()->opacity = 0.2f;
-    //reachCircleMesh->position.z = -0.1;
 
     scene->add(targetCircle);
     scene->add(centerCircle);
@@ -64,7 +62,7 @@ int main() {
     std::size_t prevNumJoints = 0;
 
 
-    canvas.animate([&]() {
+    canvas.animate([&] {
 
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
@@ -72,7 +70,7 @@ int main() {
 
         if(ui.initializeChain)
         {
-            while (chain.joints.size() > ui.numJoints) {
+            while (chain.joints.size() > ui.numJoints) { //gpt std generate?, elr absoluttverider?
                 chain.removeJoint();
             }
             while (chain.joints.size() < ui.numJoints) {
