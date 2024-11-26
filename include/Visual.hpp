@@ -17,4 +17,17 @@ private:
 
     std::vector<std::unique_ptr<threepp::Mesh>> joints;
 };
+
+class MySpheres {
+public:
+  auto createSphere(float radius, int widthSegments, int heightSegments, auto color ) {
+    auto geometry = threepp::SphereGeometry::create( radius, widthSegments, heightSegments );
+    auto material = threepp::MeshBasicMaterial::create();
+    material->color = color;
+    return threepp::Mesh::create(geometry, material);
+  }
+private:
+
+
+};
 #endif

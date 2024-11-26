@@ -51,7 +51,7 @@ public:
 
     void updateJointAngles(const Eigen::VectorXf &angleAdjustments);
 
-
+    // TODO: Fiks når utgangspunkt er 'perfekt'
     void updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate,
                                  float threshold = 0.1f, int maxIteration = 10);
 

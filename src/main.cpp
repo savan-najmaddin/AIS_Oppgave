@@ -38,7 +38,8 @@ struct MyUI : public ImguiContext {//gjør om til klasse
 
         ImGui::Text("Input field: ");
 
-        ImGui::InputInt("Number of joints: (1-10)", &numJoints, 1, 10);
+        ImGui::InputInt("Number of joints: (1-10)", &numJoints, 1, 10); //tror lim er 20
+
         if (!initializeChain) {
             ImGui::InputFloat("Joint Length (0.1 - 10.0): ", &jointLength, 0.1f, 10.0f);
 
@@ -63,7 +64,7 @@ int main() {
     std::shared_ptr<Scene> scene = createScene();
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamera();
 
-    IOCapture capture{};
+    IOCapture capture{}; //er dette nødvendig?
     capture.preventMouseEvent = [] {
         return ImGui::GetIO().WantCaptureMouse;
     };
@@ -73,7 +74,6 @@ int main() {
     canvas.setIOCapture(&capture);
 
     KinematicChain chain;
-    Joint joint;
     MyUI ui(canvas);
 
     float &learningRate = ui.learningRate;
@@ -83,33 +83,20 @@ int main() {
     canvas.addMouseListener(ml);
 
     VisualJoints visualJoints;
+    MySpheres sphere;
 
-    auto targetGeometry = SphereGeometry::create(0.5f, 16, 16);
-    auto targetMaterial = MeshBasicMaterial::create({{"color", Color::green}});
-    auto targetMesh = Mesh::create(targetGeometry, targetMaterial);
+    auto targetCircle = sphere.createSphere(0.5f, 32, 32, Color(0x800080)); //lilla
 
-    auto circleGeometry = SphereGeometry::create(1, 64);
-    auto circleMaterial = MeshBasicMaterial::create();
-    circleMaterial->color = Color(0xffffff);
-    circleMaterial->transparent = false;
-    circleMaterial->opacity = 0.2f;
+    auto centerCircle = sphere.createSphere(0.5f, 32, 32, Color(0x0000ff)); //blå
 
-    auto reachGeometry = SphereGeometry::create(1, 64);
-    auto reachMaterial = MeshBasicMaterial::create();
-    reachMaterial->color = Color(0xffffff);
-    reachMaterial->transparent = true;
-    reachMaterial->opacity = 0.2f;
-    auto reachCircleMesh = Mesh::create(reachGeometry, reachMaterial);
-    reachCircleMesh->position.z = -0.1;
+    auto reachCircle = sphere.createSphere(1.0f, 300, 300, Color(0x00AAAD)); //turkis
+    reachCircle->material()->transparent = true;
+    reachCircle->material()->opacity = 0.2f;
+    //reachCircleMesh->position.z = -0.1;
 
-    auto circleMesh = Mesh::create(circleGeometry, circleMaterial);
-    circleMesh->rotation.x = math::degToRad(-90);
-
-    circleMesh->position.set(0, 0, 0.1);
-
-    scene->add(targetMesh);
-    scene->add(circleMesh);
-    scene->add(reachCircleMesh);
+    scene->add(targetCircle);
+    scene->add(centerCircle);
+    scene->add(reachCircle);
 
     std::size_t prevNumJoints = 0;
 
@@ -118,7 +105,7 @@ int main() {
 
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
-        targetMesh->position.set(targetPosition.x(), targetPosition.y(), 0);
+        targetCircle->position.set(targetPosition.x(), targetPosition.y(), 0);
 
         if(ui.initializeChain)
         {
@@ -133,8 +120,8 @@ int main() {
 
                 chain.updateMaxReach();
                 visualJoints.setChain(*scene, chain);
-                auto geometry = threepp::SphereGeometry::create(chain.getMaxReach(), 64);
-                reachCircleMesh->setGeometry(geometry);
+                auto const geometry = SphereGeometry::create(chain.getMaxReach(), 64);
+                reachCircle->setGeometry(geometry);
                 prevNumJoints = chain.joints.size();
             }
 
