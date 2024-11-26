@@ -6,6 +6,8 @@
 
 #include "Visual.hpp"
 
+#include <Objects.hpp>
+
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -29,9 +31,6 @@ int main() {
     capture.preventMouseEvent = [] {
         return ImGui::GetIO().WantCaptureMouse;
     };
-    capture.preventKeyboardEvent = [] {
-        return ImGui::GetIO().WantCaptureKeyboard;
-    };
     canvas.setIOCapture(&capture);
 
     KinematicChain chain;
@@ -45,17 +44,10 @@ int main() {
 
     VisualJoints visualJoints;
 
-    auto targetCircle = MySpheres::createSphere(0.5f, 32, 32, Color(0x800080)); //lilla
+    MySpheres mySpheres;
+    Spheres spheres;
 
-    auto centerCircle = MySpheres::createSphere(0.5f, 32, 32, Color(0xffffff)); //blå
-
-    auto reachCircle = MySpheres::createSphere(1.0f, 300, 300, Color(0x00AAAD)); //turkis
-    reachCircle->material()->transparent = true;
-    reachCircle->material()->opacity = 0.2f;
-
-    scene->add(targetCircle);
-    scene->add(centerCircle);
-    scene->add(reachCircle);
+    mySpheres.circleInitializer(scene);
 
     std::size_t prevNumJoints = 0;
 
@@ -64,7 +56,7 @@ int main() {
 
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
-        targetCircle->position.set(targetPosition.x(), targetPosition.y(), 0);
+        spheres.targetCircle->position.set(targetPosition.x(), targetPosition.y(), 0);
 
         if(ui.initializeChain)
         {
@@ -80,7 +72,7 @@ int main() {
                 chain.updateMaxReach();
                 visualJoints.setChain(*scene, chain);
                 auto const geometry = SphereGeometry::create(chain.getMaxReach(), 64);
-                reachCircle->setGeometry(geometry);
+                spheres.reachCircle->setGeometry(geometry);
                 prevNumJoints = chain.joints.size();
             }
 

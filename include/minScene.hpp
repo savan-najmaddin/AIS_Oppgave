@@ -7,6 +7,7 @@
 
 
 using namespace threepp;
+
 struct CanvasParameters {
     float width;
     float height;

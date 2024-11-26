@@ -5,6 +5,7 @@
 #include "iostream"
 #include "threepp/threepp.hpp"
 
+
 class VisualJoints {
 public:
     void setChain(threepp::Scene &scene, const KinematicChain &chain);
@@ -18,13 +19,6 @@ private:
     std::vector<std::unique_ptr<threepp::Mesh>> joints;
 };
 
-class MySpheres {
-public:
-    static auto createSphere(float const radius, int const widthSegments, int const heightSegments, auto color) {
-        const auto geometry = threepp::SphereGeometry::create(radius, widthSegments, heightSegments);
-        const auto material = threepp::MeshBasicMaterial::create();
-        material->color = color;
-        return threepp::Mesh::create(geometry, material);
-    }
-};
+
+
 #endif

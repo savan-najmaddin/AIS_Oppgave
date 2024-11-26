@@ -18,7 +18,6 @@ public:
         threepp::Canvas &canvas;
         threepp::OrthographicCamera &camera;
 
-
         MyMouseListener(float &t, KinematicChain &chain, threepp::Canvas &canvas, threepp::OrthographicCamera &camera)
             : t(t), chain(chain), canvas(canvas), camera(camera) {}
 
@@ -40,6 +39,9 @@ public:
 
         }
     };
+
+
+
 
 };
 
