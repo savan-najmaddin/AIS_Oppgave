@@ -4,6 +4,7 @@
 #include "minScene.hpp"
 #include "threepp/extras/imgui/ImguiContext.hpp"
 #include "threepp/threepp.hpp"
+#include "ImGui.hpp"
 
 #include <Visual.hpp>
 
@@ -17,44 +18,6 @@
 
 using namespace threepp;
 
-
-struct MyUI : public ImguiContext {//gjør om til klasse
-    int numJoints;
-    float jointLength;
-    float learningRate;
-    bool initializeChain;
-
-    explicit MyUI(const Canvas &canvas)
-        : ImguiContext(canvas.windowPtr()),
-          numJoints(3),
-          jointLength(5.0f),
-          learningRate(0.08f),
-          initializeChain(false) {}
-
-    void onRender() override {
-        ImGui::SetNextWindowPos({}, 0, {});
-        ImGui::SetNextWindowSize({}, 0);
-        ImGui::Begin("Bendern");
-
-        ImGui::Text("Input field: ");
-
-        ImGui::InputInt("Number of joints: (1-10)", &numJoints, 1, 10); //tror lim er 20
-
-        if (!initializeChain) {
-            ImGui::InputFloat("Joint Length (0.1 - 10.0): ", &jointLength, 0.1f, 10.0f);
-
-            if (ImGui::Button("Initialize Chain: ")) {
-                initializeChain = true;
-            }
-        } else {
-            ImGui::SliderFloat("Learning Rate: ", &learningRate, 0.03f, 0.5f);
-
-        }
-        ImGui::End();
-    }
-};
-
-using namespace threepp;
 
 int main() {
     auto parameter = canvasParameter();
@@ -87,7 +50,7 @@ int main() {
 
     auto targetCircle = sphere.createSphere(0.5f, 32, 32, Color(0x800080)); //lilla
 
-    auto centerCircle = sphere.createSphere(0.5f, 32, 32, Color(0x0000ff)); //blå
+    auto centerCircle = sphere.createSphere(0.5f, 32, 32, Color(0xffffff)); //blå
 
     auto reachCircle = sphere.createSphere(1.0f, 300, 300, Color(0x00AAAD)); //turkis
     reachCircle->material()->transparent = true;
