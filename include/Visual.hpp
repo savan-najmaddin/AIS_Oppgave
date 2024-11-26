@@ -1,7 +1,7 @@
 #ifndef VISUAL_HPP
 #define VISUAL_HPP
 
-#include "Logikk.hpp"
+#include "Logic.hpp"
 #include "iostream"
 #include "threepp/threepp.hpp"
 

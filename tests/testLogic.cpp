@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch_all.hpp"
-#include "Logikk.hpp"
+#include "Logic.hpp"
 
 TEST_CASE("Testing the initial condition of the endeffector", "[effector test]") {
 

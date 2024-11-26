@@ -1,12 +1,10 @@
-#include "Eigen/Core"
-#include "Logikk.hpp"
-#include "controller.hpp"
-#include "minScene.hpp"
-#include "threepp/extras/imgui/ImguiContext.hpp"
-#include "threepp/threepp.hpp"
-#include "ImGui.hpp"
+#include "Logic.hpp"
 
-#include <Visual.hpp>
+#include "include/ImGui.hpp"
+#include "include/controller.hpp"
+#include "include/minScene.hpp"
+
+#include "Visual.hpp"
 
 
 #ifndef M_PI

@@ -47,7 +47,7 @@ endif ()
 add_subdirectory(external)
 add_subdirectory(src)
 
-add_executable(kinematikk src/main.cpp)
+add_executable(kinematikk main.cpp)
 target_link_libraries(kinematikk PUBLIC kinematikkLib) #burde dette være PRIVATE?
 
 if (KINEMATIKK_TEST)
