@@ -64,7 +64,7 @@ int main() {
     std::shared_ptr<Scene> scene = createScene();
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamera();
 
-    IOCapture capture{}; //er dette nødvendig?
+    IOCapture capture{}; //kan slettes hvis jeg begrenser mus til maxreach
     capture.preventMouseEvent = [] {
         return ImGui::GetIO().WantCaptureMouse;
     };

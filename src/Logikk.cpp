@@ -138,7 +138,7 @@ Eigen::VectorXf KinematicChain::computeAngleAdjustments(const Eigen::Vector2f &e
     Eigen::MatrixXf jacobianTranspose = computeJacobianTranspose();
     Eigen::VectorXf angleAdjustments = learningRate * jacobianTranspose * error;
 
-    float maxAngleChange = 0.01f;//limit angle change, this is to slow it down once it´s close to the target
+    float maxAngleChange = 0.002f;//limit angle change, this is to slow it down once it´s close to the target
     for (int i = 0; i < angleAdjustments.size(); ++i) {
         angleAdjustments(i) = std::clamp(angleAdjustments(i), -maxAngleChange, maxAngleChange);
     }

@@ -17,6 +17,7 @@ inline Canvas::Parameters canvasParameter(){ //vinduet til programmet
     parameter.title("Min tittel");
     parameter.size(800.0f, 800.0f);
     parameter.vsync(true);
+    parameter.antialiasing(4);
     parameter.resizable(false);
     return parameter;
 
