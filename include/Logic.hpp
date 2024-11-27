@@ -58,7 +58,7 @@ public:
 private:
     static float clampAngle(float angle);
 
-    Eigen::Vector2f m_newVectorPosition{6.0f, 3.0f};
+    Eigen::Vector2f m_newVectorPosition{6.0f, 3.0f}; //ikke nødvendig å init, gir bare startPos
     float m_maxReach;
 };
 
