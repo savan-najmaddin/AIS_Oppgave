@@ -44,17 +44,15 @@ int main() {
 
     VisualJoints visualJoints;
 
-    SphereInitializer sphereInitializer;
-
     MySpheres centerCircle(0.5f, 32, 32, Color(0x0000FF)); //blå
+    centerCircle.addToScene(scene);
 
     MySpheres targetCircle(0.5f, 32, 32, Color(0x800080)); //lilla
+    targetCircle.addToScene(scene);
 
     MySpheres reachCircle(1.0f, 300, 300, Color(0x00AAAD), true, 0.2f); //turkis
+    reachCircle.addToScene(scene);
 
-    sphereInitializer.circleInitializer(scene, centerCircle); //for loop ?
-    sphereInitializer.circleInitializer(scene, targetCircle);
-    sphereInitializer.circleInitializer(scene, reachCircle);
 
     std::size_t prevNumJoints = 0;
 
@@ -71,7 +69,7 @@ int main() {
                 chain.removeJoint();
             }
             while (chain.joints.size() < ui.numJoints) {
-                chain.addJoint(Joint(M_PI, ui.jointLength));
+                chain.addJoint(Joint(std::numbers::pi, ui.jointLength));
             }
 
             if (chain.joints.size() != prevNumJoints) {
@@ -89,6 +87,7 @@ int main() {
 
             renderer.render(*scene, *camera);
         }
+
         ui.render();
     });
 

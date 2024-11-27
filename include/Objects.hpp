@@ -3,45 +3,33 @@
 
 #include "threepp/threepp.hpp"
 
-struct MySpheres {
+
+class MySpheres {
 public:
     MySpheres(float radius, int widthSegments, int heightSegments,
-        threepp::Color color, bool transparent = false, float opacity = 1.0f);
+              threepp::Color color, bool transparent = false, float opacity = 1.0f);
+
 
     void setRadius(float radius);
+    float getRadius();
 
-    float getRadius() const;
+    std::shared_ptr<threepp::Mesh> getMesh();
 
-    int getWidthSegments() const;
-
-    int getHeightSegments() const;
-
-    threepp::Color getColor() ;
-
-    void setMaterial(std::shared_ptr<threepp::MeshBasicMaterial> material);
-    std::shared_ptr<threepp::MeshBasicMaterial> getMaterial() const;
-
-    void setMesh(std::shared_ptr<threepp::Mesh> mesh);
-    std::shared_ptr<threepp::Mesh> getMesh() const;
-
-private :
-    float m_radius;
-    const int m_widthSegments;
-    const int m_heightSegments;
-    threepp::Color m_color;
-
-    std::shared_ptr<threepp::MeshBasicMaterial> m_material;
-    std::shared_ptr<threepp::Mesh> m_mesh;
-};
-
-
-class SphereInitializer {
-public:
-    void circleInitializer(std::shared_ptr<threepp::Scene> scene, MySpheres& spheres);
-
+    void addToScene(const std::shared_ptr<threepp::Scene> &scene);
 
 private:
-    std::shared_ptr<threepp::Mesh> createSphere(MySpheres& sphere);
+    float m_radius;
+    int m_widthSegments;
+    int m_heightSegments;
+    threepp::Color m_color;
+    bool m_transparent;
+    float m_opacity;
+
+    void createMesh();
+
+    std::shared_ptr<threepp::Mesh> m_mesh;
+    std::shared_ptr<threepp::SphereGeometry> m_geometry;
+    std::shared_ptr<threepp::MeshBasicMaterial> m_material;
 };
 
 #endif// OBJECTS_HPP
