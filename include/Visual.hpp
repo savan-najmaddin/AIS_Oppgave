@@ -11,7 +11,7 @@ public:
     void setChain(threepp::Scene &scene, const KinematicChain &chain);
 
     // Kan være const fordi pekeren ikke blir endret på direkte
-    void update(const KinematicChain &chain) const;
+    void updateJointVisual(const KinematicChain &chain) const;
 
 private:
     static constexpr float WIDTH = 0.2f;

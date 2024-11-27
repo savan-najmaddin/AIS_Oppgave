@@ -6,6 +6,7 @@
 
 #include "Visual.hpp"
 
+#include <Handler.hpp>
 #include <Objects.hpp>
 
 
@@ -51,9 +52,6 @@ int main() {
     reachCircle.addToScene(scene);
 
 
-    std::size_t prevNumJoints = 0;
-
-
     canvas.animate([&] {
 
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
@@ -62,24 +60,10 @@ int main() {
 
         if(ui.initializeChain) //TODO flytt til egen metode, start her
         {
-            while (chain.joints.size() > ui.numJoints) {
-                chain.removeJoint();
-            }
-            while (chain.joints.size() < ui.numJoints) {
-                chain.addJoint(Joint(std::numbers::pi, ui.jointLength));
-            }
-
-            if (chain.joints.size() != prevNumJoints) {
-
-                chain.updateMaxReach();
-                visualJoints.setChain(*scene, chain);
-                auto const geometry = SphereGeometry::create(chain.getMaxReach());
-                reachCircle.getMesh()->setGeometry(geometry);
-                prevNumJoints = chain.joints.size();
-            }
+            Handler handler(chain, ui, visualJoints, *scene, reachCircle);
 
             chain.updateInverseKinematics(targetPosition, learningRate);
-            visualJoints.update(chain);
+            visualJoints.updateJointVisual(chain);
             //TODO flytt til egen metode, slutt her
 
             renderer.render(*scene, *camera);

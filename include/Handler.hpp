@@ -6,29 +6,27 @@
 #include "Visual.hpp"
 #include "threepp/threepp.hpp"
 
+#include <Objects.hpp>
+
 
 class Handler {
 
 public:
 
-  Handler(Scene& scene, KinematicChain& chain, MyUI& ui, VisualJoints& visualJoints)
-    :m_prevNumJoints{0} ,
-  m_scene(scene),
-  m_chain(chain), m_ui(ui),
-  m_visualJoints(visualJoints) {}
+  Handler(KinematicChain& chain, const MyUI& ui, VisualJoints& visualJoints,  Scene& scene,
+    MySpheres& mySphere);
 
-  void jointResize(KinematicChain& chain, MyUI& ui);
+  static void jointResize(KinematicChain& chain,const MyUI& ui);
 
-  void updateMesh(KinematicChain& chain, VisualJoints& visualJoints, Scene& scene);
+  static void updateMesh(KinematicChain& chain, VisualJoints& visualJoints,  Scene& scene,
+   MySpheres& mySphere, int& prevNumJoints);
 
 private:
+
   std::shared_ptr<SphereGeometry> m_geometry;
   int m_prevNumJoints;
 
-  Scene& m_scene;
-  KinematicChain& m_chain;
-  MyUI& m_ui;
-  VisualJoints& m_visualJoints;
+
 
 
 
