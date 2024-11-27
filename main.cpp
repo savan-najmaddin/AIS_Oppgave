@@ -50,10 +50,7 @@ int main() {
 
     MySpheres targetCircle(0.5f, 32, 32, Color(0x800080)); //lilla
 
-    MySpheres reachCircle(1.0f, 300, 300, Color(0x00AAAD)); //turkis
-    reachCircle.material->transparent = true; //kan legges i konstruktør
-    reachCircle.material->opacity = 0.2f;
-
+    MySpheres reachCircle(1.0f, 300, 300, Color(0x00AAAD), true, 0.2f); //turkis
 
     sphereInitializer.circleInitializer(scene, centerCircle); //for loop ?
     sphereInitializer.circleInitializer(scene, targetCircle);
@@ -66,7 +63,7 @@ int main() {
 
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
-        targetCircle.mesh->position.set(targetPosition.x(), targetPosition.y(), 0);
+        targetCircle.getMesh()->position.set(targetPosition.x(), targetPosition.y(), 0);
 
         if(ui.initializeChain)
         { //TODO flytt til egen metode, start her
@@ -82,7 +79,7 @@ int main() {
                 chain.updateMaxReach();
                 visualJoints.setChain(*scene, chain);
                 auto const geometry = SphereGeometry::create(chain.getMaxReach(), 64);
-                reachCircle.mesh->setGeometry(geometry);
+                reachCircle.getMesh()->setGeometry(geometry);
                 prevNumJoints = chain.joints.size();
             }
 
