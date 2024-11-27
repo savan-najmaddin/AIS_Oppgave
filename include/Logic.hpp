@@ -49,11 +49,9 @@ public:
     void updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate,
                                  float threshold = 0.1f, int maxIteration = 10);
 
-    Eigen::Vector2f computeError(const Eigen::Vector2f& targetPosition) const;
+    [[nodiscard]] Eigen::Vector2f computeError(const Eigen::Vector2f& targetPosition) const;
 
-    Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f& error, float learningRate) const;
-
-    std::vector<Joint> getJoints() const;
+    [[nodiscard]] Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f& error, float learningRate) const;
 
 private:
     static float clampAngle(float angle);

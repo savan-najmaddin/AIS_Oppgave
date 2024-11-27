@@ -6,28 +6,34 @@
 #include "Visual.hpp"
 #include "threepp/threepp.hpp"
 
-/*
-class SphereHandler {
+
+class Handler {
 
 public:
-    explicit SphereHandler(Scene *scene);
 
-    Sphere *getTargetCircle() const;
-    Sphere *getCenterCircle() const;
-    Sphere *getReachCircle() const;
+  Handler(Scene& scene, KinematicChain& chain, MyUI& ui, VisualJoints& visualJoints)
+    :m_prevNumJoints{0} ,
+  m_scene(scene),
+  m_chain(chain), m_ui(ui),
+  m_visualJoints(visualJoints) {}
 
+  void jointResize(KinematicChain& chain, MyUI& ui);
+
+  void updateMesh(KinematicChain& chain, VisualJoints& visualJoints, Scene& scene);
 
 private:
-    std::shared_ptr<Scene> m_scene;
-    Canvas &canvas_;
+  std::shared_ptr<SphereGeometry> m_geometry;
+  int m_prevNumJoints;
 
-    std::unique_ptr<MeshBasicMaterial> m_targetCircle;
-    std::unique_ptr<MeshBasicMaterial> m_centerCircle;
-    std::unique_ptr<MeshBasicMaterial> m_reachCircle;
+  Scene& m_scene;
+  KinematicChain& m_chain;
+  MyUI& m_ui;
+  VisualJoints& m_visualJoints;
 
-    std::unique_ptr<MeshBasicMaterial> sphereToScene(float radius, int widthSegments, int heightSegments, Color color);
+
+
+
 };
 
-*/
+
 #endif//HANDLER_HPP
-      //TODO marker private medlemmer

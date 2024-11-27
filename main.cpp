@@ -9,9 +9,6 @@
 #include <Objects.hpp>
 
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
 
 //sette exceptions
 
@@ -63,8 +60,8 @@ int main() {
 
         targetCircle.getMesh()->position.set(targetPosition.x(), targetPosition.y(), 0);
 
-        if(ui.initializeChain)
-        { //TODO flytt til egen metode, start her
+        if(ui.initializeChain) //TODO flytt til egen metode, start her
+        {
             while (chain.joints.size() > ui.numJoints) {
                 chain.removeJoint();
             }
@@ -76,7 +73,7 @@ int main() {
 
                 chain.updateMaxReach();
                 visualJoints.setChain(*scene, chain);
-                auto const geometry = SphereGeometry::create(chain.getMaxReach(), 64);
+                auto const geometry = SphereGeometry::create(chain.getMaxReach());
                 reachCircle.getMesh()->setGeometry(geometry);
                 prevNumJoints = chain.joints.size();
             }

@@ -23,6 +23,8 @@ void MySpheres::createMesh() {
     m_mesh = threepp::Mesh::create(m_geometry, m_material);
 }
 
+
+
 float MySpheres::getRadius() {
     return m_radius;
 }
