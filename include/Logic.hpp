@@ -34,12 +34,8 @@ public:
     void targetPosition(Eigen::Vector2f &position);
     const Eigen::Vector2f& getTargetPosition() const;
 
-
-    static float clampAngle(float angle);
-
     float getMaxReach() const;
     void updateMaxReach();
-
 
     // Google når nodiscard skal brukes
     [[nodiscard]] Eigen::Vector2f findEffectorPosition() const;
@@ -48,10 +44,8 @@ public:
 
     [[nodiscard]] Eigen::MatrixXf computeJacobianTranspose() const;
 
-
     void updateJointAngles(const Eigen::VectorXf &angleAdjustments);
 
-    // TODO: Fiks når utgangspunkt er 'perfekt', forekommer ved 0 i jacobian tror jeg, utfallsvinkel av ny joint annerledes?
     void updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate,
                                  float threshold = 0.1f, int maxIteration = 10);
 
@@ -59,10 +53,13 @@ public:
 
     Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f& error, float learningRate) const;
 
+    std::vector<Joint> getJoints() const;
 
 private:
-    Eigen::Vector2f newVectorPosition{6.0f, 3.0f};
-    float maxReach;
+    static float clampAngle(float angle);
+
+    Eigen::Vector2f m_newVectorPosition{6.0f, 3.0f};
+    float m_maxReach;
 };
 
 #endif

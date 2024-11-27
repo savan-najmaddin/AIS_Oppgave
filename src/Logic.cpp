@@ -13,7 +13,7 @@ KinematicChain::KinematicChain(size_t n) : joints(n) {
         totalLength += joint.length;
     }
 
-    maxReach = totalLength;
+    m_maxReach = totalLength;
 }
 
 void KinematicChain::addJoint(const Joint &joint) {
@@ -24,31 +24,22 @@ void KinematicChain::removeJoint() {
 }
 
 void KinematicChain::targetPosition(Eigen::Vector2f &position) {
-    newVectorPosition = position;
+    m_newVectorPosition = position;
 }
 
 const Eigen::Vector2f &KinematicChain::getTargetPosition() const {
-    return newVectorPosition;
+    return m_newVectorPosition;
 }
 
-float KinematicChain::clampAngle(float angle) {
-    angle = std::fmod(angle, 2 * M_PI);//mod av 2π
-
-    if (angle < 0.0f) {
-        angle += 2 * M_PI;
-    }
-
-    return angle;
-}
 float KinematicChain::getMaxReach() const {
-    return maxReach;
+    return m_maxReach;
 }
 void KinematicChain::updateMaxReach() {
     float totalLength{0};
     for (const auto &joint: joints) {
         totalLength += joint.length;
     }
-    maxReach = totalLength;
+    m_maxReach = totalLength;
 }
 
 Eigen::Vector2f KinematicChain::findEffectorPosition() const {
@@ -143,4 +134,19 @@ Eigen::VectorXf KinematicChain::computeAngleAdjustments(const Eigen::Vector2f &e
         angleAdjustments(i) = std::clamp(angleAdjustments(i), -maxAngleChange, maxAngleChange);
     }
     return angleAdjustments;
+}
+
+std::vector<Joint> KinematicChain::getJoints() const {
+    return joints;
+}
+
+
+float KinematicChain::clampAngle(float angle) {
+    angle = std::fmod(angle, 2 * M_PI); //mod av 2π
+
+    if (angle < 0.0f) {
+        angle += 2 * M_PI;
+    }
+
+    return angle;
 }
