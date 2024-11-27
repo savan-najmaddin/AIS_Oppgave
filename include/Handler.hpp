@@ -26,11 +26,6 @@ private:
   std::shared_ptr<SphereGeometry> m_geometry;
   int m_prevNumJoints;
 
-
-
-
-
-
 };
 
 

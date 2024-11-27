@@ -18,7 +18,7 @@ using namespace threepp;
 
 
 int main() {
-    auto parameter = canvasParameter();
+    auto parameter = canvasParameter(); //sett inn i game.run
     Canvas canvas(parameter);
     GLRenderer renderer(canvas.size());
 
