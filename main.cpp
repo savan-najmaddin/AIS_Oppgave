@@ -27,7 +27,7 @@ int main() {
     std::shared_ptr<Scene> scene = createScene();
     std::shared_ptr<OrthographicCamera> camera = createOrthographicCamera();
 
-    IOCapture capture{}; //kan slettes hvis jeg begrenser mus til maxreach
+    IOCapture capture{};
     capture.preventMouseEvent = [] {
         return ImGui::GetIO().WantCaptureMouse;
     };
@@ -51,7 +51,7 @@ int main() {
     MySpheres targetCircle(0.5f, 32, 32, Color(0x800080)); //lilla
 
     MySpheres reachCircle(1.0f, 300, 300, Color(0x00AAAD)); //turkis
-    reachCircle.material->transparent = true;
+    reachCircle.material->transparent = true; //kan legges i konstruktør
     reachCircle.material->opacity = 0.2f;
 
 
@@ -66,7 +66,7 @@ int main() {
 
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
-        targetCircle.position.set(targetPosition.x(), targetPosition.y(), 0);
+        targetCircle.mesh->position.set(targetPosition.x(), targetPosition.y(), 0);
 
         if(ui.initializeChain)
         { //TODO flytt til egen metode, start her
@@ -82,7 +82,7 @@ int main() {
                 chain.updateMaxReach();
                 visualJoints.setChain(*scene, chain);
                 auto const geometry = SphereGeometry::create(chain.getMaxReach(), 64);
-                reachCircle->setGeometry(geometry);
+                reachCircle.mesh->setGeometry(geometry);
                 prevNumJoints = chain.joints.size();
             }
 
