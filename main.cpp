@@ -44,10 +44,20 @@ int main() {
 
     VisualJoints visualJoints;
 
-    MySpheres mySpheres;
-    Spheres spheres;
+    SphereInitializer sphereInitializer;
 
-    mySpheres.circleInitializer(scene);
+    MySpheres centerCircle(0.5f, 32, 32, Color(0x0000FF)); //blå
+
+    MySpheres targetCircle(0.5f, 32, 32, Color(0x800080)); //lilla
+
+    MySpheres reachCircle(1.0f, 300, 300, Color(0x00AAAD)); //turkis
+    reachCircle.material->transparent = true;
+    reachCircle.material->opacity = 0.2f;
+
+
+    sphereInitializer.circleInitializer(scene, centerCircle); //for loop ?
+    sphereInitializer.circleInitializer(scene, targetCircle);
+    sphereInitializer.circleInitializer(scene, reachCircle);
 
     std::size_t prevNumJoints = 0;
 
@@ -56,11 +66,11 @@ int main() {
 
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
-        spheres.targetCircle->position.set(targetPosition.x(), targetPosition.y(), 0);
+        targetCircle.position.set(targetPosition.x(), targetPosition.y(), 0);
 
         if(ui.initializeChain)
-        {
-            while (chain.joints.size() > ui.numJoints) { //gpt std generate?, elr absoluttverider?
+        { //TODO flytt til egen metode, start her
+            while (chain.joints.size() > ui.numJoints) {
                 chain.removeJoint();
             }
             while (chain.joints.size() < ui.numJoints) {
@@ -72,12 +82,13 @@ int main() {
                 chain.updateMaxReach();
                 visualJoints.setChain(*scene, chain);
                 auto const geometry = SphereGeometry::create(chain.getMaxReach(), 64);
-                spheres.reachCircle->setGeometry(geometry);
+                reachCircle->setGeometry(geometry);
                 prevNumJoints = chain.joints.size();
             }
 
             chain.updateInverseKinematics(targetPosition, learningRate);
             visualJoints.update(chain);
+            //TODO flytt til egen metode, slutt her
 
             renderer.render(*scene, *camera);
         }
