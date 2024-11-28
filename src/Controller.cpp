@@ -1,4 +1,4 @@
-#include "controller.hpp"
+#include "Controller.hpp"
 
 
 controller::MyMouseListener::MyMouseListener(float &t, KinematicChain &chain, threepp::Canvas &canvas, threepp::OrthographicCamera &camera)

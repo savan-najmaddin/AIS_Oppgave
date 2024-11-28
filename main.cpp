@@ -1,7 +1,7 @@
 #include "Logic.hpp"
 
 #include "include/ImGui.hpp"
-#include "include/controller.hpp"
+#include "include/Controller.hpp"
 #include "include/MyScene.hpp"
 
 #include "Visual.hpp"

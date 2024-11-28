@@ -9,7 +9,6 @@ Handler::Handler( KinematicChain& chain, const MyUI& ui, VisualJoints& visualJoi
     {
     jointResize(chain, ui);
     updateMesh(chain, visualJoints, scene, mySphere );
-    std::cout<< visualJoints.joints.size() << std::endl;
 }
 
 void Handler::jointResize(KinematicChain& chain, const  MyUI& ui) {
@@ -24,7 +23,6 @@ void Handler::jointResize(KinematicChain& chain, const  MyUI& ui) {
 void Handler::updateMesh(KinematicChain& chain, VisualJoints& visualJoints,  Scene& scene,
                          MySpheres& mySphere) {
     if (chain.joints.size() != prevNumJoints) {
-        std::cout << prevNumJoints << std::endl;
         chain.updateMaxReach();
         visualJoints.setChain(scene, chain);
         auto const geometry = SphereGeometry::create(chain.getMaxReach());

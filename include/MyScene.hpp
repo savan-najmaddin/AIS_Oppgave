@@ -11,7 +11,7 @@ struct CanvasParameters {
     float height;
 };
 
-inline Canvas::Parameters canvasParameter(){ //vinduet til programmet
+inline Canvas::Parameters canvasParameter() {//vinduet til programmet
     Canvas::Parameters parameter;
     parameter.title("Min tittel");
     parameter.size(800.0f, 800.0f);
@@ -19,7 +19,6 @@ inline Canvas::Parameters canvasParameter(){ //vinduet til programmet
     parameter.antialiasing(4);
     parameter.resizable(false);
     return parameter;
-
 };
 
 inline auto createScene() {
@@ -29,13 +28,11 @@ inline auto createScene() {
 inline std::shared_ptr<OrthographicCamera> createOrthographicCamera() {
 
     auto camera = OrthographicCamera::create(
-        -20, 20,
-        20, -20,
-        -100.0f, 100.0f
-    );
+            -20, 20,
+            20, -20,
+            -100.0f, 100.0f);
 
     return camera;
 }
 
-
-#endif MYSCENE_HPP
+#endif

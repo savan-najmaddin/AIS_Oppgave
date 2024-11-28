@@ -3,7 +3,12 @@
 #include <numbers>
 #include <chrono>
 
-//static assertion
+//todo unit testing
+//todo integrated testing
+//todo test idea, does visual joint update correctly
+//todo exception handling
+//todo assertions
+//todo documentation, try to use doxygen
 
 Joint::Joint(float ang, float len) : angle(ang), length(len) {}
 
@@ -38,9 +43,9 @@ void KinematicChain::circularMotion(Eigen::Vector2f &position, float radius) {
     static auto start = std::chrono::steady_clock::now(); //gpt
     float time = std::chrono::duration<float>(std::chrono::steady_clock::now() - start).count(); //gpt
 
-    float angle = 3.0f;
-    position.x() = std::sin( time* angle)  *  radius;
-    position.y() = std::cos(time*angle ) *  radius;
+    float angle = 1.0f;
+    position.x() = std::sin(time * angle)  *  radius + 1.0f; //for circulare motion remove 2.0f & 1.0f
+    position.y() = std::cos(time * angle)  *  radius + 1.0f;
 
 }
 
