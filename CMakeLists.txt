@@ -23,15 +23,8 @@ FetchContent_MakeAvailable(threepp)
 
 
 
-FetchContent_Declare(
-        eigen
-        GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-        GIT_TAG 3.4.0
-)
-FetchContent_MakeAvailable(eigen)
-add_library(eigen::eigen INTERFACE IMPORTED)
-set_target_properties(eigen::eigen PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${eigen_SOURCE_DIR}"
-)
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+
 
 if (KINEMATIKK_TEST)
     FetchContent_Declare(
@@ -48,8 +41,4 @@ add_subdirectory(external)
 add_subdirectory(src)
 
 add_executable(kinematikk main.cpp)
-target_link_libraries(kinematikk PUBLIC kinematikkLib) #burde dette være PRIVATE?
-
-if (KINEMATIKK_TEST)
-    add_subdirectory(tests)
-endif ()
+target_link_libraries(kinematikk PUBLIC kinematikkLib)
