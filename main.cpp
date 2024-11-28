@@ -52,7 +52,7 @@ int main() {
     canvas.animate([&] {
 
         if (ui.randomPosition) {
-            KinematicChain::circularMotion(chain.getTargetPosition(), learningRate, chain.getMaxReach());
+            KinematicChain::circularMotion(chain.getTargetPosition(), chain.getMaxReach());
         }
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 

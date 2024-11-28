@@ -34,7 +34,7 @@ public:
     void targetPosition(Eigen::Vector2f &position);
      Eigen::Vector2f& getTargetPosition() ;
 
-    static void circularMotion(Eigen::Vector2f &position, float learningrate, float radius);
+    static void circularMotion(Eigen::Vector2f &position, float radius);
 
     float getMaxReach() const;
     void updateMaxReach();

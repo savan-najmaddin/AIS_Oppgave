@@ -1,32 +1,35 @@
 #include "Handler.hpp"
-
+#include <iostream>
 #include <Objects.hpp>
+
+int prevNumJoints = 0;
 
 Handler::Handler( KinematicChain& chain, const MyUI& ui, VisualJoints& visualJoints, Scene& scene,
                  MySpheres& mySphere)
-    : m_geometry(std::shared_ptr<SphereGeometry>()),
-      m_prevNumJoints(0) {
+    {
     jointResize(chain, ui);
-    updateMesh(chain, visualJoints, scene, mySphere, m_prevNumJoints);
+    updateMesh(chain, visualJoints, scene, mySphere );
+    std::cout<< visualJoints.joints.size() << std::endl;
 }
 
 void Handler::jointResize(KinematicChain& chain, const  MyUI& ui) {
-    while (chain.joints.size() > ui.numJoints) {
+    while (chain.joints.size() > ui.numJoints ) {
         chain.removeJoint();
     }
     while (chain.joints.size() < ui.numJoints) {
-        chain.addJoint(Joint(std::numbers::pi, ui.jointLength));
+        chain.addJoint(Joint(std::numbers::pi /2 , ui.jointLength)); //don´t let angle be same as starting angle
     }
 }
 
 void Handler::updateMesh(KinematicChain& chain, VisualJoints& visualJoints,  Scene& scene,
-                         MySpheres& mySphere, int& prevNumJoints) {
+                         MySpheres& mySphere) {
     if (chain.joints.size() != prevNumJoints) {
-
+        std::cout << prevNumJoints << std::endl;
         chain.updateMaxReach();
         visualJoints.setChain(scene, chain);
         auto const geometry = SphereGeometry::create(chain.getMaxReach());
         mySphere.getMesh()->setGeometry(geometry);
         prevNumJoints = chain.joints.size();
     }
+
 }

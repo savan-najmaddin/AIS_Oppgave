@@ -19,12 +19,12 @@ public:
   static void jointResize(KinematicChain& chain,const MyUI& ui);
 
   static void updateMesh(KinematicChain& chain, VisualJoints& visualJoints,  Scene& scene,
-   MySpheres& mySphere, int& prevNumJoints);
+   MySpheres& mySphere);
 
 private:
 
   std::shared_ptr<SphereGeometry> m_geometry;
-  int m_prevNumJoints;
+
 
 };
 
