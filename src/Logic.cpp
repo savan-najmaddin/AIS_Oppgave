@@ -5,7 +5,8 @@
 
 Joint::Joint(float ang, float len) : angle(ang), length(len) {}
 
-//vet at det burde være 2 klasser, men jeg har dårlig tid
+
+
 KinematicChain::KinematicChain(size_t n) : joints(n) {
     float totalLength = 0.0f;
     for (const auto &joint: joints) {

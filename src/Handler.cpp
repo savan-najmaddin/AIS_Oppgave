@@ -10,7 +10,6 @@ Handler::Handler( KinematicChain& chain, const MyUI& ui, VisualJoints& visualJoi
     updateMesh(chain, visualJoints, scene, mySphere, m_prevNumJoints);
 }
 
-
 void Handler::jointResize(KinematicChain& chain, const  MyUI& ui) {
     while (chain.joints.size() > ui.numJoints) {
         chain.removeJoint();

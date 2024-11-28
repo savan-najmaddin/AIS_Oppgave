@@ -2,7 +2,7 @@
 
 #include "include/ImGui.hpp"
 #include "include/controller.hpp"
-#include "include/minScene.hpp"
+#include "include/MyScene.hpp"
 
 #include "Visual.hpp"
 
@@ -58,13 +58,12 @@ int main() {
 
         targetCircle.getMesh()->position.set(targetPosition.x(), targetPosition.y(), 0);
 
-        if(ui.initializeChain) //TODO flytt til egen metode, start her
-        {
+        if(ui.initializeChain)
+         {
             Handler handler(chain, ui, visualJoints, *scene, reachCircle);
 
             chain.updateInverseKinematics(targetPosition, learningRate);
             visualJoints.updateJointVisual(chain);
-            //TODO flytt til egen metode, slutt her
 
             renderer.render(*scene, *camera);
         }

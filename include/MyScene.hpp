@@ -1,10 +1,8 @@
 
-#ifndef MINSCENE_HPP
-#define MINSCENE_HPP
+#ifndef MYSCENE_HPP
+#define MYSCENE_HPP
 
 #include "threepp/threepp.hpp"
-
-
 
 using namespace threepp;
 
@@ -29,18 +27,15 @@ inline auto createScene() {
 }
 
 inline std::shared_ptr<OrthographicCamera> createOrthographicCamera() {
-    float viewSize = 20.0f; //vurderer resizeable kamera, la stå for nå
-    float aspectRatio = 1.0f;
 
     auto camera = OrthographicCamera::create(
         -20, 20,
-        20, -20, //aspectrartio er 1
+        20, -20,
         -100.0f, 100.0f
     );
 
     return camera;
 }
 
-//
 
-#endif //MINSCENE_HPP
+#endif MYSCENE_HPP
