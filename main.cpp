@@ -11,9 +11,6 @@
 
 
 
-//sette exceptions
-
-
 using namespace threepp;
 
 
@@ -54,6 +51,9 @@ int main() {
 
     canvas.animate([&] {
 
+        if (ui.randomPosition) {
+            KinematicChain::circularMotion(chain.getTargetPosition(), learningRate, chain.getMaxReach());
+        }
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
         targetCircle.getMesh()->position.set(targetPosition.x(), targetPosition.y(), 0);

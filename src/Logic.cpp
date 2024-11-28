@@ -1,7 +1,9 @@
 #include "Logic.hpp"
 
 #include <numbers>
+#include <chrono>
 
+//static assertion
 
 Joint::Joint(float ang, float len) : angle(ang), length(len) {}
 
@@ -27,8 +29,19 @@ void KinematicChain::targetPosition(Eigen::Vector2f &position) {
     m_newVectorPosition = position;
 }
 
-const Eigen::Vector2f &KinematicChain::getTargetPosition() const {
+ Eigen::Vector2f &KinematicChain::getTargetPosition()  {
     return m_newVectorPosition;
+}
+
+void KinematicChain::circularMotion(Eigen::Vector2f &position, float learningrate, float radius) {
+
+    static auto start = std::chrono::steady_clock::now(); //gpt
+    float time = std::chrono::duration<float>(std::chrono::steady_clock::now() - start).count(); //gpt
+
+    float angle = learningrate * 3.0f;
+    position.x() = std::sin( time* angle)  *  radius;
+    position.y() = std::cos(time*angle ) *  radius;
+
 }
 
 float KinematicChain::getMaxReach() const {
@@ -67,8 +80,12 @@ std::vector<float> KinematicChain::computeCumulativeAngels() const {
 }
 
 Eigen::MatrixXf KinematicChain::computeJacobianTranspose() const {
+    if (joints.empty()) {
+        //TODO excpetion her throw{}
+    }
     Eigen::MatrixXf jacobianTranspose(joints.size(), 2);
     jacobianTranspose.setZero();
+
 
     std::vector<float> cumulativeAngles = computeCumulativeAngels();
 
@@ -145,3 +162,4 @@ float KinematicChain::clampAngle(float angle) {
 
     return angle;
 }
+

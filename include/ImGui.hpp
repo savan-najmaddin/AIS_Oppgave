@@ -16,7 +16,7 @@ public:
     float jointLength;
     float learningRate;
     bool initializeChain;
-
+    bool randomPosition;
 
     void onRender() override;
 

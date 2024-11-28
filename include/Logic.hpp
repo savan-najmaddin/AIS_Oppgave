@@ -32,7 +32,9 @@ public:
     void removeJoint();
 
     void targetPosition(Eigen::Vector2f &position);
-    const Eigen::Vector2f& getTargetPosition() const;
+     Eigen::Vector2f& getTargetPosition() ;
+
+    static void circularMotion(Eigen::Vector2f &position, float learningrate, float radius);
 
     float getMaxReach() const;
     void updateMaxReach();
@@ -53,11 +55,13 @@ public:
 
     [[nodiscard]] Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f& error, float learningRate) const;
 
+
 private:
     static float clampAngle(float angle);
 
     Eigen::Vector2f m_newVectorPosition{6.0f, 3.0f}; //ikke nødvendig å init, gir bare startPos
     float m_maxReach;
+
 };
 
 #endif

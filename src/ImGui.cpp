@@ -7,7 +7,8 @@ MyUI::MyUI(const Canvas &canvas)
       numJoints(3),
       jointLength(5.0f),
       learningRate(0.3f),
-      initializeChain(false){};
+      initializeChain(false),
+      randomPosition(false){};
 
 
 void MyUI::onRender() {
@@ -19,7 +20,6 @@ void MyUI::onRender() {
     ImGui::Text("Input field:");
 
     ImGui::InputInt("Number of joints: (1-10)", &numJoints, 1, 10);//tror maks 20
-
     if (!initializeChain) {
         ImGui::InputFloat("Joint Length (0.1 - 10.0):", &jointLength, 0.1f, 10.0f);
 
@@ -28,6 +28,7 @@ void MyUI::onRender() {
         }
     } else {
         ImGui::SliderFloat("Learning Rate:", &learningRate, 0.03f, 0.5f);
+        ImGui::Checkbox("Circulare motion", &randomPosition);
     }
     ImGui::End();
 }

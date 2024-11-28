@@ -21,10 +21,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(threepp)
 
-
-
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
-
 
 if (KINEMATIKK_TEST)
     FetchContent_Declare(
@@ -35,7 +32,6 @@ if (KINEMATIKK_TEST)
     FetchContent_MakeAvailable(Catch2)
     enable_testing()
 endif ()
-
 
 add_subdirectory(external)
 add_subdirectory(src)
