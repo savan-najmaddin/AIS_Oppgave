@@ -9,8 +9,9 @@ void VisualJoints::setChain(threepp::Scene &scene, const KinematicChain &chain) 
                 scene.add(*joints.back());
             }
         }
-    } else {
-        while (chain.joints.size() > joints.size()) {
+    }
+    else {
+        while (chain.joints.size() > joints.size()) { //todo exception hvis joint.size er negativ?
             const std::size_t i = joints.size() ;
             auto geometry = threepp::BoxGeometry::create(chain.joints[i].length, WIDTH, WIDTH);
             auto material = threepp::MeshBasicMaterial::create({{"color", threepp::Color::red}});

@@ -30,6 +30,7 @@ int main() {
 
     KinematicChain chain;
     MyUI ui(canvas);
+    VisualJoints visualJoints;
 
     float &learningRate = ui.learningRate;
 
@@ -37,12 +38,8 @@ int main() {
     controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
     canvas.addMouseListener(ml);
 
-    VisualJoints visualJoints;
-
     MySpheres centerCircle(0.5f, Color(0x0000FF), scene );
-
-    MySpheres targetCircle(0.5f, Color(0x800080), scene); //lilla
-
+    MySpheres targetCircle(0.5f, Color(0x800080), scene);
     MySpheres reachCircle(1.0f, Color(0x00AAAD), scene, true, 0.2f);
 
     canvas.animate([&] {

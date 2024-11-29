@@ -9,10 +9,6 @@ include(FetchContent)
 
 set(THREEPP_BUILD_TESTS OFF)
 set(THREEPP_BUILD_EXAMPLES OFF)
-set(BUILD_TESTING OFF CACHE BOOL "Disable Eigen's tests" FORCE)
-set(EIGEN_BUILD_DOC OFF CACHE BOOL "Disable Eigen documentation build" FORCE)
-set(EIGEN_BUILD_PKGCONFIG OFF CACHE BOOL "Disable Eigen's pkg-config files" FORCE)
-
 
 FetchContent_Declare(
         threepp
@@ -35,6 +31,7 @@ endif ()
 
 add_subdirectory(external)
 add_subdirectory(src)
+add_subdirectory(tests)
 
 add_executable(kinematikk main.cpp)
 target_link_libraries(kinematikk PUBLIC kinematikkLib)

@@ -1,20 +1,38 @@
 #define CATCH_CONFIG_MAIN
-#include "catch2/catch_all.hpp"
 #include "Logic.hpp"
-
-TEST_CASE("Testing the initial condition of the endeffector", "[effector test]") {
-
-    KinematicChain chain(2);
-    chain.addJoint(Joint(0.0f, 0.0f));
-    chain.addJoint(Joint(0.0f, 0.0f));
-
-    Eigen::Vector2f endEffectorPosition = chain.findEffectorPosition();
-
-    Eigen::Vector2f expectedPosition = chain.findEffectorPosition();
+#include "catch2/catch_all.hpp"
 
 
-    REQUIRE(endEffectorPosition.isApprox(expectedPosition, 0.01f));
+
+TEST_CASE("Testing findEffectorPosition", "[findEffectorPosition]") {
+    KinematicChain chain(0);
+    chain.addJoint(Joint(0.0f, 1.0f));
+    chain.addJoint(Joint(0.0f, 1.0f));
+
+
+    Eigen::Vector2f expectedPosition(2.0f, 0.0f);
+
+    // Get the effector position from the chain
+    Eigen::Vector2f effectorPosition = chain.findEffectorPosition();
+
+    REQUIRE((effectorPosition - expectedPosition).norm() < 0.001f);
 }
 
-//lag test for maks antall joint og lengde
+TEST_CASE("Testing for accuracy if out of reach ", "[Test#2]") {
+    // Create a KinematicChain with two joints of length 1 each
+    KinematicChain chain(0);
+    chain.addJoint(Joint(0.0f, 1.0f));
+    chain.addJoint(Joint(0.0f, 1.0f));
+
+     Eigen::Vector2f targetPosition{3.0f, 0};
+
+    chain.updateInverseKinematics(targetPosition, 0.8f, 0.1f, 10);
+
+    Eigen::Vector2f expectedPosition(2.0f, 0.0f);
+    Eigen::Vector2f effectorPosition = chain.findEffectorPosition();
+
+    REQUIRE_THAT(effectorPosition.y(), Catch::Matchers::WithinRel(expectedPosition.y(), 0.01f));
+    REQUIRE_THAT(effectorPosition.x(), Catch::Matchers::WithinRel(expectedPosition.x(), 0.01f));
+}
+
 

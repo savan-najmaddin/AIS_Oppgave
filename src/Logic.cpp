@@ -28,6 +28,7 @@ void KinematicChain::addJoint(const Joint &joint) {
     joints.emplace_back(joint);
 }
 void KinematicChain::removeJoint() {
+    //todo exception handling
     joints.pop_back();
 }
 
@@ -45,8 +46,8 @@ void KinematicChain::circularMotion(Eigen::Vector2f &position, float radius) {
     float time = std::chrono::duration<float>(std::chrono::steady_clock::now() - start).count(); //gpt
 
     float angle = 1.0f;
-    position.x() = std::sin(time * angle)  *  radius + 1.0f; //for circulare motion remove 2.0f & 1.0f
-    position.y() = std::cos(time * angle)  *  radius + 1.0f;
+    position.x() = std::sin(time * angle)  *  radius ; //for circulare motion remove 2.0f & 1.0f
+    position.y() = std::cos(time * angle)  *  radius ;
 
 }
 
