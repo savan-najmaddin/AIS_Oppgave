@@ -8,7 +8,9 @@ MyUI::MyUI(const Canvas &canvas)
       jointLength(5.0f),
       learningRate(0.3f),
       initializeChain(false),
-      randomPosition(false){}
+      randomPosition(false),
+        dontClick(false)
+        {}
 
 
 void MyUI::onRender() {
@@ -29,6 +31,7 @@ void MyUI::onRender() {
     } else {
         ImGui::SliderFloat("Learning Rate:", &learningRate, 0.03f, 0.5f);
         ImGui::Checkbox("Circulare motion", &randomPosition);
+        ImGui::Checkbox("Don't click", &dontClick);
     }
     ImGui::End();
 }

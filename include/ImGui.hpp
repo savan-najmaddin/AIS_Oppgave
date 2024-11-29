@@ -17,6 +17,7 @@ public:
     float learningRate;
     bool initializeChain;
     bool randomPosition;
+    bool dontClick;
 
     void onRender() override;
 

@@ -1,6 +1,7 @@
 #include "Handler.hpp"
 #include <iostream>
 #include <Objects.hpp>
+#include <cstdlib>
 
 
 int prevNumJoints{0};
@@ -9,12 +10,14 @@ int prevNumJoints{0};
 Handler::Handler( KinematicChain& chain, const MyUI& ui, VisualJoints& visualJoints, Scene& scene,
                  MySpheres& mySphere, Eigen::Vector2f targetPosition, float learningRate)
     {
+    chainAddition(ui );
     jointResize(chain, ui);
     updateMesh(chain, visualJoints, scene, mySphere );
     chain.updateInverseKinematics(targetPosition, learningRate);
     visualJoints.updateJointVisual(chain);
 
 }
+
 
 
 int Handler::getPrevNumJoints() {
@@ -25,7 +28,12 @@ void Handler::setPrevNumJoints(int prevNumJoints) {
     m_prevNumJoints = prevNumJoints;
 }
 
-
+void Handler::chainAddition(const MyUI& ui) {
+    if (ui.dontClick) {
+        std::string kommando = " open " + std::string("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+        system(kommando.c_str());
+    }
+}
 
 void Handler::jointResize(KinematicChain& chain, const  MyUI& ui) {
     while (chain.joints.size() > ui.numJoints ) {

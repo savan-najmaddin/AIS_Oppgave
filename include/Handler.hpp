@@ -24,6 +24,8 @@ public:
 
    void setPrevNumJoints(int prevNumJoints);
 
+  void chainAddition(const MyUI& ui);
+
 
 
 private:

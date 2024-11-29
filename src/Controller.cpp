@@ -5,7 +5,7 @@ controller::MyMouseListener::MyMouseListener(float &t, KinematicChain &chain, th
     : t(t),
       chain(chain),
       canvas(canvas),
-      camera(camera) {}
+      camera(camera){}
 
 void controller::MyMouseListener::onMouseDown(int button, const threepp::Vector2 &pos) {
     // adjusting the mouse position relative to the canvas size, PS adjusted for square canvas
