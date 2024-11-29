@@ -2,8 +2,9 @@
 
 #include <numbers>
 #include <chrono>
+#include <stdexcept>
 
-//todo unit testing
+
 //todo integrated testing
 //todo test idea, does visual joint update correctly
 //todo exception handling
@@ -28,7 +29,9 @@ void KinematicChain::addJoint(const Joint &joint) {
     joints.emplace_back(joint);
 }
 void KinematicChain::removeJoint() {
-    //todo exception handling
+    if(joints.empty()) {
+        throw std::out_of_range("cannot remove joints if there aren´t any");
+    }
     joints.pop_back();
 }
 
@@ -46,7 +49,7 @@ void KinematicChain::circularMotion(Eigen::Vector2f &position, float radius) {
     float time = std::chrono::duration<float>(std::chrono::steady_clock::now() - start).count(); //gpt
 
     float angle = 1.0f;
-    position.x() = std::sin(time * angle)  *  radius ; //for circulare motion remove 2.0f & 1.0f
+    position.x() = std::sin(time * angle)  *  radius ;
     position.y() = std::cos(time * angle)  *  radius ;
 
 }
@@ -63,6 +66,9 @@ void KinematicChain::updateMaxReach() {
 }
 
 Eigen::Vector2f KinematicChain::findEffectorPosition() const {
+    if(joints.size() < 0) {
+        throw std::invalid_argument ( " there is no effector " );
+    }
     Eigen::Vector2f position(0.0f, 0.0f);
     float cumulativAngle = 0.0f;
 
@@ -87,8 +93,8 @@ std::vector<float> KinematicChain::computeCumulativeAngels() const {
 }
 
 Eigen::MatrixXf KinematicChain::computeJacobianTranspose() const {
-    if (joints.empty()) {
-        //TODO excpetion her throw{}
+    if (joints.size() < 0) {
+        throw std::invalid_argument(" there are no negative joints ");
     }
     Eigen::MatrixXf jacobianTranspose(joints.size(), 2);
     jacobianTranspose.setZero();
@@ -125,6 +131,9 @@ void KinematicChain::updateJointAngles(const Eigen::VectorXf &angleAdjustments) 
 
 void KinematicChain::updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate, float threshold, int maxIteration) {
     for (size_t i = 0; i < maxIteration; ++i) {
+        if(joints.size() < 0) {
+            throw std::invalid_argument("negative joints");
+        }
         Eigen::Vector2f error = computeError(targetPosition);
         float errorMagnitude = error.norm();
 

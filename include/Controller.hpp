@@ -2,7 +2,7 @@
 #define CONTROLLER_HPP
 
 
-#include "Eigen/Core"
+
 #include "Logic.hpp"
 #include "threepp/threepp.hpp"
 

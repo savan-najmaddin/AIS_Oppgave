@@ -42,6 +42,7 @@ int main() {
     MySpheres targetCircle(0.5f, Color(0x800080), scene);
     MySpheres reachCircle(1.0f, Color(0x00AAAD), scene, true, 0.2f);
 
+
     canvas.animate([&] {
 
         if (ui.randomPosition) {

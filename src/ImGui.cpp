@@ -9,7 +9,7 @@ MyUI::MyUI(const Canvas &canvas)
       learningRate(0.3f),
       initializeChain(false),
       randomPosition(false),
-        dontClick(false)
+    dontClick(false)
         {}
 
 
@@ -20,8 +20,16 @@ void MyUI::onRender() {
     ImGui::Begin("Bendern");
 
     ImGui::Text("Input field:");
+    try {
+        ImGui::InputInt("Number of joints: (1-10)", &numJoints, 1, 10);
+        if (numJoints > 10 || numJoints < 0) {
+            throw std::out_of_range("Input a number from 0 - 10");
+        }
+    } catch (const std::exception &e) {
+        ImGui::TextColored(ImVec4(1, 0, 0, 1), "Error: %s", e.what());
+        numJoints = std::clamp(numJoints, 0, 10);
+    }
 
-    ImGui::InputInt("Number of joints: (1-10)", &numJoints, 1, 10);//tror maks 20
     if (!initializeChain) {
         ImGui::InputFloat("Joint Length (0.1 - 10.0):", &jointLength, 0.1f, 10.0f);
 
@@ -29,9 +37,10 @@ void MyUI::onRender() {
             initializeChain = true;
         }
     } else {
-        ImGui::SliderFloat("Learning Rate:", &learningRate, 0.03f, 0.5f);
+        ImGui::SliderFloat("Learning Rate:", &learningRate, 0.03f, 1.0f);
         ImGui::Checkbox("Circulare motion", &randomPosition);
         ImGui::Checkbox("Don't click", &dontClick);
+
     }
     ImGui::End();
 }
