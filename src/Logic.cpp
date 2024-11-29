@@ -10,6 +10,7 @@
 //todo assertions
 //todo documentation, try to use doxygen
 
+
 Joint::Joint(float ang, float len) : angle(ang), length(len) {}
 
 

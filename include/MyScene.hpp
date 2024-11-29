@@ -19,7 +19,7 @@ inline Canvas::Parameters canvasParameter() {//vinduet til programmet
     parameter.antialiasing(4);
     parameter.resizable(false);
     return parameter;
-};
+}
 
 inline auto createScene() {
     return Scene::create();

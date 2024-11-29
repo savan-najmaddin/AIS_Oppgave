@@ -8,7 +8,7 @@ MyUI::MyUI(const Canvas &canvas)
       jointLength(5.0f),
       learningRate(0.3f),
       initializeChain(false),
-      randomPosition(false){};
+      randomPosition(false){}
 
 
 void MyUI::onRender() {
