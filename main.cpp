@@ -60,11 +60,7 @@ int main() {
 
         if(ui.initializeChain)
          {
-            Handler handler(chain, ui, visualJoints, *scene, reachCircle);
-
-            chain.updateInverseKinematics(targetPosition, learningRate);
-            visualJoints.updateJointVisual(chain);
-
+            Handler handler(chain, ui, visualJoints, *scene, reachCircle, targetPosition, learningRate);
             renderer.render(*scene, *camera);
         }
 

@@ -5,10 +5,13 @@
 int prevNumJoints = 0;
 
 Handler::Handler( KinematicChain& chain, const MyUI& ui, VisualJoints& visualJoints, Scene& scene,
-                 MySpheres& mySphere)
+                 MySpheres& mySphere, Eigen::Vector2f targetPosition, float learningRate)
     {
     jointResize(chain, ui);
     updateMesh(chain, visualJoints, scene, mySphere );
+    chain.updateInverseKinematics(targetPosition, learningRate);
+    visualJoints.updateJointVisual(chain);
+
 }
 
 void Handler::jointResize(KinematicChain& chain, const  MyUI& ui) {
@@ -30,5 +33,7 @@ void Handler::updateMesh(KinematicChain& chain, VisualJoints& visualJoints,  Sce
         mySphere.getMesh()->setGeometry(geometry);
         prevNumJoints = chain.joints.size();
     }
+
+
 
 }

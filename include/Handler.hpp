@@ -12,20 +12,19 @@
 class Handler {
 
 public:
+    Handler(KinematicChain &chain, const MyUI &ui, VisualJoints &visualJoints, Scene &scene,
+            MySpheres &mySphere, Eigen::Vector2f targetPosition, float learningRate);
 
-  Handler(KinematicChain& chain, const MyUI& ui, VisualJoints& visualJoints,  Scene& scene,
-    MySpheres& mySphere);
+    static void jointResize(KinematicChain &chain, const MyUI &ui);
 
-  static void jointResize(KinematicChain& chain,const MyUI& ui);
+    static void updateMesh(KinematicChain &chain, VisualJoints &visualJoints, Scene &scene,
+                           MySpheres &mySphere);
 
-  static void updateMesh(KinematicChain& chain, VisualJoints& visualJoints,  Scene& scene,
-   MySpheres& mySphere);
+
+
 
 private:
-
-  std::shared_ptr<SphereGeometry> m_geometry;
-
-
+    std::shared_ptr<SphereGeometry> m_geometry;
 };
 
 
