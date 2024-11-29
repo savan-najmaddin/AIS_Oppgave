@@ -39,15 +39,11 @@ int main() {
 
     VisualJoints visualJoints;
 
-    MySpheres centerCircle(0.5f, 32, 32, Color(0x0000FF)); //blå
-    centerCircle.addToScene(scene);
+    MySpheres centerCircle(0.5f, Color(0x0000FF), scene );
 
-    MySpheres targetCircle(0.5f, 32, 32, Color(0x800080)); //lilla
-    targetCircle.addToScene(scene);
+    MySpheres targetCircle(0.5f, Color(0x800080), scene); //lilla
 
-    MySpheres reachCircle(1.0f, 300, 300, Color(0x00AAAD), true, 0.2f); //turkis
-    reachCircle.addToScene(scene);
-
+    MySpheres reachCircle(1.0f, Color(0x00AAAD), scene, true, 0.2f);
 
     canvas.animate([&] {
 

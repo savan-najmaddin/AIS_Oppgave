@@ -2,7 +2,9 @@
 #include <iostream>
 #include <Objects.hpp>
 
-int prevNumJoints = 0;
+
+int prevNumJoints{0};
+
 
 Handler::Handler( KinematicChain& chain, const MyUI& ui, VisualJoints& visualJoints, Scene& scene,
                  MySpheres& mySphere, Eigen::Vector2f targetPosition, float learningRate)
@@ -13,6 +15,17 @@ Handler::Handler( KinematicChain& chain, const MyUI& ui, VisualJoints& visualJoi
     visualJoints.updateJointVisual(chain);
 
 }
+
+
+int Handler::getPrevNumJoints() {
+    return m_prevNumJoints;
+}
+
+void Handler::setPrevNumJoints(int prevNumJoints) {
+    m_prevNumJoints = prevNumJoints;
+}
+
+
 
 void Handler::jointResize(KinematicChain& chain, const  MyUI& ui) {
     while (chain.joints.size() > ui.numJoints ) {
@@ -26,14 +39,12 @@ void Handler::jointResize(KinematicChain& chain, const  MyUI& ui) {
 void Handler::updateMesh(KinematicChain& chain, VisualJoints& visualJoints,  Scene& scene,
                          MySpheres& mySphere) {
 
-    if (chain.joints.size() != prevNumJoints) {
+    if (chain.joints.size() > m_prevNumJoints || chain.joints.empty() ) { //todo bli kvitt chain.joints.empty()
         chain.updateMaxReach();
         visualJoints.setChain(scene, chain);
         auto const geometry = SphereGeometry::create(chain.getMaxReach());
         mySphere.getMesh()->setGeometry(geometry);
-        prevNumJoints = chain.joints.size();
+        m_prevNumJoints = chain.joints.size() +1 ;
     }
-
-
 
 }

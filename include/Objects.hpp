@@ -6,8 +6,8 @@
 
 class MySpheres {
 public:
-    MySpheres(float radius, int widthSegments, int heightSegments,
-              threepp::Color color, bool transparent = false, float opacity = 1.0f);
+    MySpheres(float radius, threepp::Color color,
+        const std::shared_ptr<threepp::Scene>& scene, bool transparent = false, float opacity = 1.0f);
 
 
     void setRadius(float radius);
@@ -15,12 +15,10 @@ public:
 
     std::shared_ptr<threepp::Mesh> getMesh();
 
-    void addToScene(const std::shared_ptr<threepp::Scene> &scene);
+    void addToScene(const std::shared_ptr<threepp::Scene> &scene, std::shared_ptr<threepp::Mesh> mesh);
 
 private:
     float m_radius;
-    int m_widthSegments;
-    int m_heightSegments;
     threepp::Color m_color;
     bool m_transparent;
     float m_opacity;
