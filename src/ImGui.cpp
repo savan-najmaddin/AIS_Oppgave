@@ -32,8 +32,8 @@ void MyUI::onRender() {
             throw std::out_of_range("Input a number from 0 - 10");
         }
     } catch (const std::exception &e) {
-        ImGui::TextColored(ImVec4(1, 0, 0, 1), "Error: %s", e.what());
         numJoints = std::clamp(numJoints, 0, 10);
+        //ImGui::TextColored(ImVec4(1, 0, 0, 1), "Error: %s", e.what()); //todo denne er ikke synlig
     }
 
     if (!initializeChain) {
@@ -43,7 +43,7 @@ void MyUI::onRender() {
             initializeChain = true;
         }
     } else {
-        ImGui::SliderFloat("Learning Rate:", &learningRate, 0.001f, 0.2f);
+        ImGui::SliderFloat("Learning Rate:", &learningRate, 0.001f, 4.0f);
         ImGui::Checkbox("Circulare motion", &randomPosition);
         ImGui::Checkbox("Don't click", &dontClick);
     }

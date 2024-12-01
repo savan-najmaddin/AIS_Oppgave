@@ -28,8 +28,8 @@ int main() {
     controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
     canvas.addMouseListener(ml);
 
-    MySpheres centerCircle(0.5f, Color(0x0000FF), scene);
-    MySpheres targetCircle(0.5f, Color(0x800080), scene);
+    MySpheres centerCircle(0.35f, Color(0x0000FF), scene);
+    MySpheres targetCircle(0.35f, Color(0x800080), scene);
     MySpheres reachCircle(1.0f, Color(0x00AAAD), scene, true, 0.2f);
 
     canvas.animate([&] {
@@ -44,7 +44,6 @@ int main() {
             Handler handler(chain, ui, visualJoints, *scene, reachCircle, targetPosition, learningRate);
             renderer.render(*scene, *camera);
         }
-
 
         ui.render();
     });
