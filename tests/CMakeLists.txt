@@ -4,7 +4,9 @@ function(add_test_executable name)
             threepp
             Catch2::Catch2WithMain
             kinematikkLib
-            imgui::imgui)
+            imgui::imgui
+            )
+
     target_include_directories(${name} PRIVATE "${PROJECT_SOURCE_DIR}/src")
     add_test(NAME ${name} COMMAND ${name})
 endfunction()

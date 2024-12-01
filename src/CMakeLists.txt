@@ -2,7 +2,7 @@ add_library(kinematikkLib
         Visual.cpp
         Handler.cpp
         Objects.cpp
-        controller.cpp
+        Controller.cpp
         Logic.cpp
         ImGui.cpp)
 target_include_directories(kinematikkLib PUBLIC ${CMAKE_SOURCE_DIR}/include)
