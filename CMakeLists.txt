@@ -17,6 +17,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(threepp)
 
+FetchContent_Declare(
+        Eigen3
+        GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+        GIT_TAG 3.4.0  # Use the desired version
+)
+
+FetchContent_MakeAvailable(Eigen3)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
 if (KINEMATIKK_TEST)
