@@ -34,10 +34,10 @@ void Handler::unlimitedGems(const MyUI& ui) {
 }
 
 void Handler::jointResize(KinematicChain& chain, const  MyUI& ui) {
-    while (chain.joints.size() > ui.numJoints ) {
+    while (chain.getJoints().size() > ui.numJoints ) {
         chain.removeJoint();
     }
-    while (chain.joints.size() < ui.numJoints) {
+    while (chain.getJoints().size() < ui.numJoints) {
         chain.addJoint(Joint(std::numbers::pi /2 , ui.jointLength)); //don´t let angle be same as starting angle
     }
 }
@@ -45,12 +45,12 @@ void Handler::jointResize(KinematicChain& chain, const  MyUI& ui) {
 void Handler::updateMesh(KinematicChain& chain, VisualJoints& visualJoints,  Scene& scene,
                          MySpheres& mySphere) {
 
-    if (chain.joints.size() > m_prevNumJoints || chain.joints.empty() ) { //todo bli kvitt chain.joints.empty()
+    if (chain.getJoints().size() > m_prevNumJoints || chain.getJoints().empty() ) { //todo bli kvitt chain.visualJoints.empty()
         chain.updateMaxReach();
         visualJoints.setChain(scene, chain);
         auto const geometry = SphereGeometry::create(chain.getMaxReach());
         mySphere.getMesh()->setGeometry(geometry);
-        m_prevNumJoints = chain.joints.size() +1 ;
+        m_prevNumJoints = chain.getJoints().size() + 1 ;
     }
 
 }

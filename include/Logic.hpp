@@ -24,10 +24,9 @@ struct Joint {
 
 class KinematicChain {
 public:
-    std::vector<Joint> joints;
-
     explicit KinematicChain(size_t n = 0);
 
+    std::vector<Joint> getJoints() const;
     void addJoint(const Joint &joint);
     void removeJoint();
 
@@ -39,35 +38,31 @@ public:
     float getMaxReach() const;
     void updateMaxReach();
 
-    //todo Google når nodiscard skal brukes
-    [[nodiscard]] Eigen::Vector2f findEffectorPosition() const;
-
-    [[nodiscard]] std::vector<float> computeCumulativeAngels() const;
-
-    [[nodiscard]] Eigen::MatrixXf computeJacobianTranspose() const;
-
-    void updateJointAngles(const Eigen::VectorXf &angleAdjustments);
+    Eigen::Vector2f findEffectorPosition() const;
 
     void inverseKinematicsHandler(const Eigen::Vector2f &targetPosition, float learningRate,
                                   float threshold = 0.1f, int maxIteration = 10);
 
-    [[nodiscard]] Eigen::Vector2f computeError(const Eigen::Vector2f &targetPosition) const;
 
-    [[nodiscard]] Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f &error, float learningRate) const;
-
-    std::pair<float, float> computePartialDerivates(size_t i, const std::vector<float> &cumulativeAngle) const;
-
-    bool hasConverged(const Eigen::Vector2f &targetPosition, float threshold) const;
-
-    void adjustErrorMagnitude(Eigen::Vector2f &error) const;
-
-    void errorHandler(const Eigen::Vector2f &targetPosition, float learningRate);
 
 private:
-    static float clampAngle(float angle);
-
-    Eigen::Vector2f m_newVectorPosition{6.0f, 3.0f};//ikke nødvendig å init, gir bare startPos
+    std::vector<Joint> m_joints;
     float m_maxReach;
+    Eigen::Vector2f m_targetPosition;
+    Eigen::Vector2f m_newVectorPosition{2.0f, 3.0f};
+
+    static float clampAngle(float angle);
+    bool hasConverged(const Eigen::Vector2f& targetPosition, float threshold) const;
+    void errorHandler(const Eigen::Vector2f& targetPosition, float learningRate);
+    void adjustErrorMagnitude(Eigen::Vector2f& error) const;
+    void updateJointAngles(const Eigen::VectorXf& angleAdjustments);
+
+    Eigen::MatrixXf computeJacobianTranspose() const;
+    Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f& error, float learningRate) const;
+    Eigen::Vector2f computeError(const Eigen::Vector2f& targetPosition) const;
+    std::vector<float> computeCumulativeAngles() const;
+    std::pair<float, float> computePartialDerivates(size_t i, const std::vector<float> &cumulativeAngle) const;
+
 };
 
 #endif

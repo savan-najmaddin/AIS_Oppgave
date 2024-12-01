@@ -7,30 +7,33 @@
 
 //todo integrated testing
 //todo test idea, does visual joint update correctly
-//todo exception handling
 //todo assertions
 
 Joint::Joint(float ang, float len) : angle(ang), length(len) {}
 
 
 
-KinematicChain::KinematicChain(size_t n) : joints(n) {
+KinematicChain::KinematicChain(size_t n) : m_joints(n) {
     float totalLength = 0.0f;
-    for (const auto &joint: joints) {
+    for (const auto &joint: m_joints) {
         totalLength += joint.length;
     }
 
     m_maxReach = totalLength;
 }
 
+std::vector<Joint> KinematicChain::getJoints() const {
+    return m_joints;
+}
+
 void KinematicChain::addJoint(const Joint &joint) {
-    joints.emplace_back(joint);
+    m_joints.emplace_back(joint);
 }
 void KinematicChain::removeJoint() {
-    if(joints.empty()) {
+    if(m_joints.empty()) {
         throw std::out_of_range("cannot remove joints if there aren´t any");
     }
-    joints.pop_back();
+    m_joints.pop_back();
 }
 
 void KinematicChain::targetPosition(Eigen::Vector2f &position) {
@@ -57,20 +60,20 @@ float KinematicChain::getMaxReach() const {
 }
 void KinematicChain::updateMaxReach() {
     float totalLength{0};
-    for (const auto &joint: joints) {
+    for (const auto &joint: m_joints) {
         totalLength += joint.length;
     }
     m_maxReach = totalLength;
 }
 
 Eigen::Vector2f KinematicChain::findEffectorPosition() const {
-    if(joints.size() < 0) {
+    if(m_joints.size() < 0) {
         throw std::invalid_argument ( " there is no effector " );
     }
     Eigen::Vector2f position(0.0f, 0.0f);
     float cumulativAngle = 0.0f;
 
-    for (const auto &joint: joints) {
+    for (const auto &joint: m_joints) {
         cumulativAngle += joint.angle;
         position.x() += joint.length * std::cos(cumulativAngle);
         position.y() += joint.length * std::sin(cumulativAngle);
@@ -78,27 +81,27 @@ Eigen::Vector2f KinematicChain::findEffectorPosition() const {
     return position;
 }
 
-std::vector<float> KinematicChain::computeCumulativeAngels() const {
+std::vector<float> KinematicChain::computeCumulativeAngles() const {
 
-    std::vector<float> cumulativeAngles(joints.size());
+    std::vector<float> cumulativeAngles(m_joints.size());
     float cumulativeAngle = 0.0f;
 
-    for (size_t i = 0; i < joints.size(); ++i) {
-        cumulativeAngle += joints[i].angle;
+    for (size_t i = 0; i < m_joints.size(); ++i) {
+        cumulativeAngle += m_joints[i].angle;
         cumulativeAngles[i] = cumulativeAngle;
     }
     return cumulativeAngles;
 }
 
 Eigen::MatrixXf KinematicChain::computeJacobianTranspose() const {
-    if (joints.size() < 0) {
+    if (m_joints.size() < 0) {
         throw std::invalid_argument(" there are no negative joints ");
     }
-    Eigen::MatrixXf jacobianTranspose(joints.size(), 2);
+    Eigen::MatrixXf jacobianTranspose(m_joints.size(), 2);
     jacobianTranspose.setZero();
-    std::vector<float> cumulativeAngles = computeCumulativeAngels();
+    std::vector<float> cumulativeAngles = computeCumulativeAngles();
 
-    for(size_t i = 0; i < joints.size() ; ++i ) {
+    for(size_t i = 0; i < m_joints.size() ; ++i ) {
         auto [partialX, partialY] = computePartialDerivates(i, cumulativeAngles);
         jacobianTranspose(i, 0) = partialX;
         jacobianTranspose(i, 1) = partialY;
@@ -107,18 +110,18 @@ Eigen::MatrixXf KinematicChain::computeJacobianTranspose() const {
 }
 
 void KinematicChain::updateJointAngles(const Eigen::VectorXf &angleAdjustments) {
-    for (size_t i = 0; i < joints.size(); ++i) {
-        joints[i].angle += angleAdjustments(i);
-        joints[i].angle = clampAngle(joints[i].angle);
+    for (size_t i = 0; i < m_joints.size(); ++i) {
+        m_joints[i].angle += angleAdjustments(i);
+        m_joints[i].angle = clampAngle(m_joints[i].angle);
     }
 }
 
 void KinematicChain::inverseKinematicsHandler(const Eigen::Vector2f &targetPosition, float learningRate, float threshold, int maxIteration) {
     for (size_t i = 0; i < maxIteration; ++i) {
-        if(joints.size() < 0) {
+        if(m_joints.size() < 0) {
             throw std::invalid_argument("negative joints");
         }
-        for (size_t i = 0; i < maxIteration; ++i) {
+        for (size_t j = 0; j < maxIteration; ++j) {
             if(hasConverged(targetPosition, threshold)) {
                 break;
             }
@@ -151,10 +154,10 @@ std::pair<float, float> KinematicChain::computePartialDerivates(
         float partialX = 0.0f;
         float partialY = 0.0f;
 
-        for (size_t j = i; j < joints.size(); ++j) {
+        for (size_t j = i; j < m_joints.size(); ++j) {
             float angleSum = cumulativeAngles[j];
-            float dx_dtheta = -joints[j].length * std::sin(angleSum);
-            float dy_dtheta = joints[j].length * std::cos(angleSum);
+            float dx_dtheta = -m_joints[j].length * std::sin(angleSum);
+            float dy_dtheta = m_joints[j].length * std::cos(angleSum);
 
             partialX += dx_dtheta;
             partialY += dy_dtheta;

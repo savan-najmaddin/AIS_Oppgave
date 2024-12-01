@@ -45,6 +45,7 @@ int main() {
             renderer.render(*scene, *camera);
         }
 
+
         ui.render();
     });
 
