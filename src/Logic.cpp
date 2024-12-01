@@ -177,7 +177,6 @@ float KinematicChain::clampAngle(float angle) {
     if (angle < 0.0f) { //er dette nødvendig?
         angle += 2 * std::numbers::pi;
     }
-
     return angle;
 }
 

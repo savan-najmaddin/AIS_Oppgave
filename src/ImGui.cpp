@@ -20,7 +20,6 @@ MyUI::MyUI( Canvas &canvas)
 
 
 void MyUI::onRender() {
-
     ImGui::SetNextWindowPos({}, 0, {});
     ImGui::SetNextWindowSize({}, 0);
     ImGui::Begin("Bendern");
@@ -33,7 +32,6 @@ void MyUI::onRender() {
         }
     } catch (const std::exception &e) {
         numJoints = std::clamp(numJoints, 0, 10);
-        //ImGui::TextColored(ImVec4(1, 0, 0, 1), "Error: %s", e.what()); //todo denne er ikke synlig
     }
 
     if (!initializeChain) {

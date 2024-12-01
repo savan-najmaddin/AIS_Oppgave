@@ -4,9 +4,6 @@
 #include <iostream>
 
 
-int prevNumJoints{0};
-
-
 Handler::Handler(KinematicChain &chain, const MyUI &ui, VisualJoints &visualJoints, Scene &scene,
                  MySpheres &mySphere, Eigen::Vector2f targetPosition, float learningRate) {
     unlimitedGems(ui);

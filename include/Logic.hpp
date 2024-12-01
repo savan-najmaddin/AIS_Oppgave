@@ -43,8 +43,6 @@ public:
     void inverseKinematicsHandler(const Eigen::Vector2f &targetPosition, float learningRate,
                                   float threshold = 0.1f, int maxIteration = 10);
 
-
-
 private:
     std::vector<Joint> m_joints;
     float m_maxReach;

@@ -25,6 +25,9 @@ public:
 private:
     IOCapture m_capture;
     Canvas& m_canvas;
+    int m_framecount{0};
+    int m_countOfPress{0};
+    std::exception e{};
 };
 
 

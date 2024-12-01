@@ -12,7 +12,7 @@ using namespace threepp;
 
 int main() {
     auto parameter = canvasParameter();
-    Canvas canvas(parameter); //todo gjør til en linje
+    Canvas canvas(parameter);
     GLRenderer renderer(canvas.size());
 
     std::shared_ptr<Scene> scene = createScene();
