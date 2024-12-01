@@ -13,7 +13,7 @@ Handler::Handler( KinematicChain& chain, const MyUI& ui, VisualJoints& visualJoi
     unlimitedGems(ui );
     jointResize(chain, ui);
     updateMesh(chain, visualJoints, scene, mySphere );
-    chain.updateInverseKinematics(targetPosition, learningRate);
+    chain.inverseKinematicsHandler(targetPosition, learningRate);
     visualJoints.updateJointVisual(chain);
 
 }

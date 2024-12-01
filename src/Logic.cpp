@@ -9,8 +9,6 @@
 //todo test idea, does visual joint update correctly
 //todo exception handling
 //todo assertions
-//todo documentation, try to use doxygen
-
 
 Joint::Joint(float ang, float len) : angle(ang), length(len) {}
 
@@ -105,9 +103,6 @@ Eigen::MatrixXf KinematicChain::computeJacobianTranspose() const {
         jacobianTranspose(i, 0) = partialX;
         jacobianTranspose(i, 1) = partialY;
     }
-
-
-
     return jacobianTranspose;
 }
 
@@ -118,25 +113,17 @@ void KinematicChain::updateJointAngles(const Eigen::VectorXf &angleAdjustments) 
     }
 }
 
-void KinematicChain::updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate, float threshold, int maxIteration) {
+void KinematicChain::inverseKinematicsHandler(const Eigen::Vector2f &targetPosition, float learningRate, float threshold, int maxIteration) {
     for (size_t i = 0; i < maxIteration; ++i) {
         if(joints.size() < 0) {
             throw std::invalid_argument("negative joints");
         }
-        Eigen::Vector2f error = computeError(targetPosition);
-        float errorMagnitude = error.norm();
-
-        if (error.norm() < threshold) {
-            break;
+        for (size_t i = 0; i < maxIteration; ++i) {
+            if(hasConverged(targetPosition, threshold)) {
+                break;
+            }
+            errorHandler(targetPosition, learningRate);
         }
-
-        float maxErrorMagnitutde = 0.001f;//define how precise the end effector should be
-        if (errorMagnitude > maxErrorMagnitutde) {
-            error *= maxErrorMagnitutde / errorMagnitude;
-        }
-
-        Eigen::VectorXf angleAdjustments = computeAngleAdjustments(error, learningRate);
-        updateJointAngles(angleAdjustments);
     }
 }
 
@@ -157,6 +144,7 @@ Eigen::VectorXf KinematicChain::computeAngleAdjustments(const Eigen::Vector2f &e
     }
     return angleAdjustments;
 }
+
 
 std::pair<float, float> KinematicChain::computePartialDerivates(
     size_t i, const std::vector<float>& cumulativeAngles) const {
@@ -185,3 +173,25 @@ float KinematicChain::clampAngle(float angle) {
     return angle;
 }
 
+bool KinematicChain::hasConverged(const Eigen::Vector2f &targetPosition, float threshold) const {
+    Eigen::Vector2f error = computeError(targetPosition);
+    return error.norm() < threshold;
+}
+
+
+void KinematicChain::adjustErrorMagnitude( Eigen::Vector2f &error) const {
+    float errorMagnitude = error.norm();
+    float maxErrorMagnitutde = 0.001f;//define how precise the end effector should be
+
+    if (errorMagnitude > maxErrorMagnitutde) {
+        error *= maxErrorMagnitutde / errorMagnitude;
+    }
+}
+
+void KinematicChain::errorHandler(const Eigen::Vector2f &targetPosition, float learningRate) {
+    Eigen::Vector2f error = computeError(targetPosition);
+    adjustErrorMagnitude(error);
+
+    Eigen::VectorXf angleAdjustments = computeAngleAdjustments(error, learningRate);
+    updateJointAngles(angleAdjustments);
+}

@@ -48,14 +48,20 @@ public:
 
     void updateJointAngles(const Eigen::VectorXf &angleAdjustments);
 
-    void updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate,
-                                 float threshold = 0.1f, int maxIteration = 10);
+    void inverseKinematicsHandler(const Eigen::Vector2f &targetPosition, float learningRate,
+                                  float threshold = 0.1f, int maxIteration = 10);
 
     [[nodiscard]] Eigen::Vector2f computeError(const Eigen::Vector2f &targetPosition) const;
 
     [[nodiscard]] Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f &error, float learningRate) const;
 
-    std::pair<float, float> computePartialDerivates(size_t i, const std::vector<float> &cumulativeAngle) const ;
+    std::pair<float, float> computePartialDerivates(size_t i, const std::vector<float> &cumulativeAngle) const;
+
+    bool hasConverged(const Eigen::Vector2f &targetPosition, float threshold) const;
+
+    void adjustErrorMagnitude(Eigen::Vector2f &error) const;
+
+    void errorHandler(const Eigen::Vector2f &targetPosition, float learningRate);
 
 private:
     static float clampAngle(float angle);
