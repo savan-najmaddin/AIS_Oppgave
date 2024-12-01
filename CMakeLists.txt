@@ -16,7 +16,7 @@ FetchContent_Declare(
         GIT_TAG 2e2397e0b7f0e639f254ea3046b70e53a71f0387
 )
 FetchContent_MakeAvailable(threepp)
-
+set(Eigen3_DIR "$ENV{EIGEN3_ROOT}/cmake")
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
 if (KINEMATIKK_TEST)
