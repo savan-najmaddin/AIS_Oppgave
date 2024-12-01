@@ -49,8 +49,8 @@ void KinematicChain::circularMotion(Eigen::Vector2f &position, float radius) {
     float time = std::chrono::duration<float>(std::chrono::steady_clock::now() - start).count(); //gpt
 
     float angle = 1.0f;
-    position.x() = std::sin(time * angle)  *  radius ;
-    position.y() = std::cos(time * angle)  *  radius ;
+    position.x() = std::sin(time * angle)  *  radius *1.15 ;
+    position.y() = std::cos(time * angle)  *  radius * 1.15 ;
 
 }
 

@@ -19,7 +19,7 @@ struct Joint {
     float angle;
     float length;
 
-    explicit Joint(float ang = 0.0f, float len = 1.0f); //explicit for å forhindre feil konvertering
+    explicit Joint(float ang = 0.0f, float len = 1.0f);//explicit for å forhindre feil konvertering
 };
 
 class KinematicChain {
@@ -32,14 +32,14 @@ public:
     void removeJoint();
 
     void targetPosition(Eigen::Vector2f &position);
-     Eigen::Vector2f& getTargetPosition() ;
+    Eigen::Vector2f &getTargetPosition();
 
     static void circularMotion(Eigen::Vector2f &position, float radius);
 
     float getMaxReach() const;
     void updateMaxReach();
 
-    // Google når nodiscard skal brukes
+    //todo Google når nodiscard skal brukes
     [[nodiscard]] Eigen::Vector2f findEffectorPosition() const;
 
     [[nodiscard]] std::vector<float> computeCumulativeAngels() const;
@@ -51,17 +51,16 @@ public:
     void updateInverseKinematics(const Eigen::Vector2f &targetPosition, float learningRate,
                                  float threshold = 0.1f, int maxIteration = 10);
 
-    [[nodiscard]] Eigen::Vector2f computeError(const Eigen::Vector2f& targetPosition) const;
+    [[nodiscard]] Eigen::Vector2f computeError(const Eigen::Vector2f &targetPosition) const;
 
-    [[nodiscard]] Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f& error, float learningRate) const;
+    [[nodiscard]] Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f &error, float learningRate) const;
 
 
 private:
     static float clampAngle(float angle);
 
-    Eigen::Vector2f m_newVectorPosition{6.0f, 3.0f}; //ikke nødvendig å init, gir bare startPos
+    Eigen::Vector2f m_newVectorPosition{6.0f, 3.0f};//ikke nødvendig å init, gir bare startPos
     float m_maxReach;
-
 };
 
 #endif

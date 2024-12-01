@@ -1,14 +1,13 @@
-add_executable(test_main testLogic.cpp testHandler.cpp)
+function(add_test_executable name)
+    add_executable(${name} ${name}.cpp)
+    target_link_libraries(${name} PRIVATE
+            threepp
+            Catch2::Catch2WithMain
+            kinematikkLib
+            imgui::imgui)
+    target_include_directories(${name} PRIVATE "${PROJECT_SOURCE_DIR}/src")
+    add_test(NAME ${name} COMMAND ${name})
+endfunction()
 
-find_package(eigen3 3.3 REQUIRED NO_MODULE)
-
-target_link_libraries(
-        test_main
-        PRIVATE
-        Catch2::Catch2WithMain
-        threepp::threepp
-        kinematikkLib
-
-)
-add_test(NAME test_main COMMAND test_main)
-
+add_test_executable(testHandler)
+add_test_executable(testLogic)

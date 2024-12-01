@@ -24,7 +24,7 @@ public:
 
    void setPrevNumJoints(int prevNumJoints);
 
-  void chainAddition(const MyUI& ui);
+  void unlimitedGems(const MyUI& ui);
 
 
 

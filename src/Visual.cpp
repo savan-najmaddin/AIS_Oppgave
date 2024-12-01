@@ -21,6 +21,8 @@ void VisualJoints::setChain(threepp::Scene &scene, const KinematicChain &chain) 
         }
     }
 }
+
+
 void VisualJoints::updateJointVisual(const KinematicChain &chain) const {
     float cumulativeAngle = 0.0f;
     Eigen::Vector2f position(0.0f, 0.0f);

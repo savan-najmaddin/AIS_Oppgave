@@ -10,7 +10,7 @@ using namespace threepp;
 
 class MyUI : public ImguiContext {//gjør om til klasse, ps wtf er final
 public:
-    explicit MyUI(const Canvas &canvas);
+    explicit MyUI( Canvas &canvas);
 
     int numJoints;
     float jointLength;
@@ -19,9 +19,14 @@ public:
     bool randomPosition;
     bool dontClick;
 
+
     void onRender() override;
 
+private:
+    IOCapture m_capture;
+    Canvas& m_canvas;
 };
+
 
 
 #endif

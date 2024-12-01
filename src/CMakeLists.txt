@@ -1,4 +1,12 @@
-add_library(kinematikkLib)
-target_sources(kinematikkLib PRIVATE controller.cpp Logic.cpp ImGui.cpp Visual.cpp Handler.cpp Objects.cpp)
+add_library(kinematikkLib
+        Visual.cpp
+        Handler.cpp
+        Objects.cpp
+        controller.cpp
+        Logic.cpp
+        ImGui.cpp)
 target_include_directories(kinematikkLib PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(kinematikkLib PUBLIC threepp::threepp Eigen3::Eigen imgui::imgui)
+target_link_libraries(kinematikkLib PUBLIC
+        threepp::threepp
+        Eigen3::Eigen
+        imgui::imgui)
