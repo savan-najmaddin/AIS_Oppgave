@@ -98,27 +98,16 @@ Eigen::MatrixXf KinematicChain::computeJacobianTranspose() const {
     }
     Eigen::MatrixXf jacobianTranspose(joints.size(), 2);
     jacobianTranspose.setZero();
-
-
     std::vector<float> cumulativeAngles = computeCumulativeAngels();
 
-    for (size_t i = 0; i < joints.size(); ++i) {
-        float partialX = 0.0f;
-        float partialY = 0.0f;
-
-
-        for (size_t j = i; j < joints.size(); ++j) {
-            float angleSum = cumulativeAngles[j];
-            float dx_dtheta = -joints[j].length * std::sin(angleSum);
-            float dy_dtheta = joints[j].length * std::cos(angleSum);
-
-            partialX += dx_dtheta;
-            partialY += dy_dtheta;
-        }
-
+    for(size_t i = 0; i < joints.size() ; ++i ) {
+        auto [partialX, partialY] = computePartialDerivates(i, cumulativeAngles);
         jacobianTranspose(i, 0) = partialX;
         jacobianTranspose(i, 1) = partialY;
     }
+
+
+
     return jacobianTranspose;
 }
 
@@ -168,6 +157,23 @@ Eigen::VectorXf KinematicChain::computeAngleAdjustments(const Eigen::Vector2f &e
     }
     return angleAdjustments;
 }
+
+std::pair<float, float> KinematicChain::computePartialDerivates(
+    size_t i, const std::vector<float>& cumulativeAngles) const {
+        float partialX = 0.0f;
+        float partialY = 0.0f;
+
+        for (size_t j = i; j < joints.size(); ++j) {
+            float angleSum = cumulativeAngles[j];
+            float dx_dtheta = -joints[j].length * std::sin(angleSum);
+            float dy_dtheta = joints[j].length * std::cos(angleSum);
+
+            partialX += dx_dtheta;
+            partialY += dy_dtheta;
+        }
+        return {partialX, partialY};
+}
+
 
 float KinematicChain::clampAngle(float angle) {
     angle = std::fmod(angle, 2 * std::numbers::pi); //mod av 2π

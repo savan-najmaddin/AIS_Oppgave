@@ -55,6 +55,7 @@ public:
 
     [[nodiscard]] Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f &error, float learningRate) const;
 
+    std::pair<float, float> computePartialDerivates(size_t i, const std::vector<float> &cumulativeAngle) const ;
 
 private:
     static float clampAngle(float angle);
