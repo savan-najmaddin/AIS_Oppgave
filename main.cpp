@@ -32,6 +32,8 @@ int main() {
     MySpheres targetCircle(0.35f, Color(0x800080), scene);
     MySpheres reachCircle(1.0f, Color(0x00AAAD), scene, true, 0.2f);
 
+    Handler handler;
+
     canvas.animate([&] {
         if (ui.randomPosition) {
             KinematicChain::circularMotion(chain.getTargetPosition(), chain.getMaxReach());
@@ -41,7 +43,7 @@ int main() {
         targetCircle.getMesh()->position.set(targetPosition.x(), targetPosition.y(), 0);
 
         if (ui.initializeChain) {
-            Handler handler(chain, ui, visualJoints, *scene, reachCircle, targetPosition, learningRate);
+            handler.update(chain, ui, visualJoints, *scene, reachCircle, targetPosition, learningRate);
             renderer.render(*scene, *camera);
         }
 

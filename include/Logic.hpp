@@ -26,11 +26,11 @@ class KinematicChain {
 public:
     explicit KinematicChain(size_t n = 0);
 
-    std::vector<Joint> getJoints() const;
+    const std::vector<Joint> &getJoints() const;
     void addJoint(const Joint &joint);
     void removeJoint();
 
-    void targetPosition(Eigen::Vector2f &position);
+    void targetPosition(const Eigen::Vector2f &position);
     Eigen::Vector2f &getTargetPosition();
 
     static void circularMotion(Eigen::Vector2f &position, float radius);

@@ -12,7 +12,8 @@
 class Handler {
 
 public:
-    Handler(KinematicChain &chain, const MyUI &ui, VisualJoints &visualJoints, Scene &scene,
+    Handler() = default;
+    void update(KinematicChain &chain, const MyUI &ui, VisualJoints &visualJoints, Scene &scene,
             MySpheres &mySphere, Eigen::Vector2f targetPosition, float learningRate);
 
 
@@ -20,12 +21,12 @@ private:
     std::shared_ptr<SphereGeometry> m_geometry;
     int m_prevNumJoints = 0;
 
-    void jointResize(KinematicChain &chain, const MyUI &ui);
+    void jointResize(KinematicChain &chain, const MyUI &ui) const;
 
     void updateMesh(KinematicChain &chain, VisualJoints &visualJoints, Scene &scene,
                     MySpheres &mySphere);
 
-    int getPrevNumJoints();
+    int getPrevNumJoints() const;
 
     void setPrevNumJoints(int prevNumJoints);
 

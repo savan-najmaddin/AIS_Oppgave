@@ -23,7 +23,7 @@ KinematicChain::KinematicChain(size_t n) : m_joints(n) {
     m_maxReach = totalLength;
 }
 
-std::vector<Joint> KinematicChain::getJoints() const {
+const std::vector<Joint> &KinematicChain::getJoints() const {
     return m_joints;
 }
 
@@ -35,21 +35,36 @@ void KinematicChain::removeJoint() {
     if(m_joints.empty()) {
         throw std::out_of_range("cannot remove joints if there aren´t any");
     }
-    m_joints.pop_back();
+    if (!m_joints.empty())
+        m_joints.pop_back();
 }
 
-void KinematicChain::targetPosition(Eigen::Vector2f &position) {
+void KinematicChain::targetPosition(const Eigen::Vector2f &position) {
     m_newVectorPosition = position;
 }
- Eigen::Vector2f &KinematicChain::getTargetPosition()  {
+Eigen::Vector2f &KinematicChain::getTargetPosition() {
     return m_newVectorPosition;
 }
 void KinematicChain::circularMotion(Eigen::Vector2f &position, float radius) {
-    static auto start = std::chrono::steady_clock::now(); //gpt
-    float time = std::chrono::duration<float>(std::chrono::steady_clock::now() - start).count(); //gpt
+    //static auto start = std::chrono::steady_clock::now(); //gpt
+    //float time = std::chrono::duration<float>(std::chrono::steady_clock::now() - start).count(); //gpt
+    // Gotten here: https://stackoverflow.com/questions/15957805/extract-year-month-day-etc-from-stdchronotime-point-in-c/15958113#15958113
+    // Get the current time as a time_point
+    auto now = std::chrono::system_clock::now();
 
-    position.x() = std::sin(time)  *  radius *1.25 ;
-    position.y() = std::cos(time)  *  radius * 1.25 ;
+    // Convert to time_t for use with C APIs
+    std::time_t nowCTime = std::chrono::system_clock::to_time_t(now);
+
+    // Convert to tm struct (local time)
+    std::tm localTime = *std::localtime(&nowCTime);
+
+    int hours = localTime.tm_hour;
+    int minutes = localTime.tm_min;
+    int seconds = localTime.tm_sec;
+    float timeStepMin = 2 * std::numbers::pi / 60;
+
+    position.x() = std::sin(seconds * timeStepMin)  *  radius * 1.25 ;
+    position.y() = std::cos(seconds * timeStepMin)  *  radius * 1.25 ;
 }
 
 float KinematicChain::getMaxReach() const {

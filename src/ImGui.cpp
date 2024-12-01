@@ -1,5 +1,7 @@
 #include "ImGui.hpp"
 
+#include <iostream>
+
 using namespace threepp;
 
 MyUI::MyUI( Canvas &canvas)
