@@ -7,7 +7,7 @@ MyUI::MyUI( Canvas &canvas)
       m_canvas(canvas),
       numJoints(3),
       jointLength(5.0f),
-      learningRate(0.3f),
+      learningRate(0.01f),
       initializeChain(false),
       randomPosition(false),
       dontClick(false)
@@ -43,7 +43,7 @@ void MyUI::onRender() {
             initializeChain = true;
         }
     } else {
-        ImGui::SliderFloat("Learning Rate:", &learningRate, 0.03f, 4.0f);
+        ImGui::SliderFloat("Learning Rate:", &learningRate, 0.001f, 0.2f);
         ImGui::Checkbox("Circulare motion", &randomPosition);
         ImGui::Checkbox("Don't click", &dontClick);
     }
