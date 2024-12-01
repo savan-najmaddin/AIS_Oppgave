@@ -6,9 +6,6 @@
 #include <cassert>
 
 
-//todo integrated testing
-//todo test idea, does visual joint update correctly
-//todo assertions
 
 Joint::Joint(float ang, float len) : angle(ang), length(len) {}
 
@@ -39,16 +36,15 @@ void KinematicChain::removeJoint() {
         m_joints.pop_back();
 }
 
-void KinematicChain::targetPosition(const Eigen::Vector2f &position) {
-    m_newVectorPosition = position;
+void KinematicChain::setTargetPosition(const Eigen::Vector2f &position) {
+    m_targetPosition = position;
 }
 Eigen::Vector2f &KinematicChain::getTargetPosition() {
-    return m_newVectorPosition;
+    return m_targetPosition;
 }
-void KinematicChain::circularMotion(Eigen::Vector2f &position, float radius) {
-    //static auto start = std::chrono::steady_clock::now(); //gpt
-    //float time = std::chrono::duration<float>(std::chrono::steady_clock::now() - start).count(); //gpt
+void KinematicChain::showTime(TimeUnit unit) {
     // Gotten here: https://stackoverflow.com/questions/15957805/extract-year-month-day-etc-from-stdchronotime-point-in-c/15958113#15958113
+
     // Get the current time as a time_point
     auto now = std::chrono::system_clock::now();
 
@@ -58,13 +54,26 @@ void KinematicChain::circularMotion(Eigen::Vector2f &position, float radius) {
     // Convert to tm struct (local time)
     std::tm localTime = *std::localtime(&nowCTime);
 
-    int hours = localTime.tm_hour;
-    int minutes = localTime.tm_min;
-    int seconds = localTime.tm_sec;
-    float timeStepMin = 2 * std::numbers::pi / 60;
+    int t = 0;
+    float timeStep = 2 * std::numbers::pi;
 
-    position.x() = std::sin(seconds * timeStepMin)  *  radius * 1.25 ;
-    position.y() = std::cos(seconds * timeStepMin)  *  radius * 1.25 ;
+    switch (unit) {
+        case TimeUnit::SECONDS:
+            t = localTime.tm_sec;
+            timeStep /= 60.0f;
+            break;
+        case TimeUnit::MINUTES:
+            t = localTime.tm_min;
+            timeStep /= 60.0f;
+            break;
+        case TimeUnit::HOURS:
+            t = localTime.tm_hour;
+            timeStep /= 12.0f;
+            break;
+    }
+
+    m_targetPosition.x() = std::sin(t * timeStep)  *  m_maxReach * 1.25 ;
+    m_targetPosition.y() = std::cos(t * timeStep)  *  m_maxReach * 1.25 ;
 }
 
 float KinematicChain::getMaxReach() const {
@@ -130,30 +139,30 @@ std::pair<float, float> KinematicChain::computePartialDerivates(
         return {partialX, partialY};
 }
 
-void KinematicChain::inverseKinematicsHandler(const Eigen::Vector2f &targetPosition, float learningRate, float threshold, int maxIteration) {
+void KinematicChain::inverseKinematicsHandler(float learningRate, float threshold, int maxIteration) {
     for (size_t i = 0; i < maxIteration; ++i) {
-            if(!hasConverged(targetPosition, threshold)) {
-                errorHandler(targetPosition, learningRate);
+            if(!hasConverged(threshold)) {
+                errorHandler(learningRate);
             }
         }
     }
 
-bool KinematicChain::hasConverged(const Eigen::Vector2f &targetPosition, float threshold) const {
-    Eigen::Vector2f error = computeError(targetPosition);
+bool KinematicChain::hasConverged(float threshold) const {
+    Eigen::Vector2f error = computeError();
     return error.norm() < threshold;
 }
 
-void KinematicChain::errorHandler(const Eigen::Vector2f &targetPosition, float learningRate) {
-    Eigen::Vector2f error = computeError(targetPosition);
+void KinematicChain::errorHandler(float learningRate) {
+    Eigen::Vector2f error = computeError();
     adjustErrorMagnitude(error);
 
     Eigen::VectorXf angleAdjustments = computeAngleAdjustments(error, learningRate);
     updateJointAngles(angleAdjustments);
 }
 
-Eigen::Vector2f KinematicChain::computeError(const Eigen::Vector2f &targetPosition) const {
+Eigen::Vector2f KinematicChain::computeError() const {
     Eigen::Vector2f currentPosition = findEffectorPosition();
-    Eigen::Vector2f error = targetPosition - currentPosition;
+    Eigen::Vector2f error = m_targetPosition - currentPosition;
 
     return error;
 }

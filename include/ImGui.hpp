@@ -16,8 +16,10 @@ public:
     float jointLength;
     float learningRate;
     bool initializeChain;
-    bool randomPosition;
+    bool clock;
     bool dontClick;
+    int timeUnit = 0;
+    std::array<std::string, 3> timeUnits = {"Seconds", "Minutes", "Hours"};
 
 
     void onRender() override;

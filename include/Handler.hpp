@@ -14,7 +14,7 @@ class Handler {
 public:
     Handler() = default;
     void update(KinematicChain &chain, const MyUI &ui, VisualJoints &visualJoints, Scene &scene,
-            MySpheres &mySphere, Eigen::Vector2f targetPosition, float learningRate);
+            MySpheres &mySphere, float learningRate);
 
 
 private:

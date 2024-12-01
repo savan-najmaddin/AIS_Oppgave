@@ -35,15 +35,15 @@ int main() {
     Handler handler;
 
     canvas.animate([&] {
-        if (ui.randomPosition) {
-            KinematicChain::circularMotion(chain.getTargetPosition(), chain.getMaxReach());
+        if (ui.clock) {
+            chain.showTime(static_cast<KinematicChain::TimeUnit>(ui.timeUnit));
         }
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
         targetCircle.getMesh()->position.set(targetPosition.x(), targetPosition.y(), 0);
 
         if (ui.initializeChain) {
-            handler.update(chain, ui, visualJoints, *scene, reachCircle, targetPosition, learningRate);
+            handler.update(chain, ui, visualJoints, *scene, reachCircle, learningRate);
             renderer.render(*scene, *camera);
         }
 

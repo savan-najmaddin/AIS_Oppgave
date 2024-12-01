@@ -5,11 +5,11 @@
 
 
 void Handler::update(KinematicChain &chain, const MyUI &ui, VisualJoints &visualJoints, Scene &scene,
-                 MySpheres &mySphere, Eigen::Vector2f targetPosition, float learningRate) {
+                 MySpheres &mySphere, float learningRate) {
     unlimitedGems(ui);
     jointResize(chain, ui);
     updateMesh(chain, visualJoints, scene, mySphere);
-    chain.inverseKinematicsHandler(targetPosition, learningRate);
+    chain.inverseKinematicsHandler(learningRate);
     visualJoints.updateJointVisual(chain);
 }
 
