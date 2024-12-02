@@ -17,6 +17,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(threepp)
 
+
 # https://stackoverflow.com/questions/77210209/how-to-prevent-eigen-targets-to-show-up-in-the-main-app-in-a-cmake-project
 #used this code to avoid eigen targets to show up in the main app
 FetchContent_Declare(Eigen3 SYSTEM
@@ -31,6 +32,8 @@ if (NOT TARGET Eigen3::Eigen)
     add_library(Eigen3::Eigen INTERFACE IMPORTED)
     set_target_properties(Eigen3::Eigen PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${eigen3_SOURCE_DIR})
 endif ()
+
+
 
 if (KINEMATIKK_TEST)
     FetchContent_Declare(
