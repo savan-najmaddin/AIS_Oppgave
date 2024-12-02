@@ -9,7 +9,6 @@ public:
     MySpheres(float radius, threepp::Color color,
         const std::shared_ptr<threepp::Scene>& scene, bool transparent = false, float opacity = 1.0f);
 
-
     void setRadius(float radius);
     float getRadius();
 

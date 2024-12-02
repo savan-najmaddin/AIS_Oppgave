@@ -4,19 +4,16 @@
 #include <iostream>
 
 
-int prevNumJoints{0};
-
-
-Handler::Handler(KinematicChain &chain, const MyUI &ui, VisualJoints &visualJoints, Scene &scene,
-                 MySpheres &mySphere, Eigen::Vector2f targetPosition, float learningRate) {
+void Handler::update(KinematicChain &chain, const MyUI &ui, VisualJoints &visualJoints, Scene &scene,
+                 MySpheres &mySphere, float learningRate) {
     unlimitedGems(ui);
     jointResize(chain, ui);
     updateMesh(chain, visualJoints, scene, mySphere);
-    chain.inverseKinematicsHandler(targetPosition, learningRate);
+    chain.inverseKinematicsHandler(learningRate);
     visualJoints.updateJointVisual(chain);
 }
 
-int Handler::getPrevNumJoints() {
+int Handler::getPrevNumJoints() const {
     return m_prevNumJoints;
 }
 
@@ -26,12 +23,12 @@ void Handler::setPrevNumJoints(int prevNumJoints) {
 
 void Handler::unlimitedGems(const MyUI &ui) {
     if (ui.dontClick) {
-        std::string kommando = " open " + std::string("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+        std::string kommando = "start chrome " + std::string("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
         system(kommando.c_str());
     }
 }
 
-void Handler::jointResize(KinematicChain &chain, const MyUI &ui) {
+void Handler::jointResize(KinematicChain &chain, const MyUI &ui) const {
     while (chain.getJoints().size() > ui.numJoints) {
         chain.removeJoint();
     }
@@ -43,7 +40,7 @@ void Handler::jointResize(KinematicChain &chain, const MyUI &ui) {
 void Handler::updateMesh(KinematicChain &chain, VisualJoints &visualJoints, Scene &scene,
                          MySpheres &mySphere) {
 
-    if (chain.getJoints().size() > m_prevNumJoints || chain.getJoints().empty()) {//todo bli kvitt chain.visualJoints.empty()
+    if (chain.getJoints().size() != m_prevNumJoints) {
         chain.updateMaxReach();
         visualJoints.setChain(scene, chain);
         auto const geometry = SphereGeometry::create(chain.getMaxReach());

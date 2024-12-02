@@ -21,5 +21,5 @@ void controller::MyMouseListener::onMouseDown(int button, const threepp::Vector2
 
 
     Eigen::Vector2f target(worldCoords.x, worldCoords.y);
-    chain.targetPosition(target);
+    chain.setTargetPosition(target);
 }

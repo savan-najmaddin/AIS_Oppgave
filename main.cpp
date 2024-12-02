@@ -12,7 +12,7 @@ using namespace threepp;
 
 int main() {
     auto parameter = canvasParameter();
-    Canvas canvas(parameter); //todo gjør til en linje
+    Canvas canvas(parameter);
     GLRenderer renderer(canvas.size());
 
     std::shared_ptr<Scene> scene = createScene();
@@ -32,16 +32,18 @@ int main() {
     MySpheres targetCircle(0.35f, Color(0x800080), scene);
     MySpheres reachCircle(1.0f, Color(0x00AAAD), scene, true, 0.2f);
 
+    Handler handler;
+
     canvas.animate([&] {
-        if (ui.randomPosition) {
-            KinematicChain::circularMotion(chain.getTargetPosition(), chain.getMaxReach());
+        if (ui.clock) {
+            chain.showTime(static_cast<KinematicChain::TimeUnit>(ui.timeUnit));
         }
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
         targetCircle.getMesh()->position.set(targetPosition.x(), targetPosition.y(), 0);
 
         if (ui.initializeChain) {
-            Handler handler(chain, ui, visualJoints, *scene, reachCircle, targetPosition, learningRate);
+            handler.update(chain, ui, visualJoints, *scene, reachCircle, learningRate);
             renderer.render(*scene, *camera);
         }
 

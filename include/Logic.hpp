@@ -24,42 +24,45 @@ struct Joint {
 
 class KinematicChain {
 public:
+    enum class TimeUnit {
+        SECONDS,
+        MINUTES,
+        HOURS
+    };
+
     explicit KinematicChain(size_t n = 0);
 
-    std::vector<Joint> getJoints() const;
+    const std::vector<Joint> &getJoints() const;
     void addJoint(const Joint &joint);
     void removeJoint();
 
-    void targetPosition(Eigen::Vector2f &position);
+    void setTargetPosition(const Eigen::Vector2f &position);
     Eigen::Vector2f &getTargetPosition();
 
-    static void circularMotion(Eigen::Vector2f &position, float radius);
+    void showTime(TimeUnit unit);
 
     float getMaxReach() const;
     void updateMaxReach();
 
     Eigen::Vector2f findEffectorPosition() const;
 
-    void inverseKinematicsHandler(const Eigen::Vector2f &targetPosition, float learningRate,
+    void inverseKinematicsHandler(float learningRate,
                                   float threshold = 0.1f, int maxIteration = 10);
-
-
 
 private:
     std::vector<Joint> m_joints;
     float m_maxReach;
     Eigen::Vector2f m_targetPosition;
-    Eigen::Vector2f m_newVectorPosition{2.0f, 3.0f};
 
     static float clampAngle(float angle);
-    bool hasConverged(const Eigen::Vector2f& targetPosition, float threshold) const;
-    void errorHandler(const Eigen::Vector2f& targetPosition, float learningRate);
+    bool hasConverged(float threshold) const;
+    void errorHandler(float learningRate);
     void adjustErrorMagnitude(Eigen::Vector2f& error) const;
     void updateJointAngles(const Eigen::VectorXf& angleAdjustments);
 
     Eigen::MatrixXf computeJacobianTranspose() const;
     Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f& error, float learningRate) const;
-    Eigen::Vector2f computeError(const Eigen::Vector2f& targetPosition) const;
+    Eigen::Vector2f computeError() const;
     std::vector<float> computeCumulativeAngles() const;
     std::pair<float, float> computePartialDerivates(size_t i, const std::vector<float> &cumulativeAngle) const;
 

@@ -16,8 +16,10 @@ public:
     float jointLength;
     float learningRate;
     bool initializeChain;
-    bool randomPosition;
+    bool clock;
     bool dontClick;
+    int timeUnit = 0;
+    std::array<std::string, 3> timeUnits = {"Seconds", "Minutes", "Hours"};
 
 
     void onRender() override;
@@ -25,6 +27,9 @@ public:
 private:
     IOCapture m_capture;
     Canvas& m_canvas;
+    int m_framecount{0};
+    int m_countOfPress{0};
+    std::exception e{};
 };
 
 
