@@ -23,7 +23,7 @@ void Handler::setPrevNumJoints(int prevNumJoints) {
 
 void Handler::unlimitedGems(const MyUI &ui) {
     if (ui.dontClick) {
-        std::string kommando = " open " + std::string("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+        std::string kommando = "start chrome " + std::string("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
         system(kommando.c_str());
     }
 }

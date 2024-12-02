@@ -14,11 +14,12 @@ TEST_CASE("testing if visual joints are updated correctly", "[Test#1]") {
     auto scene = createScene();
     MySpheres mySphere(0.0f, Color(0x0000FF), scene);
     Eigen::Vector2f targetPosition(0.0f, 0.0f);
+    chain.setTargetPosition(targetPosition);
     float learningRate = 0.1f;
 
     // Create a Handler instance
-    Handler handler(chain, ui, visualC, *scene, mySphere, targetPosition, learningRate);
-
+    Handler handler;
+    handler.update(chain, ui, visualC, *scene, mySphere, learningRate);
     // Verify that the chain has zero joints
     REQUIRE(chain.getJoints().size() == visualC.visualJoints.size());
 
