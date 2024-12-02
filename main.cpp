@@ -1,22 +1,19 @@
 #include "Logic.hpp"
+#include "Visual.hpp"
 #include "include/Controller.hpp"
 #include "include/ImGui.hpp"
 #include "include/MyScene.hpp"
-#include "Visual.hpp"
 #include <Handler.hpp>
 #include <Objects.hpp>
 
 
-using namespace threepp;
-
-
 int main() {
     auto parameter = canvasParameter();
-    Canvas canvas(parameter);
-    GLRenderer renderer(canvas.size());
+    threepp::Canvas canvas(parameter);
+    threepp::GLRenderer renderer(canvas.size());
 
-    std::shared_ptr<Scene> scene = createScene();
-    std::shared_ptr<OrthographicCamera> camera = createOrthographicCamera();
+    std::shared_ptr<threepp::Scene> scene = createScene();
+    std::shared_ptr<threepp::OrthographicCamera> camera = createOrthographicCamera();
 
     KinematicChain chain;
     MyUI ui(canvas);
@@ -24,13 +21,13 @@ int main() {
 
     float &learningRate = ui.learningRate;
 
-    Clock clock;
+    threepp::Clock clock;
     controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
     canvas.addMouseListener(ml);
 
-    MySpheres centerCircle(0.35f, Color(0x0000FF), scene);
-    MySpheres targetCircle(0.35f, Color(0x800080), scene);
-    MySpheres reachCircle(1.0f, Color(0x00AAAD), scene, true, 0.2f);
+    MySpheres centerCircle(0.35f, threepp::Color(0x0000FF), scene);
+    MySpheres targetCircle(0.35f, threepp::Color(0x800080), scene);
+    MySpheres reachCircle(1.0f, threepp::Color(0x00AAAD), scene, true, 0.2f);
 
     Handler handler;
 

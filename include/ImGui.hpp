@@ -1,23 +1,24 @@
+/**
+ * @brief this class is responsible for the user interface
+ */
+
 #ifndef IMGUI_HPP
 #define IMGUI_HPP
-
 
 #include "threepp/extras/imgui/ImguiContext.hpp"
 #include "threepp/threepp.hpp"
 
 
-using namespace threepp;
-
-class MyUI : public ImguiContext {//gjør om til klasse, ps wtf er final
+class MyUI final : public ImguiContext {//gjør om til klasse, ps wtf er final
 public:
-    explicit MyUI( Canvas &canvas);
+    explicit MyUI(threepp::Canvas &canvas);
 
     int numJoints;
     float jointLength;
     float learningRate;
     bool initializeChain;
     bool clock;
-    bool dontClick;
+    mutable bool dontClick;
     int timeUnit = 0;
     std::array<std::string, 3> timeUnits = {"Seconds", "Minutes", "Hours"};
 
@@ -25,13 +26,9 @@ public:
     void onRender() override;
 
 private:
-    IOCapture m_capture;
-    Canvas& m_canvas;
-    int m_framecount{0};
-    int m_countOfPress{0};
-    std::exception e{};
+    threepp::IOCapture m_capture;
+    threepp::Canvas &m_canvas;
 };
-
 
 
 #endif

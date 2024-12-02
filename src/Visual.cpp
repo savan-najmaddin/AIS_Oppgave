@@ -1,13 +1,13 @@
 #include "Visual.hpp"
 
+
 void VisualJoints::setChain(threepp::Scene &scene, const KinematicChain &chain) {
-    while (chain.getJoints().size() != visualJoints.size()) {
-        while (chain.getJoints().size() < visualJoints.size()) {
-            removeJoint(scene, chain);
-        }
-        while (chain.getJoints().size() > visualJoints.size()) {
-            addJoint(scene, chain);
-        }
+
+    while (chain.getJoints().size() < visualJoints.size()) {
+        removeJoint(scene, chain);
+    }
+    while (chain.getJoints().size() > visualJoints.size()) {
+        addJoint(scene, chain);
     }
 }
 
@@ -39,8 +39,4 @@ void VisualJoints::addJoint(threepp::Scene &scene, const KinematicChain &chain) 
 void VisualJoints::removeJoint(threepp::Scene &scene, const KinematicChain &chain) {
     scene.remove(*visualJoints.back());
     visualJoints.pop_back();
-    if (!chain.getJoints().empty()) {
-        scene.add(*visualJoints.back());
-    }
 }
-
