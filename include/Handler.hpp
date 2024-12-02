@@ -7,7 +7,9 @@
 #include "threepp/threepp.hpp"
 
 #include <Objects.hpp>
-
+/**
+ * @brief
+ */
 
 class Handler {
 
@@ -18,7 +20,6 @@ public:
 
 
 private:
-    std::shared_ptr<threepp::SphereGeometry> m_geometry;
     int m_prevNumJoints = 0;
 
     static void jointResize(KinematicChain &chain, const MyUI &ui) ;

@@ -12,3 +12,4 @@ function(add_test_executable name)
 endfunction()
 
 add_test_executable(testLogic)
+add_test_executable(testVisual)

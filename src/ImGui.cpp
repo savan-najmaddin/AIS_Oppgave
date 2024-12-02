@@ -1,10 +1,9 @@
 #include "ImGui.hpp"
 
 #include <iostream>
-//TODO: remove namespaces
 using namespace threepp;
 
-MyUI::MyUI( Canvas &canvas)
+MyUI::MyUI(Canvas &canvas)
     : ImguiContext(canvas.windowPtr()),
       m_canvas(canvas),
       numJoints(3),
@@ -12,8 +11,7 @@ MyUI::MyUI( Canvas &canvas)
       learningRate(0.01f),
       initializeChain(false),
       clock(false),
-      dontClick(false)
-    {
+      dontClick(false) {
     m_capture.preventMouseEvent = [] {
         return ImGui::GetIO().WantCaptureMouse;
     };
@@ -32,7 +30,7 @@ void MyUI::onRender() {
         if (numJoints > 10 || numJoints < 0) {
             throw std::out_of_range("Input a number from 0 - 10");
         }
-    } catch (const std::exception &e) {
+    } catch (const std::exception &) {
         numJoints = std::clamp(numJoints, 0, 10);
     }
 

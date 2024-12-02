@@ -43,13 +43,8 @@ Eigen::Vector2f &KinematicChain::getTargetPosition() {
 void KinematicChain::showTime(const TimeUnit unit) {
     // Gotten here: https://stackoverflow.com/questions/15957805/extract-year-month-day-etc-from-stdchronotime-point-in-c/15958113#15958113
 
-    // Get the current time as a time_point
     const auto now = std::chrono::system_clock::now();
-
-    // Convert to time_t for use with C APIs
     const std::time_t nowCTime = std::chrono::system_clock::to_time_t(now);
-
-    // Convert to tm struct (local time)
     const std::tm localTime = *std::localtime(&nowCTime);
 
     int t = 0;
@@ -149,6 +144,9 @@ bool KinematicChain::hasConverged(const float threshold) const {
     Eigen::Vector2f const error = computeError();
     return error.norm() < threshold;
 }
+bool KinematicChain::getHasConverged(const float threshold) const {
+    return hasConverged(threshold);
+}
 
 void KinematicChain::errorHandler(const float learningRate) {
     Eigen::Vector2f error = computeError();
@@ -196,8 +194,9 @@ void KinematicChain::updateJointAngles(const Eigen::VectorXf &angleAdjustments) 
 float KinematicChain::clampAngle(float angle) {
     angle = std::fmod(angle, 2 * std::numbers::pi);
 
-    if (angle < 0.0f) {//er dette nødvendig?
+    if (angle < 0.0f) {
         angle += 2 * std::numbers::pi;
     }
     return angle;
 }
+

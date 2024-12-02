@@ -1,12 +1,10 @@
 #include "Logic.hpp"
+#include "Visual.hpp"
 #include "include/Controller.hpp"
 #include "include/ImGui.hpp"
 #include "include/MyScene.hpp"
-#include "Visual.hpp"
 #include <Handler.hpp>
 #include <Objects.hpp>
-
-
 
 
 int main() {

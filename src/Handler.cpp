@@ -44,7 +44,6 @@ void Handler::jointResize(KinematicChain &chain, const MyUI &ui)  {
 
 void Handler::updateMesh(KinematicChain &chain, VisualJoints &visualJoints, Scene &scene,
                          const MySpheres &mySphere) {
-
     if (chain.getJoints().size() != m_prevNumJoints) {
         chain.updateMaxReach();
         visualJoints.setChain(scene, chain);

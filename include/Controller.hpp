@@ -5,6 +5,9 @@
 #include "Logic.hpp"
 #include "threepp/threepp.hpp"
 
+/**
+ * @brief this class is responsible for handling mouse events
+ */
 
 class controller {
 
