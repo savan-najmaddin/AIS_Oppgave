@@ -13,7 +13,7 @@ struct CanvasParameters {
 
 inline Canvas::Parameters canvasParameter() {//vinduet til programmet
     Canvas::Parameters parameter;
-    parameter.title("Min tittel");
+    parameter.title("Inverse Kinematics ");
     parameter.size(800.0f, 800.0f);
     parameter.vsync(true);
     parameter.antialiasing(4);

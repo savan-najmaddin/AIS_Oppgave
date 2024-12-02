@@ -1,7 +1,7 @@
 #include "ImGui.hpp"
 
 #include <iostream>
-
+//TODO: remove namespaces
 using namespace threepp;
 
 MyUI::MyUI( Canvas &canvas)
@@ -24,7 +24,7 @@ MyUI::MyUI( Canvas &canvas)
 void MyUI::onRender() {
     ImGui::SetNextWindowPos({}, 0, {});
     ImGui::SetNextWindowSize({}, 0);
-    ImGui::Begin("Bendern");
+    ImGui::Begin("Bendy ");
 
     ImGui::Text("Input field:");
     try {
