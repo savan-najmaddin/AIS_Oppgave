@@ -1,10 +1,15 @@
+/**
+ * @brief this class is responsible for the screen layout
+ */
 
 #ifndef MYSCENE_HPP
 #define MYSCENE_HPP
 
 #include "threepp/threepp.hpp"
+#include "ImGui.hpp"
 
 
+MyUI ui();
 struct CanvasParameters {
     float width;
     float height;

@@ -1,3 +1,7 @@
+/**
+ * @brief this class is responsible for the visual representation of the joints
+ */
+
 #ifndef VISUAL_HPP
 #define VISUAL_HPP
 
@@ -9,7 +13,7 @@ class VisualJoints {
 public:
     void setChain(threepp::Scene &scene, const KinematicChain &chain);
 
-    // Kan være const fordi pekeren ikke blir endret på direkte
+    //this can be a const since the pointer doesn´t change any values directly
     void updateJointVisual(const KinematicChain &chain) const;
 
     std::vector<std::shared_ptr<threepp::Mesh>> visualJoints;

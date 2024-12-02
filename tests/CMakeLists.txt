@@ -5,7 +5,7 @@ function(add_test_executable name)
             Catch2::Catch2WithMain
             kinematikkLib
             imgui::imgui
-            )
+    )
 
     target_include_directories(${name} PRIVATE "${PROJECT_SOURCE_DIR}/src")
     add_test(NAME ${name} COMMAND ${name})

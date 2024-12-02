@@ -1,13 +1,9 @@
-//a. Beregning av Jacobian-transposematrisen
-//b. Multiplikasjon av en vektor med Jacobian-transposen
-//c. Beregning av Jacobian multiplisert med Jacobian-transposen (J * J^T)
-//d. Selve løseren.
-
-//bevegelsen til IK kjeden gjort numerisk
+/**
+ * @brief this class is responsible for the inverse kinematics and targetpositions
+ */
 
 #ifndef LOGIKK_HPP
 #define LOGIKK_HPP
-
 
 #include "Eigen/Core"
 #include <iostream>
@@ -39,6 +35,7 @@ public:
     void setTargetPosition(const Eigen::Vector2f &position);
     Eigen::Vector2f &getTargetPosition();
 
+    // This code is used to get the current time of the system
     void showTime(TimeUnit unit);
 
     float getMaxReach() const;

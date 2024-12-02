@@ -1,7 +1,6 @@
-
-
-#include "catch2/catch_all.hpp"
 #include "Visual.hpp"
+#include "catch2/catch_all.hpp"
+
 
 TEST_CASE("Testing exception handling for joint removal", "[Joint Removal]") {
     KinematicChain chain;

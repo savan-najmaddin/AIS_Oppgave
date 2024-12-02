@@ -10,4 +10,5 @@ target_include_directories(kinematikkLib PUBLIC ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(kinematikkLib PUBLIC
         threepp::threepp
         Eigen3::Eigen
-        imgui::imgui)
+        imgui::imgui
+)

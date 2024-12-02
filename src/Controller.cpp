@@ -16,7 +16,7 @@ void controller::MyMouseListener::onMouseDown(int button, const threepp::Vector2
     float const NDC_Y = 1.0f - 2.0f * pos.y / windowSize.height();
 
     // for targetposition
-    threepp::Vector3 ndcCoords(NDC_X, NDC_Y, 0.0f); // Z = 0 for the XY-plane
+    threepp::Vector3 ndcCoords(NDC_X, NDC_Y, 0.0f);// Z = 0 for the XY-plane
     const threepp::Vector3 worldCoords = ndcCoords.unproject(camera);
 
 

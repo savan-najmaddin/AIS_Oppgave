@@ -1,7 +1,8 @@
 #include "Objects.hpp"
 
-MySpheres::MySpheres(const float radius, const threepp::Color color, const std::shared_ptr<threepp::Scene>& scene,
-    const bool transparent, const float opacity)
+
+MySpheres::MySpheres(const float radius, const threepp::Color color, const std::shared_ptr<threepp::Scene> &scene,
+                     const bool transparent, const float opacity)
     : m_radius(radius),
       m_color(color),
       m_transparent(transparent),
@@ -21,7 +22,6 @@ void MySpheres::createMesh() {
 
     m_mesh = threepp::Mesh::create(m_geometry, m_material);
 }
-
 
 float MySpheres::getRadius() const {
     return m_radius;

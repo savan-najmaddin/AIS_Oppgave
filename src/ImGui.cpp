@@ -1,6 +1,7 @@
 #include "ImGui.hpp"
-
 #include <iostream>
+
+
 using namespace threepp;
 
 MyUI::MyUI(Canvas &canvas)
@@ -12,12 +13,11 @@ MyUI::MyUI(Canvas &canvas)
       initializeChain(false),
       clock(false),
       dontClick(false) {
-    m_capture.preventMouseEvent = [] {
+    m_capture.preventMouseEvent = [] { //from threepp
         return ImGui::GetIO().WantCaptureMouse;
     };
     m_canvas.setIOCapture(&m_capture);
 }
-
 
 void MyUI::onRender() {
     ImGui::SetNextWindowPos({}, 0, {});

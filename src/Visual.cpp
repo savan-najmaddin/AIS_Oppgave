@@ -1,5 +1,4 @@
 #include "Visual.hpp"
-#include <stdexcept>
 
 
 void VisualJoints::setChain(threepp::Scene &scene, const KinematicChain &chain) {
@@ -10,7 +9,6 @@ void VisualJoints::setChain(threepp::Scene &scene, const KinematicChain &chain) 
     while (chain.getJoints().size() > visualJoints.size()) {
         addJoint(scene, chain);
     }
-
 }
 
 void VisualJoints::updateJointVisual(const KinematicChain &chain) const {
@@ -42,4 +40,3 @@ void VisualJoints::removeJoint(threepp::Scene &scene, const KinematicChain &chai
     scene.remove(*visualJoints.back());
     visualJoints.pop_back();
 }
-
