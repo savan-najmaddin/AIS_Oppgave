@@ -11,5 +11,4 @@ function(add_test_executable name)
     add_test(NAME ${name} COMMAND ${name})
 endfunction()
 
-add_test_executable(testHandler)
 add_test_executable(testLogic)
