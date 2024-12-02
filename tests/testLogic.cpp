@@ -12,7 +12,7 @@ TEST_CASE("Testing for accuracy if out of reach ", "[Test#2]") {
     chain.addJoint(Joint(0.0f, 1.0f));
     chain.addJoint(Joint(0.0f, 1.0f));
 
-    Eigen::Vector2f targetPosition{3.0f, 0};
+    const Eigen::Vector2f targetPosition{3.0f, 0};
     chain.setTargetPosition(targetPosition);
 
     chain.inverseKinematicsHandler(0.8f, 0.1f, 10);

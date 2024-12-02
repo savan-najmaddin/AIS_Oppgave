@@ -11,6 +11,7 @@ public:
 
     // Kan være const fordi pekeren ikke blir endret på direkte
     void updateJointVisual(const KinematicChain &chain) const;
+
     std::vector<std::shared_ptr<threepp::Mesh>> visualJoints;
 
 private:

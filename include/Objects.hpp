@@ -10,11 +10,11 @@ public:
         const std::shared_ptr<threepp::Scene>& scene, bool transparent = false, float opacity = 1.0f);
 
     void setRadius(float radius);
-    float getRadius();
+    float getRadius() const;
 
-    std::shared_ptr<threepp::Mesh> getMesh();
+    std::shared_ptr<threepp::Mesh> getMesh() const;
 
-    void addToScene(const std::shared_ptr<threepp::Scene> &scene, std::shared_ptr<threepp::Mesh> mesh);
+    void addToScene(const std::shared_ptr<threepp::Scene> &scene) const;
 
 private:
     float m_radius;

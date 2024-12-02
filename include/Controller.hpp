@@ -2,16 +2,14 @@
 #define CONTROLLER_HPP
 
 
-
 #include "Logic.hpp"
 #include "threepp/threepp.hpp"
-
 
 
 class controller {
 
 public:
-    struct MyMouseListener : threepp::MouseListener {
+    struct MyMouseListener final : threepp::MouseListener {
 
         KinematicChain &chain;
         float &t;
@@ -22,10 +20,6 @@ public:
 
         void onMouseDown(int button, const threepp::Vector2 &pos) override;
     };
-
-
-
-
 };
 
 

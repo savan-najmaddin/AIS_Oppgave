@@ -43,7 +43,7 @@ void MyUI::onRender() {
             initializeChain = true;
         }
     } else {
-        ImGui::SliderFloat("Learning Rate:", &learningRate, 0.001f, 4.0f);
+        ImGui::SliderFloat("Learning Rate:", &learningRate, 0.0001f, 0.1f);
         ImGui::Checkbox("Show current time", &clock);
         ImGui::Checkbox("Don't click", &dontClick);
         if (clock) {

@@ -47,7 +47,7 @@ public:
     Eigen::Vector2f findEffectorPosition() const;
 
     void inverseKinematicsHandler(float learningRate,
-                                  float threshold = 0.1f, int maxIteration = 10);
+                                  float threshold = 0.1f, int maxIteration = 1000);
 
 private:
     std::vector<Joint> m_joints;
@@ -57,7 +57,7 @@ private:
     static float clampAngle(float angle);
     bool hasConverged(float threshold) const;
     void errorHandler(float learningRate);
-    void adjustErrorMagnitude(Eigen::Vector2f& error) const;
+    static void adjustErrorMagnitude(Eigen::Vector2f& error) ;
     void updateJointAngles(const Eigen::VectorXf& angleAdjustments);
 
     Eigen::MatrixXf computeJacobianTranspose() const;
