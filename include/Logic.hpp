@@ -6,11 +6,9 @@
 #define LOGIKK_HPP
 
 #include "Eigen/Core"
-#include <iostream>
 #include <vector>
 
 
-class KinematicChain;
 struct Joint {
     float angle;
     float length;

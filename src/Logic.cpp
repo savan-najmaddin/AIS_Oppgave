@@ -183,8 +183,7 @@ void KinematicChain::errorHandler(const float learningRate) {
     Eigen::VectorXf const angleAdjustments = computeAngleAdjustments(error, learningRate);
     updateJointAngles(angleAdjustments);
 }
-Eigen::Vector2f KinematicChain::computeError() const {
-    Eigen::Vector2f const currentPosition = findEffectorPosition();
+Eigen::Vector2f KinematicChain::computeError() const {Eigen::Vector2f const currentPosition = findEffectorPosition();
     Eigen::Vector2f error = m_targetPosition - currentPosition;
 
     return error;
@@ -198,7 +197,8 @@ void KinematicChain::adjustErrorMagnitude(Eigen::Vector2f &error) {
     }
 }
 
-Eigen::VectorXf KinematicChain::computeAngleAdjustments(const Eigen::Vector2f &error, float learningRate) const {
+Eigen::VectorXf KinematicChain::computeAngleAdjustments(
+    const Eigen::Vector2f &error, float learningRate) const {
     const Eigen::MatrixXf jacobianTranspose = computeJacobianTranspose();
     Eigen::VectorXf angleAdjustments = learningRate * jacobianTranspose * error;
 

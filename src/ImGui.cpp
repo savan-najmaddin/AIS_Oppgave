@@ -22,7 +22,7 @@ MyUI::MyUI(Canvas &canvas)
 void MyUI::onRender() {
     ImGui::SetNextWindowPos({}, 0, {});
     ImGui::SetNextWindowSize({}, 0);
-    ImGui::Begin("Bendy ");
+    ImGui::Begin("Kinematic Chain");
 
     ImGui::Text("Input field:");
     try {

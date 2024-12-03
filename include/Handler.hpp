@@ -12,7 +12,7 @@
 #include "Logic.hpp"
 #include "Visual.hpp"
 #include "threepp/threepp.hpp"
-#include <Objects.hpp>
+#include "Objects.hpp"
 
 
 class Handler {
