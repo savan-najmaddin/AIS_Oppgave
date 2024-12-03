@@ -3,6 +3,8 @@ project(kinematikk)
 
 set(CMAKE_CXX_STANDARD 20)
 
+option(KINEMATIKK_TEST "Build tests" ON)
+
 include(FetchContent)
 
 set(THREEPP_BUILD_TESTS OFF)
