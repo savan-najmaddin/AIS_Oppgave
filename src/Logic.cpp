@@ -3,11 +3,16 @@
 #include <numbers>
 #include <stdexcept>
 
+
+Joint::Joint(const float ang, const float len) : angle(ang), length(len) {}
+
+
 //bevegelsen til IK kjeden gjort numerisk
 /**
  * @brief Inverse Kinematic motion done numerically using the Jacobian
- *
- *
+ */
+
+/*
  * sources: https://www.youtube.com/watch?v=2_cdDGwnl80&t=211s&ab_channel=Geat
  * https://www.youtube.com/watch?v=2iPahF1c4bQ&t=147s&ab_channel=KeitaroNaruse
  * and chatGPT
@@ -36,7 +41,6 @@
  */
 
 
-Joint::Joint(const float ang, const float len) : angle(ang), length(len) {}
 
 void KinematicChain::setTargetPosition(const Eigen::Vector2f &position) {
     m_targetPosition = position;
@@ -198,7 +202,7 @@ void KinematicChain::adjustErrorMagnitude(Eigen::Vector2f &error) {
 }
 
 Eigen::VectorXf KinematicChain::computeAngleAdjustments(
-    const Eigen::Vector2f &error, float learningRate) const {
+    const Eigen::Vector2f &error, const float learningRate) const {
     const Eigen::MatrixXf jacobianTranspose = computeJacobianTranspose();
     Eigen::VectorXf angleAdjustments = learningRate * jacobianTranspose * error;
 

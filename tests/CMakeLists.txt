@@ -1,4 +1,4 @@
-function(add_test_executable name)
+function(add_test_executable name) #from threepp
     add_executable(${name} ${name}.cpp)
     target_link_libraries(${name} PRIVATE
             threepp

@@ -3,7 +3,6 @@ project(kinematikk)
 
 set(CMAKE_CXX_STANDARD 20)
 
-option(KINEMATIKK_TEST "Build tests" ON)
 
 include(FetchContent)
 
@@ -35,6 +34,8 @@ endif ()
 
 
 if (KINEMATIKK_TEST)
+    option(KINEMATIKK_TEST "Build tests" ON)
+    add_subdirectory(tests)
     FetchContent_Declare(
             Catch2
             GIT_REPOSITORY https://github.com/catchorg/Catch2.git
@@ -46,7 +47,7 @@ endif ()
 
 add_subdirectory(external)
 add_subdirectory(src)
-add_subdirectory(tests)
+
 
 add_executable(kinematikk main.cpp)
 target_link_libraries(kinematikk PUBLIC kinematikkLib)
