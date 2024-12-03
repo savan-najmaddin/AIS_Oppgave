@@ -3,6 +3,7 @@ project(kinematikk)
 
 set(CMAKE_CXX_STANDARD 20)
 
+option(KINEMATIKK_TEST "Build tests" ON) #from gpt
 
 include(FetchContent)
 
@@ -34,7 +35,6 @@ endif ()
 
 
 if (KINEMATIKK_TEST)
-    option(KINEMATIKK_TEST "Build tests" ON)
     add_subdirectory(tests)
     FetchContent_Declare(
             Catch2
