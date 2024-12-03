@@ -15,4 +15,4 @@ uml diagram
 
 <img src="ReadmeFiles/uml.jpg" width="500" alt="UML Diagram">
 
-
+kandidatnummer 10040
