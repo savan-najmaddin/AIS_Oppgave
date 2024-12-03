@@ -6,7 +6,6 @@
 #define MYSCENE_HPP
 
 #include "threepp/threepp.hpp"
-#include "ImGui.hpp"
 
 
 MyUI ui();

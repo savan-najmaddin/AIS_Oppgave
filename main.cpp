@@ -25,9 +25,9 @@ int main() {
     controller::MyMouseListener ml{clock.elapsedTime, chain, canvas, *camera};
     canvas.addMouseListener(ml);
 
-    MySpheres centerCircle(0.35f, threepp::Color(0x0000FF), scene);
-    MySpheres targetCircle(0.35f, threepp::Color(0x800080), scene);
-    MySpheres reachCircle(1.0f, threepp::Color(0x00AAAD), scene, true, 0.2f);
+    MySpheres centerCircle(0.35f, threepp::Color(0xffffff), scene);
+    MySpheres targetCircle(0.35f, threepp::Color(0xffffff), scene);
+    MySpheres reachCircle(1.0f, threepp::Color(0xffffff), scene, true, 0.2f);
 
     Handler handler;
 

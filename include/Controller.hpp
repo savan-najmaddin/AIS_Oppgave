@@ -1,13 +1,5 @@
 /**
  * @brief this class is responsible for handling mouse events
- *
- * Mouse listner returns a value in threepp::Vector2, which is then converted to NDC coordinates, due to
- * the cordinates originally being world cordinates. later the ndc cordinates are put in Eigen::Vector2f form
- * and this is used to set the target position of the chain
- *
- * Sources: GPT was used to let me know that World Cordinates and NDC cordinates are a thing.
- *
- * @param int button, const threepp::Vector2 &pos
  */
 
 #ifndef CONTROLLER_HPP

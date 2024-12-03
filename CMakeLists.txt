@@ -26,7 +26,6 @@ FetchContent_Declare(Eigen3 SYSTEM
         GIT_SHALLOW TRUE
         SOURCE_SUBDIR cmake
 )
-
 FetchContent_MakeAvailable(Eigen3)
 if (NOT TARGET Eigen3::Eigen)
     add_library(Eigen3::Eigen INTERFACE IMPORTED)
