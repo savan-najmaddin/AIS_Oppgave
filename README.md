@@ -5,16 +5,6 @@ This is a simple example of how to use consume [threepp](https://github.com/mark
 Includes Imgui as a bundled dependency.
 
 
-### Using vcpkg (manifest mode)
+<img src="ReadmeFiles/giphy.gif">
 
-This project includes `vcpkg.json`, but does not use it. 
-
-You may add dependencies on your own and
-call all CMake with `-DCMAKE_TOOLCHAIN_FILE=[path to vcpkg]/scripts/buildsystems/vcpkg.cmake`
-
-##### vcpkg under mingw
-Under MinGW you'll need to specify the vcpkg triplet:
-```shell
--DVCPKG_TARGET_TRIPLET=x64-mingw-[static|dynamic]  # choose either `static` or `dynamic`.
--DVCPKG_HOST_TRIPLET=x64-mingw-[static|dynamic]    # <-- needed only if MSVC cannot be found. 
-```
+<<iframe src="https://giphy.com/embed/3gaWLZX1QLPDanmIV1" width="466" height="480" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/imgui-3gaWLZX1QLPDanmIV1">via GIPHY</a></p>>

@@ -2,31 +2,17 @@
 #include "Logic.hpp"
 #include "catch2/catch_all.hpp"
 
-
-
-TEST_CASE("Testing findEffectorPosition", "[findEffectorPosition]") {
-    KinematicChain chain(0);
-    chain.addJoint(Joint(0.0f, 1.0f));
-    chain.addJoint(Joint(0.0f, 1.0f));
-
-
-    Eigen::Vector2f expectedPosition(2.0f, 0.0f);
-
-    // Get the effector position from the chain
-    Eigen::Vector2f effectorPosition = chain.findEffectorPosition();
-
-    REQUIRE((effectorPosition - expectedPosition).norm() < 0.001f);
-}
-
-TEST_CASE("Testing for accuracy if out of reach ", "[Test#2]") {
+//gpt was used here
+TEST_CASE("Testing for accuracy if out of reach ", "[Effector to target test]") {
     // Create a KinematicChain with two joints of length 1 each
-    KinematicChain chain(0);
+    KinematicChain chain;
     chain.addJoint(Joint(0.0f, 1.0f));
     chain.addJoint(Joint(0.0f, 1.0f));
 
-     Eigen::Vector2f targetPosition{3.0f, 0};
+    const Eigen::Vector2f targetPosition{3.0f, 0};
+    chain.setTargetPosition(targetPosition);
 
-    chain.inverseKinematicsHandler(targetPosition, 0.8f, 0.1f, 10);
+    chain.inverseKinematicsHandler(0.8f, 0.1f, 10);
 
     Eigen::Vector2f expectedPosition(2.0f, 0.0f);
     Eigen::Vector2f effectorPosition = chain.findEffectorPosition();
@@ -35,23 +21,20 @@ TEST_CASE("Testing for accuracy if out of reach ", "[Test#2]") {
     REQUIRE_THAT(effectorPosition.x(), Catch::Matchers::WithinRel(expectedPosition.x(), 0.01f));
 }
 
-TEST_CASE(" Testing for joint limit before crash", "[Test#3]") { //ble ikke kræsj hos meg
+TEST_CASE("check for convegence", "[Test For Convergence]") {
+    KinematicChain chain;
+    chain.addJoint(Joint(0.0f, 1.0f));
+    chain.addJoint(Joint(0.0f, 1.0f));
 
-        KinematicChain chain;
-        size_t count = 0;
-        try {
-            while (true) {
-                chain.addJoint(Joint(0.0f, 1.0f));
-                ++count;
-                if (count % 10000 == 0) {
-                    std::cout << "Added " << count << " joints." << std::endl;
-                }
-            }
-        } catch (const std::bad_alloc& e) {
-            std::cerr << "Memory allocation failed after adding " << count << " joints: " << e.what() << std::endl;
-        }
-    }
+    const Eigen::Vector2f targetPosition(0.5f, 1.0f);
+    chain.setTargetPosition(targetPosition);
 
+    chain.inverseKinematicsHandler(2.0f, 0.1f, 100000);
 
-
-
+    REQUIRE(chain.getHasConverged(0.1f) == true);
+}
+//gpt was used here
+TEST_CASE("Testing exception handling for joint removal", "[Kinematic joint exception test]") {
+    KinematicChain chain;
+    REQUIRE_THROWS_AS(chain.removeJoint(), std::out_of_range);
+}

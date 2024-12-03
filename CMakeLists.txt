@@ -17,7 +17,22 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(threepp)
 
-find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+
+# https://stackoverflow.com/questions/77210209/how-to-prevent-eigen-targets-to-show-up-in-the-main-app-in-a-cmake-project
+#used this code to avoid eigen targets to show up in the main app
+FetchContent_Declare(Eigen3 SYSTEM
+        GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+        GIT_TAG 3147391d946bb4b6c68edd901f2add6ac1f31f8c # 3.4.0
+        GIT_SHALLOW TRUE
+        SOURCE_SUBDIR cmake
+)
+FetchContent_MakeAvailable(Eigen3)
+if (NOT TARGET Eigen3::Eigen)
+    add_library(Eigen3::Eigen INTERFACE IMPORTED)
+    set_target_properties(Eigen3::Eigen PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${eigen3_SOURCE_DIR})
+endif ()
+
+
 
 if (KINEMATIKK_TEST)
     FetchContent_Declare(

@@ -1,20 +1,78 @@
 #include "Logic.hpp"
-
-#include <numbers>
 #include <chrono>
+#include <numbers>
 #include <stdexcept>
-#include <cassert>
+
+//bevegelsen til IK kjeden gjort numerisk
+/**
+ * @brief Inverse Kinematic motion done numerically using the Jacobian
+ *
+ *
+ * sources: https://www.youtube.com/watch?v=2_cdDGwnl80&t=211s&ab_channel=Geat
+ * https://www.youtube.com/watch?v=2iPahF1c4bQ&t=147s&ab_channel=KeitaroNaruse
+ * and chatGPT
+ *
+ * i also used the base code from:  https://github.com/raphaellevisse/Minimal_Inverse_Kinematics
+ *characteristic of the jacobian is that changes in the joint angles map to changes in position of the end effector.
+ * The Jacobian matrix represent the relationship between the joint velcoities and end effector velocities.
+ * It´s more efficient to use the transpose of the Jacobian, since it´s more efficient than the inverse.
+ *
+ * We take the transpose of the Jacobian, that way the rows represent joints, and columns the end effector position.
+ * then we take the transpose and multiply it by the error vector to get the angle adjustments.
+ * in our case the error vector is the difference between the target position and the current effector position
+ * when computing the Jacobian Transpose, we do so iteratively, since each item in the array is independent.
+ * we get the deriviatives of the rotation by adding a small value and seeing how it correlates with the change in position.
+ * its imperative to record the changes made under the calculations.
+ *
+ * to solve for change in each angle, we multiply by the dot product of transpose matrix and error vector
+ *
+ * Good to know: the jacobian isn´t necessarily 'correct' but it is a good approximation, hence the need for small step.
+ * in my program, there are 'irrelevant' methods that may not be relevant to the Solver itself,
+ * but rather for the integration of the solver into the program.
+ *
+ * throughout the program, i´ve used GPT to help with structure and logic, the code has been consistently updated and improved.
+ * gpt was especially critical in the start, but it also brought up serious issues that weren´t discovered until later.
+ *  i´ve also gotten help from fellow students, especially seniors who´ve helped me with the logic and structure of the in the later stages.
+ */
 
 
-//todo integrated testing
-//todo test idea, does visual joint update correctly
-//todo assertions
+Joint::Joint(const float ang, const float len) : angle(ang), length(len) {}
 
-Joint::Joint(float ang, float len) : angle(ang), length(len) {}
+void KinematicChain::setTargetPosition(const Eigen::Vector2f &position) {
+    m_targetPosition = position;
+}
+Eigen::Vector2f &KinematicChain::getTargetPosition() {
+    return m_targetPosition;
+}
+void KinematicChain::showTime(const TimeUnit unit) {
+    // Gotten here: https://stackoverflow.com/questions/15957805/extract-year-month-day-etc-from-stdchronotime-point-in-c/15958113#15958113
+    const auto now = std::chrono::system_clock::now();
+    const std::time_t nowCTime = std::chrono::system_clock::to_time_t(now);
+    const std::tm localTime = *std::localtime(&nowCTime);
 
-//important, for loops are used often since arrays are independent of each other
+    int t = 0;
+    float timeStep = 2 * std::numbers::pi;
 
-KinematicChain::KinematicChain(size_t n) : m_joints(n) {
+    switch (unit) {
+        case TimeUnit::SECONDS:
+            t = localTime.tm_sec;
+            timeStep /= 60.0f;
+            break;
+        case TimeUnit::MINUTES:
+            t = localTime.tm_min;
+            timeStep /= 60.0f;
+            break;
+        case TimeUnit::HOURS:
+            t = localTime.tm_hour;
+            timeStep /= 12.0f;
+            break;
+    }
+
+    m_targetPosition.x() = std::sin(t * timeStep) * m_maxReach * 1.25;
+    m_targetPosition.y() = std::cos(t * timeStep) * m_maxReach * 1.25;
+}
+
+KinematicChain::KinematicChain(const size_t n) : m_joints(n) {
     float totalLength = 0.0f;
     for (const auto &joint: m_joints) {
         totalLength += joint.length;
@@ -23,34 +81,21 @@ KinematicChain::KinematicChain(size_t n) : m_joints(n) {
     m_maxReach = totalLength;
 }
 
-std::vector<Joint> KinematicChain::getJoints() const {
+const std::vector<Joint> &KinematicChain::getJoints() const {
     return m_joints;
 }
 
 void KinematicChain::addJoint(const Joint &joint) {
     m_joints.emplace_back(joint);
 }
-
 void KinematicChain::removeJoint() {
-    if(m_joints.empty()) {
+    if (m_joints.empty()) {
         throw std::out_of_range("cannot remove joints if there aren´t any");
     }
-    m_joints.pop_back();
+    if (!m_joints.empty())
+        m_joints.pop_back();
 }
 
-void KinematicChain::targetPosition(Eigen::Vector2f &position) {
-    m_newVectorPosition = position;
-}
- Eigen::Vector2f &KinematicChain::getTargetPosition()  {
-    return m_newVectorPosition;
-}
-void KinematicChain::circularMotion(Eigen::Vector2f &position, float radius) {
-    static auto start = std::chrono::steady_clock::now(); //gpt
-    float time = std::chrono::duration<float>(std::chrono::steady_clock::now() - start).count(); //gpt
-
-    position.x() = std::sin(time)  *  radius *1.25 ;
-    position.y() = std::cos(time)  *  radius * 1.25 ;
-}
 
 float KinematicChain::getMaxReach() const {
     return m_maxReach;
@@ -78,9 +123,9 @@ Eigen::Vector2f KinematicChain::findEffectorPosition() const {
 Eigen::MatrixXf KinematicChain::computeJacobianTranspose() const {
     Eigen::MatrixXf jacobianTranspose(m_joints.size(), 2);
     jacobianTranspose.setZero();
-    std::vector<float> cumulativeAngles = computeCumulativeAngles();
+    const std::vector<float> cumulativeAngles = computeCumulativeAngles();
 
-    for(size_t i = 0; i < m_joints.size() ; ++i ) {
+    for (size_t i = 0; i < m_joints.size(); ++i) {
         auto [partialX, partialY] = computePartialDerivates(i, cumulativeAngles);
         jacobianTranspose(i, 0) = partialX;
         jacobianTranspose(i, 1) = partialY;
@@ -100,64 +145,65 @@ std::vector<float> KinematicChain::computeCumulativeAngles() const {
 }
 
 std::pair<float, float> KinematicChain::computePartialDerivates(
-    size_t i, const std::vector<float>& cumulativeAngles) const {
-        float partialX = 0.0f;
-        float partialY = 0.0f;
+        const size_t i, const std::vector<float> &cumulativeAngle) const {
+    float partialX = 0.0f;
+    float partialY = 0.0f;
 
-        for (size_t j = i; j < m_joints.size(); ++j) {
-            float angleSum = cumulativeAngles[j];
-            float dx_dtheta = -m_joints[j].length * std::sin(angleSum);
-            float dy_dtheta = m_joints[j].length * std::cos(angleSum);
+    for (size_t j = i; j < m_joints.size(); ++j) {
+        const float angleSum = cumulativeAngle[j];
+        const float dx_dtheta = -m_joints[j].length * std::sin(angleSum);
+        const float dy_dtheta = m_joints[j].length * std::cos(angleSum);
 
-            partialX += dx_dtheta;
-            partialY += dy_dtheta;
-        }
-        return {partialX, partialY};
+        partialX += dx_dtheta;
+        partialY += dy_dtheta;
+    }
+    return {partialX, partialY};
 }
 
-void KinematicChain::inverseKinematicsHandler(const Eigen::Vector2f &targetPosition, float learningRate, float threshold, int maxIteration) {
+void KinematicChain::inverseKinematicsHandler(const float learningRate, const float threshold, const int maxIteration) {
     for (size_t i = 0; i < maxIteration; ++i) {
-            if(!hasConverged(targetPosition, threshold)) {
-                errorHandler(targetPosition, learningRate);
-            }
+        if (!hasConverged(threshold)) {
+            errorHandler(learningRate);
         }
     }
+}
 
-bool KinematicChain::hasConverged(const Eigen::Vector2f &targetPosition, float threshold) const {
-    Eigen::Vector2f error = computeError(targetPosition);
+bool KinematicChain::hasConverged(const float threshold) const {
+    Eigen::Vector2f const error = computeError();
     return error.norm() < threshold;
 }
-
-void KinematicChain::errorHandler(const Eigen::Vector2f &targetPosition, float learningRate) {
-    Eigen::Vector2f error = computeError(targetPosition);
-    adjustErrorMagnitude(error);
-
-    Eigen::VectorXf angleAdjustments = computeAngleAdjustments(error, learningRate);
-    updateJointAngles(angleAdjustments);
+bool KinematicChain::getHasConverged(const float threshold) const {
+    return hasConverged(threshold);
 }
 
-Eigen::Vector2f KinematicChain::computeError(const Eigen::Vector2f &targetPosition) const {
-    Eigen::Vector2f currentPosition = findEffectorPosition();
-    Eigen::Vector2f error = targetPosition - currentPosition;
+void KinematicChain::errorHandler(const float learningRate) {
+    Eigen::Vector2f error = computeError();
+    adjustErrorMagnitude(error);
+
+    Eigen::VectorXf const angleAdjustments = computeAngleAdjustments(error, learningRate);
+    updateJointAngles(angleAdjustments);
+}
+Eigen::Vector2f KinematicChain::computeError() const {Eigen::Vector2f const currentPosition = findEffectorPosition();
+    Eigen::Vector2f error = m_targetPosition - currentPosition;
 
     return error;
 }
-
-void KinematicChain::adjustErrorMagnitude( Eigen::Vector2f &error) const {
-    float errorMagnitude = error.norm();
-    float maxErrorMagnitutde = 0.001f;//define how precise the end effector should be
+void KinematicChain::adjustErrorMagnitude(Eigen::Vector2f &error) {
+    const float errorMagnitude = error.norm();
+    constexpr float maxErrorMagnitutde = 0.0001f;//define how precise the end effector should be
 
     if (errorMagnitude > maxErrorMagnitutde) {
         error *= maxErrorMagnitutde / errorMagnitude;
     }
 }
 
-Eigen::VectorXf KinematicChain::computeAngleAdjustments(const Eigen::Vector2f &error, float learningRate) const {
-    Eigen::MatrixXf jacobianTranspose = computeJacobianTranspose();
+Eigen::VectorXf KinematicChain::computeAngleAdjustments(
+    const Eigen::Vector2f &error, float learningRate) const {
+    const Eigen::MatrixXf jacobianTranspose = computeJacobianTranspose();
     Eigen::VectorXf angleAdjustments = learningRate * jacobianTranspose * error;
 
-    float maxAngleChange = 0.002f;//avoid abrupt angle changes
     for (int i = 0; i < angleAdjustments.size(); ++i) {
+        constexpr float maxAngleChange = 0.002f;//limits abrupt changes in angle
         angleAdjustments(i) = std::clamp(angleAdjustments(i), -maxAngleChange, maxAngleChange);
     }
     return angleAdjustments;
@@ -172,14 +218,11 @@ void KinematicChain::updateJointAngles(const Eigen::VectorXf &angleAdjustments) 
 
 /* @brief limit angle change to 0-2π tp prevent unwated behavior */
 float KinematicChain::clampAngle(float angle) {
-    angle = std::fmod(angle, 2 * std::numbers::pi);
+    angle = std::fmod(angle, 2 * std::numbers::pi);//gpt recommended fmod
 
-    if (angle < 0.0f) { //er dette nødvendig?
+    if (angle < 0.0f) {
         angle += 2 * std::numbers::pi;
     }
-
     return angle;
 }
-
-
 

@@ -1,27 +1,15 @@
 #include "Visual.hpp"
 
+
 void VisualJoints::setChain(threepp::Scene &scene, const KinematicChain &chain) {
-    if (chain.getJoints().size() < visualJoints.size()) {
-        while (chain.getJoints().size() < visualJoints.size()) {
-            scene.remove(*visualJoints.back());
-            visualJoints.pop_back();
-            if (!chain.getJoints().empty()) {
-                scene.add(*visualJoints.back());
-            }
-        }
+
+    while (chain.getJoints().size() < joints.size()) {
+        removeJoint(scene);
     }
-    else {
-        while (chain.getJoints().size() > visualJoints.size()) { //todo exception hvis joint.size er negativ?
-            const std::size_t i = visualJoints.size() ;
-            auto geometry = threepp::BoxGeometry::create(chain.getJoints()[i].length, WIDTH, WIDTH);
-            auto material = threepp::MeshBasicMaterial::create({{"color", threepp::Color::red}});
-            auto mesh = std::make_unique<threepp::Mesh>(geometry, material);
-            visualJoints.push_back(std::move(mesh));
-            scene.add(*visualJoints.back());
-        }
+    while (chain.getJoints().size() > joints.size()) {
+        addJoint(scene, chain);
     }
 }
-
 
 void VisualJoints::updateJointVisual(const KinematicChain &chain) const {
     float cumulativeAngle = 0.0f;
@@ -31,11 +19,25 @@ void VisualJoints::updateJointVisual(const KinematicChain &chain) const {
         cumulativeAngle += chain.getJoints()[i].angle;
 
         const auto length = chain.getJoints()[i].length;
-        visualJoints[i]->position.set(position.x() + length * std::cos(cumulativeAngle) / 2,
-            position.y() + length * std::sin(cumulativeAngle) / 2, 0);
-        visualJoints[i]->rotation.set(0, 0, cumulativeAngle);
+        joints[i]->position.set(position.x() + length * std::cos(cumulativeAngle) / 2,
+                                      position.y() + length * std::sin(cumulativeAngle) / 2, 0);
+        joints[i]->rotation.set(0, 0, cumulativeAngle);
 
         position.x() += chain.getJoints()[i].length * std::cos(cumulativeAngle);
         position.y() += chain.getJoints()[i].length * std::sin(cumulativeAngle);
     }
 }
+
+void VisualJoints::addJoint(threepp::Scene &scene, const KinematicChain &chain) {
+    auto geometry = threepp::BoxGeometry::create(chain.getJoints().back().length, m_width, m_width);
+    auto material = threepp::MeshBasicMaterial::create({{"color", threepp::Color::red}});
+    auto mesh = std::make_shared<threepp::Mesh>(geometry, material);
+    joints.push_back(std::move(mesh));
+    scene.add(*joints.back());
+}
+
+void VisualJoints::removeJoint(threepp::Scene &scene) {
+    scene.remove(*joints.back());
+    joints.pop_back();
+}
+

@@ -1,29 +1,28 @@
 #include "ImGui.hpp"
+#include <iostream>
+
 
 using namespace threepp;
 
-MyUI::MyUI( Canvas &canvas)
+MyUI::MyUI(Canvas &canvas)
     : ImguiContext(canvas.windowPtr()),
       m_canvas(canvas),
       numJoints(3),
       jointLength(5.0f),
       learningRate(0.01f),
       initializeChain(false),
-      randomPosition(false),
-      dontClick(false)
-    {
-    m_capture.preventMouseEvent = [] {
+      clock(false),
+      dontClick(false) {
+    m_capture.preventMouseEvent = [] { //from threepp
         return ImGui::GetIO().WantCaptureMouse;
     };
     m_canvas.setIOCapture(&m_capture);
 }
 
-
 void MyUI::onRender() {
-
     ImGui::SetNextWindowPos({}, 0, {});
     ImGui::SetNextWindowSize({}, 0);
-    ImGui::Begin("Bendern");
+    ImGui::Begin("Kinematic Chain");
 
     ImGui::Text("Input field:");
     try {
@@ -31,9 +30,8 @@ void MyUI::onRender() {
         if (numJoints > 10 || numJoints < 0) {
             throw std::out_of_range("Input a number from 0 - 10");
         }
-    } catch (const std::exception &e) {
+    } catch (const std::exception &) {
         numJoints = std::clamp(numJoints, 0, 10);
-        //ImGui::TextColored(ImVec4(1, 0, 0, 1), "Error: %s", e.what()); //todo denne er ikke synlig
     }
 
     if (!initializeChain) {
@@ -43,9 +41,12 @@ void MyUI::onRender() {
             initializeChain = true;
         }
     } else {
-        ImGui::SliderFloat("Learning Rate:", &learningRate, 0.001f, 4.0f);
-        ImGui::Checkbox("Circulare motion", &randomPosition);
+        ImGui::SliderFloat("Learning Rate:", &learningRate, 0.0001f, 0.1f);
+        ImGui::Checkbox("Show current time", &clock);
         ImGui::Checkbox("Don't click", &dontClick);
+        if (clock) {
+            ImGui::SliderInt("Clock unit", &timeUnit, 0, 2, timeUnits[timeUnit].c_str());
+        }
     }
     ImGui::End();
 }
