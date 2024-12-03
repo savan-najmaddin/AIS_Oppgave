@@ -3,8 +3,6 @@ project(kinematikk)
 
 set(CMAKE_CXX_STANDARD 20)
 
-option(KINEMATIKK_TEST "Build tests" ON)
-
 include(FetchContent)
 
 set(THREEPP_BUILD_TESTS OFF)
@@ -25,7 +23,6 @@ FetchContent_Declare(Eigen3 SYSTEM
         GIT_SHALLOW TRUE
         SOURCE_SUBDIR cmake
 )
-
 FetchContent_MakeAvailable(Eigen3)
 if (NOT TARGET Eigen3::Eigen)
     add_library(Eigen3::Eigen INTERFACE IMPORTED)

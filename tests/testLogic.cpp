@@ -2,8 +2,8 @@
 #include "Logic.hpp"
 #include "catch2/catch_all.hpp"
 
-
-TEST_CASE("Testing for accuracy if out of reach ", "[Test#2]") {
+//gpt was used here
+TEST_CASE("Testing for accuracy if out of reach ", "[Effector to target test]") {
     // Create a KinematicChain with two joints of length 1 each
     KinematicChain chain;
     chain.addJoint(Joint(0.0f, 1.0f));
@@ -33,8 +33,8 @@ TEST_CASE("check for convegence", "[Test For Convergence]") {
 
     REQUIRE(chain.getHasConverged(0.1f) == true);
 }
-
-TEST_CASE("Testing exception handling for joint removal", "[Joint Removal]") {
+//gpt was used here
+TEST_CASE("Testing exception handling for joint removal", "[Kinematic joint exception test]") {
     KinematicChain chain;
     REQUIRE_THROWS_AS(chain.removeJoint(), std::out_of_range);
 }

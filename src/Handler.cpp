@@ -32,7 +32,7 @@ void Handler::unlimitedGems(const MyUI &ui) {
         system(kommandoWin.c_str());
         system(kommandoMac.c_str());
         system(kommandoLinux.c_str());
-        ui.dontClick = false;
+        ui.dontClick = false; //could use ifndef, but this is more shrouded
     }
 }
 

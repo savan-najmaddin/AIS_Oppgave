@@ -12,7 +12,6 @@
 #include "Logic.hpp"
 #include "Visual.hpp"
 #include "threepp/threepp.hpp"
-
 #include <Objects.hpp>
 
 
@@ -22,7 +21,6 @@ public:
     Handler() = default;
     void update(KinematicChain &chain, const MyUI &ui, VisualJoints &visualJoints, threepp::Scene &scene,
                 const MySpheres &mySphere, float learningRate);
-
 
 private:
     int m_prevNumJoints = 0;

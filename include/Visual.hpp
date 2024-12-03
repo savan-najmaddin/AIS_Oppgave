@@ -16,11 +16,11 @@ public:
     //this can be a const since the pointer doesn´t change any values directly
     void updateJointVisual(const KinematicChain &chain) const;
 
-    std::vector<std::shared_ptr<threepp::Mesh>> visualJoints;
+    std::vector<std::shared_ptr<threepp::Mesh>> joints;
 
 private:
     void addJoint(threepp::Scene &scene, const KinematicChain &chain);
-    void removeJoint(threepp::Scene &scene, const KinematicChain &chain);
+    void removeJoint(threepp::Scene &scene);
     static constexpr float m_width = 0.2f;
 };
 

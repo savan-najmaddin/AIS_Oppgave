@@ -9,7 +9,7 @@
 #include "threepp/threepp.hpp"
 
 
-class MyUI final : public ImguiContext {//gjør om til klasse, ps wtf er final
+class MyUI final : public ImguiContext {
 public:
     explicit MyUI(threepp::Canvas &canvas);
 
@@ -21,7 +21,6 @@ public:
     mutable bool dontClick;
     int timeUnit = 0;
     std::array<std::string, 3> timeUnits = {"Seconds", "Minutes", "Hours"};
-
 
     void onRender() override;
 
