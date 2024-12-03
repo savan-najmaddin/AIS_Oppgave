@@ -1,10 +1,18 @@
-# threepp custom project
+# 2D InverseKinematics solver 
 
-This is a simple example of how to use consume [threepp](https://github.com/markaren/threepp) using CMake's FetchContent.
-
-Includes Imgui as a bundled dependency.
-
+Inverse Kinematics in 2D, using Jacobian Matrix Solver for C++ assignment.
+The code can be used as a framework for programming further applications using inverse kinematics.
+By using imgui, the user can adjust numbers of joints, the length of the joints, learning rate and 2 different modes for targetposition. One being determined by mouse input and other being an emulated version of a clock that takes the current time of users device.
 
 <img src="ReadmeFiles/giphy.gif">
 
-<<iframe src="https://giphy.com/embed/3gaWLZX1QLPDanmIV1" width="466" height="480" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/imgui-3gaWLZX1QLPDanmIV1">via GIPHY</a></p>>
+
+This is the clock, time was 16:32
+
+<img src="ReadmeFiles/gifClock.gif">
+
+uml diagram
+
+<img src="ReadmeFiles/uml.jpg" width="500" alt="UML Diagram">
+
+
