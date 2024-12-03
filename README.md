@@ -7,4 +7,4 @@ Includes Imgui as a bundled dependency.
 
 <img src="ReadmeFiles/giphy.gif">
 
-<iframe src="https://giphy.com/embed/SrV5zj0iaa2hlnVxXa" width="466" height="480" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/c-jacobian-inversekinematics-SrV5zj0iaa2hlnVxXa">via GIPHY</a></p>
+<<iframe src="https://giphy.com/embed/3gaWLZX1QLPDanmIV1" width="466" height="480" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/imgui-3gaWLZX1QLPDanmIV1">via GIPHY</a></p>>
