@@ -1,5 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "Logic.hpp"
+#include "JacobianSolver.hpp"
 #include "catch2/catch_all.hpp"
 
 //gpt was used here
@@ -12,7 +13,8 @@ TEST_CASE("Testing for accuracy if out of reach ", "[Effector to target test]") 
     const Eigen::Vector2f targetPosition{3.0f, 0};
     chain.setTargetPosition(targetPosition);
 
-    chain.inverseKinematicsHandler(0.8f, 0.1f, 10);
+    JacobianSolver solver;
+    solver.solve(chain, 0.8f, 0.1f, 10);
 
     Eigen::Vector2f expectedPosition(2.0f, 0.0f);
     Eigen::Vector2f effectorPosition = chain.findEffectorPosition();
@@ -29,9 +31,12 @@ TEST_CASE("check for convegence", "[Test For Convergence]") {
     const Eigen::Vector2f targetPosition(0.5f, 1.0f);
     chain.setTargetPosition(targetPosition);
 
-    chain.inverseKinematicsHandler(2.0f, 0.1f, 100000);
+    JacobianSolver solver2;
+    solver2.solve(chain, 2.0f, 0.1f, 100000);
 
-    REQUIRE(chain.getHasConverged(0.1f) == true);
+    Eigen::Vector2f endPos = chain.findEffectorPosition();
+    Eigen::Vector2f error = targetPosition - endPos;
+    REQUIRE(error.norm() < 0.1f);
 }
 //gpt was used here
 TEST_CASE("Testing exception handling for joint removal", "[Kinematic joint exception test]") {

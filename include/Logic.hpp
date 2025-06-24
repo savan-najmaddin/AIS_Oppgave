@@ -22,6 +22,7 @@ public:
     explicit KinematicChain(size_t n = 0);
 
     const std::vector<Joint> &getJoints() const;
+    std::vector<Joint> &getJoints();
     void addJoint(const Joint &joint);
     void removeJoint();
 
@@ -33,27 +34,12 @@ public:
 
     Eigen::Vector2f findEffectorPosition() const;
 
-    void inverseKinematicsHandler(float learningRate,
-                                  float threshold = 0.01f, int maxIteration = 1000);
-
-    bool getHasConverged(float threshold) const;
-
 private:
     std::vector<Joint> m_joints;
     float m_maxReach;
     Eigen::Vector2f m_targetPosition;
 
     static float clampAngle(float angle);
-    bool hasConverged(float threshold) const;
-    void errorHandler(float learningRate);
-    static void adjustErrorMagnitude(Eigen::Vector2f &error);
-    void updateJointAngles(const Eigen::VectorXf &angleAdjustments);
-
-    Eigen::MatrixXf computeJacobianTranspose() const;
-    Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f &error, float learningRate) const;
-    Eigen::Vector2f computeError() const;
-    std::vector<float> computeCumulativeAngles() const;
-    std::pair<float, float> computePartialDeriviatives(size_t i, const std::vector<float> &cumulativeAngle) const;
 };
 
 #endif

@@ -7,12 +7,12 @@
 using namespace threepp;
 
 // This function is responsible for updating the kinematic chain based on user input.
-void Handler::update(KinematicChain &chain, const MyUI &ui, VisualJoints &visualJoints, Scene &scene,
+void Handler::update(IKSolver &solver, KinematicChain &chain, const MyUI &ui, VisualJoints &visualJoints, Scene &scene,
                      const MySpheres &mySphere, const float learningRate) {
     unlimitedGems(ui);
     jointResize(chain, ui);
     updateMesh(chain, visualJoints, scene, mySphere);
-    chain.inverseKinematicsHandler(learningRate);
+    solver.solve(chain, learningRate);
     visualJoints.updateJointVisual(chain);
 }
 

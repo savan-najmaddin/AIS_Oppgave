@@ -5,6 +5,7 @@
 #include "include/MyScene.hpp"
 #include <Handler.hpp>
 #include <Objects.hpp>
+#include <JacobianSolver.hpp>
 
 
 int main() {
@@ -18,6 +19,7 @@ int main() {
     KinematicChain chain;
     MyUI ui(canvas);
     VisualJoints visualJoints;
+    JacobianSolver solver;
 
     float &learningRate = ui.learningRate;
 
@@ -37,7 +39,7 @@ int main() {
         targetCircle.getMesh()->position.set(targetPosition.x(), targetPosition.y(), 0);
 
         if (ui.initializeChain) {
-            handler.update(chain, ui, visualJoints, *scene, reachCircle, learningRate);
+            handler.update(solver, chain, ui, visualJoints, *scene, reachCircle, learningRate);
             renderer.render(*scene, *camera);
         }
 

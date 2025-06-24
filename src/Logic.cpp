@@ -62,6 +62,10 @@ const std::vector<Joint> &KinematicChain::getJoints() const {
     return m_joints;
 }
 
+std::vector<Joint> &KinematicChain::getJoints() {
+    return m_joints;
+}
+
 void KinematicChain::addJoint(const Joint &joint) {
     m_joints.emplace_back(joint);
 }
@@ -97,101 +101,6 @@ Eigen::Vector2f KinematicChain::findEffectorPosition() const {
     return position;
 }
 
-Eigen::MatrixXf KinematicChain::computeJacobianTranspose() const {
-    Eigen::MatrixXf jacobianTranspose(m_joints.size(), 2);
-    jacobianTranspose.setZero();
-    const std::vector<float> cumulativeAngles = computeCumulativeAngles();
-
-    for (size_t i = 0; i < m_joints.size(); ++i) {
-        auto [partialX, partialY] = computePartialDeriviatives(i, cumulativeAngles);
-        jacobianTranspose(i, 0) = partialX;
-        jacobianTranspose(i, 1) = partialY;
-    }
-    return jacobianTranspose;
-}
-
-std::vector<float> KinematicChain::computeCumulativeAngles() const {
-    std::vector<float> cumulativeAngles(m_joints.size());
-    float cumulativeAngle = 0.0f;
-
-    for (size_t i = 0; i < m_joints.size(); ++i) {
-        cumulativeAngle += m_joints[i].angle;
-        cumulativeAngles[i] = cumulativeAngle;
-    }
-    return cumulativeAngles;
-}
-
-std::pair<float, float> KinematicChain::computePartialDeriviatives(
-        const size_t i, const std::vector<float> &cumulativeAngle) const {
-    float partialX = 0.0f;
-    float partialY = 0.0f;
-
-    for (size_t j = i; j < m_joints.size(); ++j) {
-        const float angleSum = cumulativeAngle[j];
-        const float dx_dtheta = -m_joints[j].length * std::sin(angleSum);
-        const float dy_dtheta = m_joints[j].length * std::cos(angleSum);
-
-        partialX += dx_dtheta;
-        partialY += dy_dtheta;
-    }
-    return {partialX, partialY};
-}
-
-void KinematicChain::inverseKinematicsHandler(const float learningRate, const float threshold, const int maxIteration) {
-    for (size_t i = 0; i < maxIteration; ++i) {
-        if (!hasConverged(threshold)) {
-            errorHandler(learningRate);
-        }
-    }
-}
-
-bool KinematicChain::hasConverged(const float threshold) const {
-    Eigen::Vector2f const error = computeError();
-    return error.norm() < threshold;
-}
-bool KinematicChain::getHasConverged(const float threshold) const {
-    return hasConverged(threshold);
-}
-
-void KinematicChain::errorHandler(const float learningRate) {
-    Eigen::Vector2f error = computeError();
-    adjustErrorMagnitude(error);
-
-    Eigen::VectorXf const angleAdjustments = computeAngleAdjustments(error, learningRate);
-    updateJointAngles(angleAdjustments);
-}
-Eigen::Vector2f KinematicChain::computeError() const {Eigen::Vector2f const currentPosition = findEffectorPosition();
-    Eigen::Vector2f error = m_targetPosition - currentPosition;
-
-    return error;
-}
-void KinematicChain::adjustErrorMagnitude(Eigen::Vector2f &error) {
-    const float errorMagnitude = error.norm();
-    constexpr float maxErrorMagnitutde = 0.0001f;//define how precise the end effector should be
-
-    if (errorMagnitude > maxErrorMagnitutde) {
-        error *= maxErrorMagnitutde / errorMagnitude;
-    }
-}
-
-Eigen::VectorXf KinematicChain::computeAngleAdjustments(
-    const Eigen::Vector2f &error, const float learningRate) const {
-    const Eigen::MatrixXf jacobianTranspose = computeJacobianTranspose();
-    Eigen::VectorXf angleAdjustments = learningRate * jacobianTranspose * error;
-
-    for (int i = 0; i < angleAdjustments.size(); ++i) {
-        constexpr float maxAngleChange = 0.002f;//limits abrupt changes in angle
-        angleAdjustments(i) = std::clamp(angleAdjustments(i), -maxAngleChange, maxAngleChange);
-    }
-    return angleAdjustments;
-}
-
-void KinematicChain::updateJointAngles(const Eigen::VectorXf &angleAdjustments) {
-    for (size_t i = 0; i < m_joints.size(); ++i) {
-        m_joints[i].angle += angleAdjustments(i);
-        m_joints[i].angle = clampAngle(m_joints[i].angle);
-    }
-}
 
 /* @brief limit angle change to 0-2π tp prevent unwated behavior */
 float KinematicChain::clampAngle(float angle) {

@@ -10,6 +10,7 @@
 
 #include "ImGui.hpp"
 #include "Logic.hpp"
+#include "IKSolver.hpp"
 #include "Visual.hpp"
 #include "threepp/threepp.hpp"
 #include "Objects.hpp"
@@ -19,8 +20,8 @@ class Handler {
 
 public:
     Handler() = default;
-    void update(KinematicChain &chain, const MyUI &ui, VisualJoints &visualJoints, threepp::Scene &scene,
-                const MySpheres &mySphere, float learningRate);
+    void update(IKSolver &solver, KinematicChain &chain, const MyUI &ui, VisualJoints &visualJoints,
+                threepp::Scene &scene, const MySpheres &mySphere, float learningRate);
 
 private:
     int m_prevNumJoints = 0;

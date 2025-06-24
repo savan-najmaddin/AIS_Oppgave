@@ -3,6 +3,8 @@ add_library(kinematikkLib
         Handler.cpp
         Objects.cpp
         Controller.cpp
+        JacobianSolver.cpp
+        CCDSolver.cpp
         Logic.cpp
         ImGui.cpp
 )
