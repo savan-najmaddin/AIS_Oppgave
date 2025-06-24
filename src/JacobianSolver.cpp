@@ -58,8 +58,7 @@ std::vector<float> JacobianSolver::computeCumulativeAngles(const KinematicChain 
     return cumulativeAngles;
 }
 
-std::pair<float, float>
-JacobianSolver::computePartialDerivatives(const KinematicChain &chain, size_t i,
+std::pair<float, float> JacobianSolver::computePartialDerivatives(const KinematicChain &chain, size_t i,
                                           const std::vector<float> &cumulativeAngles) const {
     float partialX = 0.0f;
     float partialY = 0.0f;
@@ -74,8 +73,7 @@ JacobianSolver::computePartialDerivatives(const KinematicChain &chain, size_t i,
     return {partialX, partialY};
 }
 
-Eigen::VectorXf
-JacobianSolver::computeAngleAdjustments(const KinematicChain &chain,
+Eigen::VectorXf JacobianSolver::computeAngleAdjustments(const KinematicChain &chain,
                                         const Eigen::Vector2f &error,
                                         float learningRate) const {
     Eigen::MatrixXf jacobianTranspose = computeJacobianTranspose(chain);

@@ -3,7 +3,7 @@
 
 #include "IKSolver.hpp"
 #include <numbers>
-
+//Todo create a CCD solver
 class CCDSolver : public IKSolver {
 public:
     void solve(KinematicChain &chain, float learningRate,

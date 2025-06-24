@@ -27,7 +27,7 @@ public:
     void removeJoint();
 
     void setTargetPosition(const Eigen::Vector2f &position);
-    Eigen::Vector2f &getTargetPosition();
+    const Eigen::Vector2f  &getTargetPosition() const;
 
     float getMaxReach() const;
     void updateMaxReach();

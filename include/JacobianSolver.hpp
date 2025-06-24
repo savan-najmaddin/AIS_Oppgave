@@ -15,14 +15,16 @@ private:
 
     Eigen::Vector2f computeError(const KinematicChain &chain) const;
     Eigen::MatrixXf computeJacobianTranspose(const KinematicChain &chain) const;
-    Eigen::VectorXf
-    computeAngleAdjustments(const KinematicChain &chain,
+
+    Eigen::VectorXf computeAngleAdjustments(const KinematicChain &chain,
                             const Eigen::Vector2f &error,
                             float learningRate) const;
+
     std::vector<float> computeCumulativeAngles(const KinematicChain &chain) const;
-    std::pair<float, float>
-    computePartialDerivatives(const KinematicChain &chain, size_t i,
+
+    std::pair<float, float> computePartialDerivatives(const KinematicChain &chain, size_t i,
                               const std::vector<float> &cumulativeAngles) const;
+
     void updateJointAngles(KinematicChain &chain,
                            const Eigen::VectorXf &angleAdjustments) const;
     bool hasConverged(const KinematicChain &chain, float threshold) const;
