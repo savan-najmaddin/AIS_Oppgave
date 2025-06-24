@@ -11,10 +11,9 @@ MyUI::MyUI(Canvas &canvas)
       jointLength(5.0f),
       learningRate(0.01f),
       initializeChain(false),
-      clock(false),
       dontClick(false) {
-    m_capture.preventMouseEvent = [] { //from threepp
-        return ImGui::GetIO().WantCaptureMouse;
+      m_capture.preventMouseEvent = [] {//from threepp
+          return ImGui::GetIO().WantCaptureMouse;
     };
     m_canvas.setIOCapture(&m_capture);
 }
@@ -42,11 +41,7 @@ void MyUI::onRender() {
         }
     } else {
         ImGui::SliderFloat("Learning Rate:", &learningRate, 0.0001f, 0.1f);
-        ImGui::Checkbox("Show current time", &clock);
         ImGui::Checkbox("Don't click", &dontClick);
-        if (clock) {
-            ImGui::SliderInt("Clock unit", &timeUnit, 0, 2, timeUnits[timeUnit].c_str());
-        }
     }
     ImGui::End();
 }

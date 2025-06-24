@@ -18,11 +18,6 @@ struct Joint {
 
 class KinematicChain {
 public:
-    enum class TimeUnit {
-        SECONDS,
-        MINUTES,
-        HOURS
-    };
 
     explicit KinematicChain(size_t n = 0);
 
@@ -32,9 +27,6 @@ public:
 
     void setTargetPosition(const Eigen::Vector2f &position);
     Eigen::Vector2f &getTargetPosition();
-
-    // This code is used to get the current time of the system
-    void showTime(TimeUnit unit);
 
     float getMaxReach() const;
     void updateMaxReach();
@@ -61,7 +53,7 @@ private:
     Eigen::VectorXf computeAngleAdjustments(const Eigen::Vector2f &error, float learningRate) const;
     Eigen::Vector2f computeError() const;
     std::vector<float> computeCumulativeAngles() const;
-    std::pair<float, float> computePartialDerivates(size_t i, const std::vector<float> &cumulativeAngle) const;
+    std::pair<float, float> computePartialDeriviatives(size_t i, const std::vector<float> &cumulativeAngle) const;
 };
 
 #endif

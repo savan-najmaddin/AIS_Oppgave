@@ -32,9 +32,6 @@ int main() {
     Handler handler;
 
     canvas.animate([&] {
-        if (ui.clock) {
-            chain.showTime(static_cast<KinematicChain::TimeUnit>(ui.timeUnit));
-        }
         Eigen::Vector2f targetPosition = chain.getTargetPosition();
 
         targetCircle.getMesh()->position.set(targetPosition.x(), targetPosition.y(), 0);
